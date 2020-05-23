@@ -1,16 +1,16 @@
-package com.youngsoft.cookconverter.ui.home;
+package com.youngsoft.cookconverter.ui.baking;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class HomeViewModel extends ViewModel {
+public class ViewModelBaking extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public HomeViewModel() {
+    public ViewModelBaking() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        mText.setValue("This is dashboard fragment");
     }
 
     public LiveData<String> getText() {

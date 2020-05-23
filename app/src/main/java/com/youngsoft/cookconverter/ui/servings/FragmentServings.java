@@ -1,4 +1,4 @@
-package com.youngsoft.cookconverter.ui.notifications;
+package com.youngsoft.cookconverter.ui.servings;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.youngsoft.cookconverter.R;
 
-public class NotificationsFragment extends Fragment {
+public class FragmentServings extends Fragment {
 
-    private NotificationsViewModel notificationsViewModel;
+    private ViewModelServings viewModelServings;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        notificationsViewModel =
-                ViewModelProviders.of(this).get(NotificationsViewModel.class);
+        viewModelServings =
+                ViewModelProviders.of(this).get(ViewModelServings.class);
         View root = inflater.inflate(R.layout.fragment_notifications, container, false);
         final TextView textView = root.findViewById(R.id.text_notifications);
-        notificationsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModelServings.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

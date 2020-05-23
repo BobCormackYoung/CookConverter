@@ -1,4 +1,4 @@
-package com.youngsoft.cookconverter.ui.dashboard;
+package com.youngsoft.cookconverter.ui.baking;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.youngsoft.cookconverter.R;
 
-public class DashboardFragment extends Fragment {
+public class FragmentBaking extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
+    private ViewModelBaking viewModelBaking;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel =
-                ViewModelProviders.of(this).get(DashboardViewModel.class);
+        viewModelBaking =
+                ViewModelProviders.of(this).get(ViewModelBaking.class);
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
         final TextView textView = root.findViewById(R.id.text_dashboard);
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModelBaking.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
