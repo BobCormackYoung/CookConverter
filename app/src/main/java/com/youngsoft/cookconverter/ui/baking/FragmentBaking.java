@@ -22,7 +22,7 @@ public class FragmentBaking extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         viewModelBaking =
                 ViewModelProviders.of(this).get(ViewModelBaking.class);
-        View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        View root = inflater.inflate(R.layout.fragment_baking, container, false);
         final TextView textView = root.findViewById(R.id.text_dashboard);
         viewModelBaking.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override

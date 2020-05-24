@@ -3,4 +3,5 @@
     <string name="title_measures">Measures</string>
     <string name="title_baking">Baking</string>
     <string name="title_servings">Servings</string>
+    <string name="ingredient_note">Only required for converting between weight and volume</string>
 </resources>
