@@ -67,7 +67,8 @@
             android:id="@+id/sp_measure_input"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="2"/>
+            android:layout_weight="1"
+            android:spinnerMode="dialog" />
 
     </LinearLayout>
 
@@ -97,7 +98,8 @@
             android:id="@+id/sp_measure_output"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="2"/>
+            android:layout_weight="1"
+            android:spinnerMode="dialog" />
 
     </LinearLayout>
 

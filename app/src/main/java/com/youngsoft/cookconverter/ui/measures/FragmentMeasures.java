@@ -1,5 +1,6 @@
 package com.youngsoft.cookconverter.ui.measures;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,16 +19,22 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.youngsoft.cookconverter.R;
+import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
 
 import org.w3c.dom.Text;
+
+import java.util.List;
 
 public class FragmentMeasures extends Fragment {
 
     private ViewModelMeasures viewModelMeasures;
     private Spinner spInput;
     private Spinner spOutput;
+    private MeasuresSpinnerAdapter spinnerAdapterInput;
+    private MeasuresSpinnerAdapter spinnerAdapterOutput;
     private TextInputEditText etInputValue;
     private TextInputEditText etOutputValue;
+    private Context context;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewModelMeasures = ViewModelProviders.of(this).get(ViewModelMeasures.class);
@@ -39,6 +46,7 @@ public class FragmentMeasures extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        context = getActivity();
         setListeners(); //init view listeners
         setObservers(); //init viewmodel observers
         etInputValue.setText("0.0"); //TODO: can this be removed?
@@ -83,6 +91,22 @@ public class FragmentMeasures extends Fragment {
             public void onChanged(Double aDouble) {
                 etOutputValue.setText(aDouble.toString());
                 Log.i("FM","input value updated");
+            }
+        });
+
+        viewModelMeasures.getAllConversionFactors().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
+            @Override
+            public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
+                ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
+                conversionFactorsRecords.toArray(outputArray);
+                for(int i=0; i<outputArray.length; i++){
+                    Log.i("FM","Element at the index "+i+" is ::"+outputArray[i].getName());
+                }
+                spinnerAdapterInput = new MeasuresSpinnerAdapter(context, outputArray);
+                spInput.setAdapter(spinnerAdapterInput);
+
+                spinnerAdapterOutput = new MeasuresSpinnerAdapter(context, outputArray);
+                spOutput.setAdapter(spinnerAdapterOutput);
             }
         });
 

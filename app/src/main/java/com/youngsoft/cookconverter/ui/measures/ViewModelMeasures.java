@@ -11,11 +11,16 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
+import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
 import com.youngsoft.cookconverter.data.DataRepository;
+
+import java.util.List;
 
 public class ViewModelMeasures extends AndroidViewModel {
 
     private DataRepository dataRepository;
+
+    private LiveData<List<ConversionFactorsRecord>> allConversionFactors;
 
     private MutableLiveData<Double> inputValue;
     private MutableLiveData<Double> outputValue;
@@ -24,6 +29,9 @@ public class ViewModelMeasures extends AndroidViewModel {
 
     public ViewModelMeasures(@NonNull Application application) {
         super(application);
+        dataRepository = new DataRepository(application);
+        allConversionFactors = dataRepository.getAllConversionFactorsRecords();
+
         inputValue = new MutableLiveData<>();
         inputValue.setValue(0.0);
         outputValue = new MutableLiveData<>();
@@ -69,5 +77,10 @@ public class ViewModelMeasures extends AndroidViewModel {
     //set the converted value
     public LiveData<Double> getMediatorOutput() {
         return mediatorOutput;
+    }
+
+    //return list of all conversion factor records
+    public LiveData<List<ConversionFactorsRecord>> getAllConversionFactors() {
+        return allConversionFactors;
     }
 }
