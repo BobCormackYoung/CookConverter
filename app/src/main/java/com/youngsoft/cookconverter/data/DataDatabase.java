@@ -29,7 +29,7 @@ public abstract class DataDatabase extends RoomDatabase {
         return instance;
     }
 
-    //populate the datebase with required data
+    //populate the database with required data
     private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {

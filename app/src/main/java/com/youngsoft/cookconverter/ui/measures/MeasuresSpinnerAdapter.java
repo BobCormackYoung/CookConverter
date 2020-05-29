@@ -68,19 +68,6 @@ public class MeasuresSpinnerAdapter extends ArrayAdapter<ConversionFactorsRecord
             }
 
             return convertView;
-
-            /**
-            // I created a dynamic TextView here, but you can reference your own  custom layout for each spinner item
-            TextView label = (TextView) super.getView(position, convertView, parent);
-            label.setTextColor(Color.BLACK);
-            // Then you can get the current item using the values array (Users array) and the current position
-            // You can NOW reference each method you has created in your bean object (User class)
-            label.setText(values[position].getName());
-
-            // And finally return your dynamic (or custom) view for each spinner item
-            return label;
-            **/
-
         }
 
         // And here is when the "chooser" is popped up
@@ -99,13 +86,7 @@ public class MeasuresSpinnerAdapter extends ArrayAdapter<ConversionFactorsRecord
             }
 
             return convertView;
-            /**
-            TextView label = (TextView) super.getDropDownView(position, convertView, parent);
-            label.setTextColor(Color.BLACK);
-            label.setText(values[position].getName());
 
-            return label;
-             **/
         }
 
 }

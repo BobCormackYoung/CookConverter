@@ -18,27 +18,27 @@
     android:orientation="vertical">
 
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_measures_ingredient"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:text="Ingredient"
+        android:textSize="12sp"
+        android:layout_marginLeft="4dp"/>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tiet_measures_ingredient"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:editable="false"
-            android:hint="Ingredient"/>
+    <Spinner
+        android:id="@+id/sp_measure_ingredients"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dialog" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/ingredient_note"
-            android:textSize="12sp"
-            android:layout_marginLeft="4dp"
-            android:textStyle="italic"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ingredient_note"
+        android:textSize="12sp"
+        android:layout_marginLeft="4dp"
+        android:textStyle="italic"/>
 
-    </com.google.android.material.textfield.TextInputLayout>
 
 
     <LinearLayout
@@ -90,7 +90,8 @@
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
                 tools:text="20"
-                android:hint="Convert To"/>
+                android:hint="Convert To"
+                android:editable="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

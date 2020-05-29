@@ -1,6 +1,7 @@
 package com.youngsoft.cookconverter.data;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "ConversionFactorsRecord_Table")
@@ -14,6 +15,14 @@ public class ConversionFactorsRecord {
     private int type; //1 = mass, 2 = volume, 3 = distance
 
     public ConversionFactorsRecord(String name, double conversionFactor, int type) {
+        this.name = name;
+        this.conversionFactor = conversionFactor;
+        this.type = type;
+    }
+
+    @Ignore
+    public ConversionFactorsRecord(String name, double conversionFactor, int type, int id) {
+        this.id = id;
         this.name = name;
         this.conversionFactor = conversionFactor;
         this.type = type;
