@@ -14,6 +14,7 @@ public class DataRepository {
     private LiveData<List<ConversionFactorsRecord>> allConversionFactorsRecords;
     private LiveData<List<IngredientsRecord>> allIngredientsRecords;
     private LiveData<List<PanTypeRecord>> allPanTypeRecords;
+    private LiveData<List<ConversionFactorsRecord>> subsetConversionFactors;
 
     public DataRepository(Application application) {
         DataDatabase dataDatabase = DataDatabase.getInstance(application);
@@ -33,5 +34,13 @@ public class DataRepository {
 
     public LiveData<List<PanTypeRecord>> getAllPanTypeRecords() {
         return allPanTypeRecords;
+    }
+
+    public LiveData<List<ConversionFactorsRecord>> getSubsetConversionFactors(ConversionFactorsRecord inputConversionFactor, IngredientsRecord inputIngredients) {
+        if (inputIngredients.getType() == 0) {
+            return dataDao.getSubsetConversionFactors(inputConversionFactor.getType());
+        } else {
+            return allConversionFactorsRecords;
+        }
     }
 }

@@ -168,8 +168,15 @@ public class FragmentMeasures extends Fragment {
         viewModelMeasures.getMediatorOutput().observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
-                etOutputValue.setText(aDouble.toString());
-                Log.i("FM","Output value updated");
+                //check if value is too small to be worth displaying
+                if (aDouble*1000 < 1) {
+                    etOutputValue.setText("0.0");
+                } else {
+                    DecimalFormat decimalFormat = new DecimalFormat("#,##0.###");
+                    etOutputValue.setText(decimalFormat.format(aDouble));
+                    Log.i("FM","Output value updated");
+                }
+
             }
         });
 
@@ -184,9 +191,6 @@ public class FragmentMeasures extends Fragment {
                 }
                 spinnerAdapterInput = new MeasuresSpinnerAdapter(context, outputArray);
                 spInput.setAdapter(spinnerAdapterInput);
-
-                spinnerAdapterOutput = new MeasuresSpinnerAdapter(context, outputArray);
-                spOutput.setAdapter(spinnerAdapterOutput);
             }
         });
 
@@ -202,6 +206,27 @@ public class FragmentMeasures extends Fragment {
                 }
                 spinnerIngredients = new IngredientsSpinnerAdapter(context, outputArray);
                 spIngredients.setAdapter(spinnerIngredients);
+            }
+        });
+
+        viewModelMeasures.getSubsetConversionFactorFilter().observe(getViewLifecycleOwner(), new Observer<ViewModelMeasures.SubsetConversionFactorFilter>() {
+            @Override
+            public void onChanged(ViewModelMeasures.SubsetConversionFactorFilter subsetConversionFactorFilter) {
+                Log.i("FM","SubsetConversionFactorFilter chnaged");
+            }
+        });
+
+        viewModelMeasures.getSubsetConversionFactors().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
+            @Override
+            public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
+                ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
+                conversionFactorsRecords.toArray(outputArray);
+                for(int i=0; i<outputArray.length; i++){
+                    Log.i("FM","Subset conversionFactor element at the index "+i+" is ::"+outputArray[i].getName());
+                }
+
+                spinnerAdapterOutput = new MeasuresSpinnerAdapter(context, outputArray);
+                spOutput.setAdapter(spinnerAdapterOutput);
             }
         });
 

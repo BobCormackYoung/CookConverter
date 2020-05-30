@@ -27,4 +27,7 @@ public interface DataDao {
 
     @Query("SELECT * FROM PanTypeRecord_Table ORDER BY id")
     LiveData<List<PanTypeRecord>> getAllPanTypeRecordsSortById();
+
+    @Query("SELECT * FROM ConversionFactorsRecord_Table WHERE type = :index")
+    LiveData<List<ConversionFactorsRecord>> getSubsetConversionFactors(int index);
 }
