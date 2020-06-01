@@ -238,7 +238,6 @@ public class ViewModelMeasures extends AndroidViewModel {
 
 
 
-    //TODO: https://stackoverflow.com/questions/49493772/mediatorlivedata-or-switchmap-transformation-with-multiple-parameters
 
     /**
      * filter for the allowable output list for the spinner

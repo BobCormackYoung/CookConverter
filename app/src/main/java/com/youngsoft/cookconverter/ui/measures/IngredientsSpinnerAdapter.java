@@ -12,9 +12,6 @@ import com.youngsoft.cookconverter.data.IngredientsRecord;
 
 public class IngredientsSpinnerAdapter extends ArrayAdapter<IngredientsRecord> {
 
-    //TODO: https://codinginflow.com/tutorials/android/custom-spinner
-    //TODO: https://stackoverflow.com/questions/1625249/android-how-to-bind-spinner-to-custom-object-list
-
     // Your sent context
     private Context context;
 
