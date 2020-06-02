@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:context=".ui.baking.FragmentBundtCake">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,13 +16,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Units: "
-            android:layout_weight="5"/>
+            android:layout_weight="5" />
 
         <androidx.appcompat.widget.AppCompatSpinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/sp_fbc_input_units"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
     </LinearLayout>
 
@@ -34,7 +35,9 @@
             android:id="@+id/til_fbc_od_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:paddingRight="8dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tiet_fbc_od_input"
@@ -42,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
                 tools:text="10"
-                android:hint="Pan Outer Diameter"/>
+                android:hint="Pan Outer Diameter" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -50,7 +53,9 @@
             android:id="@+id/til_fbc_id_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:paddingLeft="8dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tiet_fbc_id_input"
@@ -58,15 +63,12 @@
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
                 tools:text="10"
-                android:hint="Pan Inner Diameter"/>
+                android:hint="Pan Inner Diameter" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
 
-
-
     </LinearLayout>
-
 
 
 </LinearLayout>

@@ -93,7 +93,6 @@ public class FragmentMeasures extends Fragment {
                     }
                     viewModelMeasures.setInputValueMutable(temp);
                 }
-                Log.i("FM","input text changed");
             }
 
             @Override
@@ -108,7 +107,6 @@ public class FragmentMeasures extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 ConversionFactorsRecord selectedItem = spinnerAdapterInput.getItem(position);
                 viewModelMeasures.setConversionFactorInputID(selectedItem);
-                Log.i("FM","Spinner input selected Item " + selectedItem.getId());
             }
 
             @Override
@@ -123,7 +121,6 @@ public class FragmentMeasures extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 ConversionFactorsRecord selectedItem = spinnerAdapterOutput.getItem(position);
                 viewModelMeasures.setConversionFactorOutputID(selectedItem);
-                Log.i("FM","Spinner output selected Item " + selectedItem.getId());
             }
 
             @Override
@@ -138,7 +135,6 @@ public class FragmentMeasures extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 IngredientsRecord selectedItem = spinnerIngredients.getItem(position);
                 viewModelMeasures.setIngredientSelected(selectedItem);
-                Log.i("FM","Ingredient output selected Item " + selectedItem.getId());
             }
 
             @Override
@@ -174,7 +170,6 @@ public class FragmentMeasures extends Fragment {
                 } else {
                     DecimalFormat decimalFormat = new DecimalFormat("#,##0.###");
                     etOutputValue.setText(decimalFormat.format(aDouble));
-                    Log.i("FM","Output value updated");
                 }
 
             }
@@ -186,9 +181,6 @@ public class FragmentMeasures extends Fragment {
             public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
                 ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
                 conversionFactorsRecords.toArray(outputArray);
-                for(int i=0; i<outputArray.length; i++){
-                    Log.i("FM","ConversionFactor element at the index "+i+" is ::"+outputArray[i].getName());
-                }
                 spinnerAdapterInput = new MeasuresSpinnerAdapter(context, outputArray);
                 spInput.setAdapter(spinnerAdapterInput);
             }
@@ -198,12 +190,8 @@ public class FragmentMeasures extends Fragment {
         viewModelMeasures.getAllIngredients().observe(getViewLifecycleOwner(), new Observer<List<IngredientsRecord>>() {
             @Override
             public void onChanged(List<IngredientsRecord> ingredientsRecords) {
-                Log.i("FM","Ingredients list change");
                 IngredientsRecord[] outputArray = new IngredientsRecord[ingredientsRecords.size()];
                 ingredientsRecords.toArray(outputArray);
-                for(int i=0; i<outputArray.length; i++){
-                    Log.i("FM","Ingredients element at the index "+i+" is ::"+outputArray[i].getName());
-                }
                 spinnerIngredients = new IngredientsSpinnerAdapter(context, outputArray);
                 spIngredients.setAdapter(spinnerIngredients);
             }
@@ -212,7 +200,7 @@ public class FragmentMeasures extends Fragment {
         viewModelMeasures.getSubsetConversionFactorFilter().observe(getViewLifecycleOwner(), new Observer<ViewModelMeasures.SubsetConversionFactorFilter>() {
             @Override
             public void onChanged(ViewModelMeasures.SubsetConversionFactorFilter subsetConversionFactorFilter) {
-                Log.i("FM","SubsetConversionFactorFilter chnaged");
+                //needs to be observed to initialise
             }
         });
 
@@ -221,10 +209,6 @@ public class FragmentMeasures extends Fragment {
             public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
                 ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
                 conversionFactorsRecords.toArray(outputArray);
-                for(int i=0; i<outputArray.length; i++){
-                    Log.i("FM","Subset conversionFactor element at the index "+i+" is ::"+outputArray[i].getName());
-                }
-
                 spinnerAdapterOutput = new MeasuresSpinnerAdapter(context, outputArray);
                 spOutput.setAdapter(spinnerAdapterOutput);
             }
@@ -258,7 +242,7 @@ public class FragmentMeasures extends Fragment {
 
     /**
      * map views from the root view
-     * @param root
+     * @param root input view for mapping
      */
     private void mapViews(View root) {
         spInput = root.findViewById(R.id.sp_measure_input);

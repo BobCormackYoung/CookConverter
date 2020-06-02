@@ -13,9 +13,20 @@ import com.youngsoft.cookconverter.R;
 
 public class FragmentRectangularCake extends Fragment {
 
+    private ViewModelBaking viewModelBaking;
+
+    FragmentRectangularCake(ViewModelBaking viewModel) {
+        viewModelBaking = viewModel;
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_rectangular_cake, container, false);
+        mapViews(root);
         return root;
+    }
+
+    private void mapViews(View root) {
+        //map views here
     }
 
 }

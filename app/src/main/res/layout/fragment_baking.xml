@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,37 +12,42 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="16dp">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_fb_input_value"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:paddingRight="8dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tiet_fb_input_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Input Value"
                 android:inputType="numberDecimal"
-                tools:text="10"
-                android:hint="Input Value"/>
+                tools:text="10" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_fb_output_value"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:paddingLeft="8dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tiet_fb_output_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Output Value"
                 android:inputType="numberDecimal"
-                tools:text="10"
-                android:hint="Output Value"/>
+                tools:text="10" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -50,9 +56,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@color/colorPrimaryDark"/>
+        android:background="@color/colorPrimary" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -63,14 +67,27 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <androidx.viewpager.widget.ViewPager
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:id="@+id/vp_baking_tablayout_input">
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryLight"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="Convert from this pan..." />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/colorPrimary" />
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/vp_baking_tablayout_input"
+                android:layout_width="match_parent"
+                android:layout_height="170dp">
 
                 <com.google.android.material.tabs.TabLayout
-                    style="@style/Widget.MaterialComponents.TabLayout.Colored"
                     android:id="@+id/tl_baking_input"
+                    style="@style/Widget.MaterialComponents.TabLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -80,17 +97,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@color/colorPrimaryDark"/>
+                android:background="@color/colorPrimary" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryLight"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="...To this pan!" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/colorPrimary" />
 
             <androidx.viewpager.widget.ViewPager
+                android:id="@+id/vp_baking_tablayout_output"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:id="@+id/vp_baking_tablayout_output">
+                android:layout_height="170dp">
 
                 <com.google.android.material.tabs.TabLayout
-                    style="@style/Widget.MaterialComponents.TabLayout.Colored"
                     android:id="@+id/tl_baking_output"
+                    style="@style/Widget.MaterialComponents.TabLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -98,8 +127,7 @@
 
         </LinearLayout>
 
-
-
     </androidx.core.widget.NestedScrollView>
+
 
 </LinearLayout>

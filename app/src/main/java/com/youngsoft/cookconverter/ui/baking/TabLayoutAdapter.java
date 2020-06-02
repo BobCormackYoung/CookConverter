@@ -5,14 +5,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.lifecycle.ViewModel;
 
 public class TabLayoutAdapter extends FragmentPagerAdapter {
 
     //3 tabs, 3 fragments
-    static final int NUM_ITEMS = 3;
+    private static final int NUM_ITEMS = 3;
+    private ViewModelBaking viewModelBaking;
 
-    public TabLayoutAdapter(@NonNull FragmentManager fm) {
+    public TabLayoutAdapter(@NonNull FragmentManager fm, ViewModelBaking viewModel) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        viewModelBaking = viewModel;
     }
 
 
@@ -21,13 +24,14 @@ public class TabLayoutAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
 
         if (position == 0) {
-            return new FragmentRectangularCake();
+            return new FragmentRectangularCake(viewModelBaking);
         } else if (position == 1) {
-            return new FragmentCircularCake();
+            return new FragmentCircularCake(viewModelBaking);
         } else if (position == 2) {
-            return new FragmentBundtCake();
+            return new FragmentBundtCake(viewModelBaking);
+        } else {
+            return new FragmentRectangularCake(viewModelBaking);
         }
-        return null;
     }
 
     @Override

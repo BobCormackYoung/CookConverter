@@ -94,27 +94,27 @@ public class ViewModelMeasures extends AndroidViewModel {
 
 
     //get the converted value
-    public LiveData<Double> getMediatorOutput() {
+    LiveData<Double> getMediatorOutput() {
         return mediatorOutput;
     }
 
     //return list of all conversion factor records
-    public LiveData<List<ConversionFactorsRecord>> getAllConversionFactors() {
+    LiveData<List<ConversionFactorsRecord>> getAllConversionFactors() {
         return allConversionFactors;
     }
 
     //return list of all ingredient records
-    public LiveData<List<IngredientsRecord>> getAllIngredients() {
+    LiveData<List<IngredientsRecord>> getAllIngredients() {
         return allIngredients;
     }
 
     //return list of all ingredient records
-    public LiveData<SubsetConversionFactorFilter> getSubsetConversionFactorFilter() {
+    LiveData<SubsetConversionFactorFilter> getSubsetConversionFactorFilter() {
         return mediatorSubsetConversionFactorFilter;
     }
 
     //return list of subset conversion factor records
-    public LiveData<List<ConversionFactorsRecord>> getSubsetConversionFactors() {
+    LiveData<List<ConversionFactorsRecord>> getSubsetConversionFactors() {
         return subsetConversionFactorList;
     }
 
@@ -122,22 +122,22 @@ public class ViewModelMeasures extends AndroidViewModel {
 
 
     //set the input value
-    public void setInputValueMutable(Double input) {
+    void setInputValueMutable(Double input) {
         inputValue.setValue(input);
     }
 
     //set the picked input conversion factor ID
-    public void setConversionFactorInputID(ConversionFactorsRecord input) {
+    void setConversionFactorInputID(ConversionFactorsRecord input) {
         conversionFactorInputID.setValue(input);
     }
 
     //set the picked output conversion factor ID
-    public void setConversionFactorOutputID(ConversionFactorsRecord input) {
+    void setConversionFactorOutputID(ConversionFactorsRecord input) {
         conversionFactorOutputID.setValue(input);
     }
 
     //set the selected ingredient
-    public void setIngredientSelected(IngredientsRecord input) {
+    void setIngredientSelected(IngredientsRecord input) {
         Log.i("VMM","setIngredientSelected " + input.getName());
         ingredientSelected.setValue(input);
     }
@@ -174,7 +174,6 @@ public class ViewModelMeasures extends AndroidViewModel {
     }
 
     private Double calculateOutputValue() {
-        Log.i("VMM","Input = " + inputValue.getValue() + " Conversion = " + mediatorConversionFactor.getValue() + " Output = " + inputValue.getValue()* mediatorConversionFactor.getValue());
         return inputValue.getValue()* mediatorConversionFactor.getValue();
     }
 
@@ -214,21 +213,19 @@ public class ViewModelMeasures extends AndroidViewModel {
         });
     }
 
+    /**
+     * calculate the conversion factor based on input, output, and ingredient
+     * @return returns the conversion factor value
+     */
     private Double calculateConversionFactor() {
-        Log.i("VMM","Conversion Factor = " + conversionFactorInputID.getValue().getConversionFactor()/conversionFactorOutputID.getValue().getConversionFactor());
-
         //check if input and output data types are the same (i.e. both mass or both volume
         if (conversionFactorInputID.getValue().getType() == conversionFactorOutputID.getValue().getType()) {
-            Log.i("VMM","conversionFactorInputID type == conversionFactorOutputID type");
             return conversionFactorInputID.getValue().getConversionFactor()/conversionFactorOutputID.getValue().getConversionFactor();
         } else {
-            Log.i("VMM","conversionFactorInputID type != conversionFactorOutputID type");
             //check if input is mass or volume
             if (conversionFactorInputID.getValue().getType() == 1 && conversionFactorOutputID.getValue().getType() == 2) {
-                Log.i("VMM","conversionFactorInputID is mass");
                 return conversionFactorInputID.getValue().getConversionFactor()/(conversionFactorOutputID.getValue().getConversionFactor()*ingredientSelected.getValue().getDensity());
             } else {
-                Log.i("VMM","conversionFactorInputID is volume");
                 return conversionFactorInputID.getValue().getConversionFactor()*ingredientSelected.getValue().getDensity()/conversionFactorOutputID.getValue().getConversionFactor();
             }
         }
@@ -240,7 +237,7 @@ public class ViewModelMeasures extends AndroidViewModel {
 
 
     /**
-     * filter for the allowable output list for the spinner
+     * filter class for the allowable output list for the spinner
      */
     static class SubsetConversionFactorFilter {
         final ConversionFactorsRecord conversionFactorsRecord;
@@ -253,13 +250,14 @@ public class ViewModelMeasures extends AndroidViewModel {
 
     }
 
+    /**
+     * setup the mediator for the subset conversion factor filter, based on conversion factor & ingredient
+     */
     private void mediatorSubsetFilterInit() {
-        Log.i("VMM","mediatorSubsetFilterInit init");
         //observe the input type
         mediatorSubsetConversionFactorFilter.addSource(conversionFactorInputID, new Observer<ConversionFactorsRecord>() {
             @Override
             public void onChanged(ConversionFactorsRecord input) {
-                Log.i("VMM","mediatorSubsetFilterInit conversionFactorInputID changed");
                 if (conversionFactorInputID.getValue() != null && ingredientSelected.getValue() != null) {
                     //create the subset filter
                     mediatorSubsetConversionFactorFilter.setValue(createSubsetFilter());
@@ -272,15 +270,17 @@ public class ViewModelMeasures extends AndroidViewModel {
             public void onChanged(IngredientsRecord input) {
                 if (conversionFactorInputID.getValue() != null && ingredientSelected.getValue() != null) {
                     //create the subset filter
-                    Log.i("VMM","mediatorSubsetFilterInit ingredientSelected changed");
                     mediatorSubsetConversionFactorFilter.setValue(createSubsetFilter());
                 }
             }
         });
     }
 
+    /**
+     * create a subset filter based on livedata values of conversion factor and ingredient
+     * @return returns the subset filter used for filtering the list of conversion factors
+     */
     private SubsetConversionFactorFilter createSubsetFilter() {
-        Log.i("VMM","createSubsetFilter " + conversionFactorInputID.getValue().getName() + " " + ingredientSelected.getValue().getName());
         return new SubsetConversionFactorFilter(conversionFactorInputID.getValue(), ingredientSelected.getValue());
     }
 }

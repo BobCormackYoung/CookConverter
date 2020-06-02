@@ -12,6 +12,12 @@ import com.youngsoft.cookconverter.R;
 
 public class FragmentBundtCake extends Fragment {
 
+    ViewModelBaking viewModelBaking;
+
+    public FragmentBundtCake(ViewModelBaking viewModel) {
+        viewModelBaking = viewModel;
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_bundt_cake, container, false);
         return root;
