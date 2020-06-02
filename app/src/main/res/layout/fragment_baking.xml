@@ -69,6 +69,7 @@
                 android:id="@+id/vp_baking_tablayout_input">
 
                 <com.google.android.material.tabs.TabLayout
+                    style="@style/Widget.MaterialComponents.TabLayout.Colored"
                     android:id="@+id/tl_baking_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -88,6 +89,7 @@
                 android:id="@+id/vp_baking_tablayout_output">
 
                 <com.google.android.material.tabs.TabLayout
+                    style="@style/Widget.MaterialComponents.TabLayout.Colored"
                     android:id="@+id/tl_baking_output"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
