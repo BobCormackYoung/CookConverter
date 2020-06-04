@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
@@ -28,6 +29,7 @@ public class FragmentBaking extends Fragment {
     private ViewPager viewPagerTabLayoutOutput;
     private TabLayout tabLayoutOutput;
     private TextInputEditText etInputValue;
+    private TextInputEditText etOutputValue;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewModelBaking = ViewModelProviders.of(this).get(ViewModelBaking.class);
@@ -43,8 +45,8 @@ public class FragmentBaking extends Fragment {
         setListeners();
         setObservers();
         //create adapter for the tab layout
-        TabLayoutAdapter adapterTabLayoutInput = new TabLayoutAdapter(getChildFragmentManager(), viewModelBaking);
-        TabLayoutAdapter adapterTabLayoutOutput = new TabLayoutAdapter(getChildFragmentManager(), viewModelBaking);
+        TabLayoutAdapter adapterTabLayoutInput = new TabLayoutAdapter(getChildFragmentManager(), viewModelBaking, true);
+        TabLayoutAdapter adapterTabLayoutOutput = new TabLayoutAdapter(getChildFragmentManager(), viewModelBaking, false);
 
         viewPagerTabLayoutInput.setAdapter(adapterTabLayoutInput);
         viewPagerTabLayoutOutput.setAdapter(adapterTabLayoutOutput);
@@ -114,6 +116,7 @@ public class FragmentBaking extends Fragment {
                     } catch (ParseException e) {
                         //Can't handle leading decimal
                         e.printStackTrace();
+                        temp = 0.0;
                     }
                     viewModelBaking.setInputValueMutable(temp);
                 }
@@ -130,6 +133,18 @@ public class FragmentBaking extends Fragment {
      * set livedata observers
      */
     private void setObservers() {
+        viewModelBaking.getOutputValue().observe(getViewLifecycleOwner(), new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                //check if value is too small to be worth displaying
+                if (aDouble*1000 < 1) {
+                    etOutputValue.setText("0.0");
+                } else {
+                    DecimalFormat decimalFormat = new DecimalFormat("#,##0.###");
+                    etOutputValue.setText(decimalFormat.format(aDouble));
+                }
+            }
+        });
     }
 
 
@@ -143,5 +158,6 @@ public class FragmentBaking extends Fragment {
         viewPagerTabLayoutOutput = root.findViewById(R.id.vp_baking_tablayout_output);
         tabLayoutOutput = root.findViewById(R.id.tl_baking_output);
         etInputValue = root.findViewById(R.id.tiet_fb_input_value);
+        etOutputValue = root.findViewById(R.id.tiet_fb_output_value);
     }
 }
