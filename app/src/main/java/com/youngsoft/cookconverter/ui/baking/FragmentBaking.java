@@ -147,7 +147,6 @@ public class FragmentBaking extends Fragment {
         });
     }
 
-
     /**
      * map views from the root fragment view
      * @param root input view used for mapping views

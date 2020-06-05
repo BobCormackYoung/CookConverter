@@ -83,7 +83,7 @@
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/vp_baking_tablayout_input"
                 android:layout_width="match_parent"
-                android:layout_height="170dp">
+                android:layout_height="180dp">
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tl_baking_input"
@@ -115,7 +115,7 @@
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/vp_baking_tablayout_output"
                 android:layout_width="match_parent"
-                android:layout_height="170dp">
+                android:layout_height="180dp">
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tl_baking_output"

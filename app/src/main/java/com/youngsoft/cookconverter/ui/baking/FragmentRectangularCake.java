@@ -44,7 +44,9 @@ public class FragmentRectangularCake extends Fragment {
         setListeners();
     }
 
+    //set view listeners for edit texts
     private void setListeners() {
+        //listener for width
         etDimension1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -75,6 +77,7 @@ public class FragmentRectangularCake extends Fragment {
             }
         });
 
+        //listener for length
         etDimension2.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -106,6 +109,7 @@ public class FragmentRectangularCake extends Fragment {
         });
     }
 
+    //save the width to input or output pan variable in viewmodel
     private void saveDimension1EditTextValue(Double v) {
         if (isInput) {
             viewModelBaking.setInputRectangularPanDimension1(v);
@@ -114,6 +118,7 @@ public class FragmentRectangularCake extends Fragment {
         }
     }
 
+    //save the length to input or output pan variable in viewmodel
     private void saveDimension2EditTextValue(Double v) {
         if (isInput) {
             viewModelBaking.setInputRectangularPanDimension2(v);
@@ -122,6 +127,7 @@ public class FragmentRectangularCake extends Fragment {
         }
     }
 
+    //map views to object variables
     private void mapViews(View root) {
         spFRCUnits = root.findViewById(R.id.sp_frc_input_units);
         etDimension1 = root.findViewById(R.id.tiet_frc_width_input);

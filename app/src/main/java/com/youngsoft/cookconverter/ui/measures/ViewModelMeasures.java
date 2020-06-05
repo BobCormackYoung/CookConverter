@@ -44,7 +44,7 @@ public class ViewModelMeasures extends AndroidViewModel {
     public ViewModelMeasures(@NonNull Application application) {
         super(application);
         dataRepository = new DataRepository(application);
-        allConversionFactors = dataRepository.getAllConversionFactorsRecords();
+        allConversionFactors = dataRepository.getAllMassVolumeConversionFactors();
         allIngredients = dataRepository.getAllIngredientsRecords();
 
         //set initial input value for conversion to 0

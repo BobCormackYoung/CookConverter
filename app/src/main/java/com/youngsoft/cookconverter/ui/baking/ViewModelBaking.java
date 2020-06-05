@@ -13,6 +13,9 @@ import com.youngsoft.cookconverter.data.DataRepository;
 
 public class ViewModelBaking extends AndroidViewModel {
 
+    //TODO: add dimensional conversions
+    //TODO: add error checking for bundt pan ID > OD and OD < ID
+
     private DataRepository dataRepository;
 
     private static Double PI = 3.14159265359;
@@ -36,6 +39,10 @@ public class ViewModelBaking extends AndroidViewModel {
     private MediatorLiveData<Double> outputValue;
     private MediatorLiveData<Double> areaInput;
     private MediatorLiveData<Double> areaOutput;
+    private MediatorLiveData<Boolean> isErrorODltIDInput;
+    private MediatorLiveData<Boolean> isErrorIDgtODInput;
+    private MediatorLiveData<Boolean> isErrorODltIDOutput;
+    private MediatorLiveData<Boolean> isErrorIDgtODOutput;
 
     public ViewModelBaking(@NonNull Application application) {
         super(application);
@@ -49,8 +56,86 @@ public class ViewModelBaking extends AndroidViewModel {
         areaOutput = new MediatorLiveData<>();
         mediatorAreaOutputInit();
 
+        isErrorIDgtODInput = new MediatorLiveData<>();
+        mediatorIsErrorIDgtODInputInit();
+        isErrorODltIDInput = new MediatorLiveData<>();
+        mediatorIsErrorODltIDInputInit();
+
+        isErrorIDgtODOutput = new MediatorLiveData<>();
+        mediatorIsErrorIDgtODOutputInit();
+        isErrorODltIDOutput = new MediatorLiveData<>();
+        mediatorIsErrorODltIDOutputInit();
+
         outputValue = new MediatorLiveData<>();
         mediatorOutputValueInit();
+    }
+
+    /**
+     * add sources for checking whether OD is less than ID
+     * only observe changes to OD value - only want to throw error when editing OD value
+     */
+    private void mediatorIsErrorODltIDOutputInit() {
+        isErrorODltIDOutput.addSource(outputBundtPanDimension1, new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                if (outputBundtPanDimension1.getValue() < outputBundtPanDimension2.getValue()) {
+                    isErrorODltIDOutput.setValue(true);
+                } else {
+                    isErrorODltIDOutput.setValue(false);
+                }
+            }
+        });
+    }
+
+    /**
+     * add sources for checking whether ID is less than OD
+     * only observe changes to ID value - only want to throw error when editing ID value
+     */
+    private void mediatorIsErrorIDgtODOutputInit() {
+        isErrorIDgtODOutput.addSource(outputBundtPanDimension2, new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                if (outputBundtPanDimension1.getValue() < outputBundtPanDimension2.getValue()) {
+                    isErrorIDgtODOutput.setValue(true);
+                } else {
+                    isErrorIDgtODOutput.setValue(false);
+                }
+            }
+        });
+    }
+
+    /**
+     * add sources for checking whether OD is less than ID
+     * only observe changes to OD value - only want to throw error when editing OD value
+     */
+    private void mediatorIsErrorODltIDInputInit() {
+        isErrorODltIDInput.addSource(inputBundtPanDimension1, new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                if (inputBundtPanDimension1.getValue() < inputBundtPanDimension2.getValue()) {
+                    isErrorODltIDInput.setValue(true);
+                } else {
+                    isErrorODltIDInput.setValue(false);
+                }
+            }
+        });
+    }
+
+    /**
+     * add sources for checking whether ID is less than OD
+     * only observe changes to ID value - only want to throw error when editing ID value
+     */
+    private void mediatorIsErrorIDgtODInputInit() {
+        isErrorIDgtODInput.addSource(inputBundtPanDimension2, new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                if (inputBundtPanDimension1.getValue() < inputBundtPanDimension2.getValue()) {
+                    isErrorIDgtODInput.setValue(true);
+                } else {
+                    isErrorIDgtODInput.setValue(false);
+                }
+            }
+        });
     }
 
     private void setupLiveData() {
@@ -95,6 +180,10 @@ public class ViewModelBaking extends AndroidViewModel {
     public LiveData<Double> getOutputValue() {
         return outputValue;
     }
+    public LiveData<Boolean> getIsErrorODltIDInput() { return isErrorODltIDInput; }
+    public LiveData<Boolean> getIsErrorIDgtODInput() { return isErrorIDgtODInput; }
+    public LiveData<Boolean> getIsErrorODltIDOutput() { return isErrorODltIDOutput; }
+    public LiveData<Boolean> getIsErrorIDgtODOutput() { return isErrorIDgtODOutput; }
 
     //setters
     void setPanTypeInputMutable(Integer input) {

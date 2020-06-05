@@ -42,6 +42,7 @@ public class FragmentCircularCake extends Fragment {
         setListeners();
     }
 
+    //set listeners for views
     private void setListeners() {
         etDimension.addTextChangedListener(new TextWatcher() {
             @Override
@@ -74,6 +75,7 @@ public class FragmentCircularCake extends Fragment {
         });
     }
 
+    //save value for the pan diameter
     private void saveEditTextValue(double v) {
         if (isInput) {
             viewModelBaking.setInputCircularPanDimension(v);
@@ -83,6 +85,7 @@ public class FragmentCircularCake extends Fragment {
 
     }
 
+    //map views from the fragment
     private void mapViews(View root) {
         spFCCUnits = root.findViewById(R.id.sp_fcc_input_units);
         etDimension = root.findViewById(R.id.tiet_fcc_od_input);
