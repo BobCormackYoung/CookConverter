@@ -17,6 +17,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
 import com.youngsoft.cookconverter.R;
+import com.youngsoft.cookconverter.ui.util.WrapContentHeightViewPager;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -24,9 +25,9 @@ import java.text.ParseException;
 public class FragmentBaking extends Fragment {
 
     private ViewModelBaking viewModelBaking;
-    private ViewPager viewPagerTabLayoutInput;
+    private WrapContentHeightViewPager viewPagerTabLayoutInput;
     private TabLayout tabLayoutInput;
-    private ViewPager viewPagerTabLayoutOutput;
+    private WrapContentHeightViewPager viewPagerTabLayoutOutput;
     private TabLayout tabLayoutOutput;
     private TextInputEditText etInputValue;
     private TextInputEditText etOutputValue;
