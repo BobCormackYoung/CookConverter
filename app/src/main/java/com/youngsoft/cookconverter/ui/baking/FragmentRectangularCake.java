@@ -1,31 +1,38 @@
 package com.youngsoft.cookconverter.ui.baking;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.Observer;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.youngsoft.cookconverter.R;
+import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
+import com.youngsoft.cookconverter.ui.util.MeasuresSpinnerAdapter;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.util.List;
 
 public class FragmentRectangularCake extends Fragment {
 
     private ViewModelBaking viewModelBaking;
     private Spinner spFRCUnits;
-    private TextInputEditText etDimension1;
-    private TextInputEditText etDimension2;
+    private TextInputEditText etDimensionWidth;
+    private TextInputEditText etDimensionLength;
     private boolean isInput;
+    private MeasuresSpinnerAdapter measuresSpinnerAdapter;
+    private Context context;
 
     FragmentRectangularCake(ViewModelBaking viewModel, boolean isInput) {
         viewModelBaking = viewModel;
@@ -41,13 +48,31 @@ public class FragmentRectangularCake extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        context = getActivity();
         setListeners();
+        setObservers();
+    }
+
+    //observe changes to livedata for updating views
+    private void setObservers() {
+
+        //observe changes to the list of conversion factors
+        //update adapter when a change is observed
+        viewModelBaking.getConversionFactorsRecordLiveData().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
+            @Override
+            public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
+                ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
+                conversionFactorsRecords.toArray(outputArray);
+                measuresSpinnerAdapter = new MeasuresSpinnerAdapter(context, outputArray);
+                spFRCUnits.setAdapter(measuresSpinnerAdapter);
+            }
+        });
     }
 
     //set view listeners for edit texts
     private void setListeners() {
         //listener for width
-        etDimension1.addTextChangedListener(new TextWatcher() {
+        etDimensionWidth.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -55,13 +80,13 @@ public class FragmentRectangularCake extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (etDimension1.getText().toString().isEmpty()) {
+                if (etDimensionWidth.getText().toString().isEmpty()) {
                     saveDimension1EditTextValue(0.0);
                 } else {
                     Double temp = null;
                     //try to catch error associated with leading decimal
                     try {
-                        temp = DecimalFormat.getNumberInstance().parse(etDimension1.getText().toString()).doubleValue();
+                        temp = DecimalFormat.getNumberInstance().parse(etDimensionWidth.getText().toString()).doubleValue();
                     } catch (ParseException e) {
                         //Can't handle leading decimal
                         e.printStackTrace();
@@ -78,7 +103,7 @@ public class FragmentRectangularCake extends Fragment {
         });
 
         //listener for length
-        etDimension2.addTextChangedListener(new TextWatcher() {
+        etDimensionLength.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -86,13 +111,13 @@ public class FragmentRectangularCake extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (etDimension2.getText().toString().isEmpty()) {
+                if (etDimensionLength.getText().toString().isEmpty()) {
                     saveDimension2EditTextValue(0.0);
                 } else {
                     Double temp = null;
                     //try to catch error associated with leading decimal
                     try {
-                        temp = DecimalFormat.getNumberInstance().parse(etDimension2.getText().toString()).doubleValue();
+                        temp = DecimalFormat.getNumberInstance().parse(etDimensionLength.getText().toString()).doubleValue();
                     } catch (ParseException e) {
                         //Can't handle leading decimal
                         e.printStackTrace();
@@ -104,6 +129,24 @@ public class FragmentRectangularCake extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        //listen for changes to the measurement spinner value
+        spFRCUnits.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ConversionFactorsRecord selectedItem = measuresSpinnerAdapter.getItem(position);
+                if (isInput) {
+                    viewModelBaking.setInputRectangularConversionFactor(selectedItem);
+                } else {
+                    viewModelBaking.setOutputRectangularConversionFactor(selectedItem);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
@@ -130,8 +173,8 @@ public class FragmentRectangularCake extends Fragment {
     //map views to object variables
     private void mapViews(View root) {
         spFRCUnits = root.findViewById(R.id.sp_frc_input_units);
-        etDimension1 = root.findViewById(R.id.tiet_frc_width_input);
-        etDimension2 = root.findViewById(R.id.tiet_frc_length_input);
+        etDimensionWidth = root.findViewById(R.id.tiet_frc_width_input);
+        etDimensionLength = root.findViewById(R.id.tiet_frc_length_input);
     }
 
 }

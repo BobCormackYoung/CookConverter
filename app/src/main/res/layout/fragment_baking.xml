@@ -89,7 +89,8 @@
                     android:id="@+id/tl_baking_input"
                     style="@style/Widget.MaterialComponents.TabLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    app:tabMode="auto" />
 
             </androidx.viewpager.widget.ViewPager>
 
@@ -121,7 +122,8 @@
                     android:id="@+id/tl_baking_output"
                     style="@style/Widget.MaterialComponents.TabLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    app:tabMode="auto"/>
 
             </androidx.viewpager.widget.ViewPager>
 

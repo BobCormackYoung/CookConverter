@@ -1,11 +1,13 @@
 package com.youngsoft.cookconverter.ui.baking;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
@@ -16,9 +18,13 @@ import androidx.lifecycle.Observer;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.youngsoft.cookconverter.R;
+import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
+import com.youngsoft.cookconverter.ui.util.IngredientsSpinnerAdapter;
+import com.youngsoft.cookconverter.ui.util.MeasuresSpinnerAdapter;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.util.List;
 
 public class FragmentBundtCake extends Fragment {
 
@@ -29,6 +35,8 @@ public class FragmentBundtCake extends Fragment {
     private TextInputLayout tilOuterDiameter;
     private TextInputLayout tilInnerDiameter;
     private boolean isInput;
+    private MeasuresSpinnerAdapter measuresSpinnerAdapter;
+    private Context context;
 
     public FragmentBundtCake(ViewModelBaking viewModel, boolean isInput) {
         viewModelBaking = viewModel;
@@ -44,11 +52,15 @@ public class FragmentBundtCake extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        context = getActivity();
         setListeners();
         setObservers();
     }
 
+    //observe changes to livedata for updating views
     private void setObservers() {
+
+        //observe for ID value being larger than the OD value
         viewModelBaking.getIsErrorIDgtODInput().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
@@ -60,6 +72,7 @@ public class FragmentBundtCake extends Fragment {
             }
         });
 
+        //observe for ID value being larger than the OD value
         viewModelBaking.getIsErrorIDgtODOutput().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
@@ -71,6 +84,7 @@ public class FragmentBundtCake extends Fragment {
             }
         });
 
+        //observe for OD value being smaller than the ID value
         viewModelBaking.getIsErrorODltIDInput().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
@@ -82,6 +96,7 @@ public class FragmentBundtCake extends Fragment {
             }
         });
 
+        //observe for OD value being smaller than the ID value
         viewModelBaking.getIsErrorODltIDOutput().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
@@ -90,6 +105,18 @@ public class FragmentBundtCake extends Fragment {
                 } else {
                     tilOuterDiameter.setError(null);
                 }
+            }
+        });
+
+        //observe changes to the list of conversion factors
+        //update adapter when a change is observed
+        viewModelBaking.getConversionFactorsRecordLiveData().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
+            @Override
+            public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
+                ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
+                conversionFactorsRecords.toArray(outputArray);
+                measuresSpinnerAdapter = new MeasuresSpinnerAdapter(context, outputArray);
+                spFBCUnits.setAdapter(measuresSpinnerAdapter);
             }
         });
     }
@@ -153,6 +180,24 @@ public class FragmentBundtCake extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        //listen for changes to the measurement spinner value
+        spFBCUnits.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ConversionFactorsRecord selectedItem = measuresSpinnerAdapter.getItem(position);
+                if (isInput) {
+                    viewModelBaking.setInputBundtConversionFactor(selectedItem);
+                } else {
+                    viewModelBaking.setOutputBundtConversionFactor(selectedItem);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });

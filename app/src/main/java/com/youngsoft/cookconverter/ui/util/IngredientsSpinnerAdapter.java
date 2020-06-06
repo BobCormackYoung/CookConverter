@@ -1,4 +1,4 @@
-package com.youngsoft.cookconverter.ui.measures;
+package com.youngsoft.cookconverter.ui.util;
 
 import android.content.Context;
 import android.view.LayoutInflater;

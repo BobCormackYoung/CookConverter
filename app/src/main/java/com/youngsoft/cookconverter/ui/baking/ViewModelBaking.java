@@ -1,6 +1,7 @@
 package com.youngsoft.cookconverter.ui.baking;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -9,7 +10,10 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
 import com.youngsoft.cookconverter.data.DataRepository;
+
+import java.util.List;
 
 public class ViewModelBaking extends AndroidViewModel {
 
@@ -19,6 +23,9 @@ public class ViewModelBaking extends AndroidViewModel {
     private DataRepository dataRepository;
 
     private static Double PI = 3.14159265359;
+
+    //livedata
+    private LiveData<List<ConversionFactorsRecord>> conversionFactorsRecordLiveData;
 
     //Mutable livedata
     private MutableLiveData<Integer> panTypeInputMutable;
@@ -34,6 +41,13 @@ public class ViewModelBaking extends AndroidViewModel {
     private MutableLiveData<Double> outputCircularPanDimension;
     private MutableLiveData<Double> outputBundtPanDimension1;
     private MutableLiveData<Double> outputBundtPanDimension2;
+    private MutableLiveData<ConversionFactorsRecord> inputBundtConversionFactor;
+    private MutableLiveData<ConversionFactorsRecord> outputBundtConversionFactor;
+    private MutableLiveData<ConversionFactorsRecord> inputRectangularConversionFactor;
+    private MutableLiveData<ConversionFactorsRecord> outputRectangularConversionFactor;
+    private MutableLiveData<ConversionFactorsRecord> inputCircularConversionFactor;
+    private MutableLiveData<ConversionFactorsRecord> outputCircularConversionFactor;
+
 
     //Mediator livedata
     private MediatorLiveData<Double> outputValue;
@@ -43,6 +57,9 @@ public class ViewModelBaking extends AndroidViewModel {
     private MediatorLiveData<Boolean> isErrorIDgtODInput;
     private MediatorLiveData<Boolean> isErrorODltIDOutput;
     private MediatorLiveData<Boolean> isErrorIDgtODOutput;
+    private MediatorLiveData<Double> conversionFactorGlobalOutput;
+    private MediatorLiveData<Double> conversionFactorInputPan;
+    private MediatorLiveData<Double> conversionFactorOutputPan;
 
     public ViewModelBaking(@NonNull Application application) {
         super(application);
@@ -66,79 +83,21 @@ public class ViewModelBaking extends AndroidViewModel {
         isErrorODltIDOutput = new MediatorLiveData<>();
         mediatorIsErrorODltIDOutputInit();
 
+        conversionFactorInputPan = new MediatorLiveData<>();
+        mediatorConversionFactorInputPanInit();
+
+        conversionFactorOutputPan = new MediatorLiveData<>();
+        mediatorConversionFactorOutputPanInit();
+
+        conversionFactorGlobalOutput = new MediatorLiveData<>();
+        mediatorConversionFactorInit();
+
         outputValue = new MediatorLiveData<>();
         mediatorOutputValueInit();
     }
 
-    /**
-     * add sources for checking whether OD is less than ID
-     * only observe changes to OD value - only want to throw error when editing OD value
-     */
-    private void mediatorIsErrorODltIDOutputInit() {
-        isErrorODltIDOutput.addSource(outputBundtPanDimension1, new Observer<Double>() {
-            @Override
-            public void onChanged(Double aDouble) {
-                if (outputBundtPanDimension1.getValue() < outputBundtPanDimension2.getValue()) {
-                    isErrorODltIDOutput.setValue(true);
-                } else {
-                    isErrorODltIDOutput.setValue(false);
-                }
-            }
-        });
-    }
-
-    /**
-     * add sources for checking whether ID is less than OD
-     * only observe changes to ID value - only want to throw error when editing ID value
-     */
-    private void mediatorIsErrorIDgtODOutputInit() {
-        isErrorIDgtODOutput.addSource(outputBundtPanDimension2, new Observer<Double>() {
-            @Override
-            public void onChanged(Double aDouble) {
-                if (outputBundtPanDimension1.getValue() < outputBundtPanDimension2.getValue()) {
-                    isErrorIDgtODOutput.setValue(true);
-                } else {
-                    isErrorIDgtODOutput.setValue(false);
-                }
-            }
-        });
-    }
-
-    /**
-     * add sources for checking whether OD is less than ID
-     * only observe changes to OD value - only want to throw error when editing OD value
-     */
-    private void mediatorIsErrorODltIDInputInit() {
-        isErrorODltIDInput.addSource(inputBundtPanDimension1, new Observer<Double>() {
-            @Override
-            public void onChanged(Double aDouble) {
-                if (inputBundtPanDimension1.getValue() < inputBundtPanDimension2.getValue()) {
-                    isErrorODltIDInput.setValue(true);
-                } else {
-                    isErrorODltIDInput.setValue(false);
-                }
-            }
-        });
-    }
-
-    /**
-     * add sources for checking whether ID is less than OD
-     * only observe changes to ID value - only want to throw error when editing ID value
-     */
-    private void mediatorIsErrorIDgtODInputInit() {
-        isErrorIDgtODInput.addSource(inputBundtPanDimension2, new Observer<Double>() {
-            @Override
-            public void onChanged(Double aDouble) {
-                if (inputBundtPanDimension1.getValue() < inputBundtPanDimension2.getValue()) {
-                    isErrorIDgtODInput.setValue(true);
-                } else {
-                    isErrorIDgtODInput.setValue(false);
-                }
-            }
-        });
-    }
-
     private void setupLiveData() {
+        conversionFactorsRecordLiveData = dataRepository.getAllDistanceConversionFactors();
         panTypeInputMutable = new MutableLiveData<>();
         panTypeOutputMutable = new MutableLiveData<>();
         inputValueMutable = new MutableLiveData<>();
@@ -152,6 +111,12 @@ public class ViewModelBaking extends AndroidViewModel {
         outputCircularPanDimension = new MutableLiveData<>();
         outputBundtPanDimension1 = new MutableLiveData<>();
         outputBundtPanDimension2 = new MutableLiveData<>();
+        inputBundtConversionFactor = new MutableLiveData<>();
+        outputBundtConversionFactor = new MutableLiveData<>();
+        inputRectangularConversionFactor = new MutableLiveData<>();
+        outputRectangularConversionFactor = new MutableLiveData<>();
+        inputCircularConversionFactor = new MutableLiveData<>();
+        outputCircularConversionFactor = new MutableLiveData<>();
     }
 
     private void initLiveData() {
@@ -184,6 +149,7 @@ public class ViewModelBaking extends AndroidViewModel {
     public LiveData<Boolean> getIsErrorIDgtODInput() { return isErrorIDgtODInput; }
     public LiveData<Boolean> getIsErrorODltIDOutput() { return isErrorODltIDOutput; }
     public LiveData<Boolean> getIsErrorIDgtODOutput() { return isErrorIDgtODOutput; }
+    public LiveData<List<ConversionFactorsRecord>> getConversionFactorsRecordLiveData() { return conversionFactorsRecordLiveData; }
 
     //setters
     void setPanTypeInputMutable(Integer input) {
@@ -205,6 +171,30 @@ public class ViewModelBaking extends AndroidViewModel {
     void setOutputCircularPanDimension(Double input) { outputCircularPanDimension.setValue(input); }
     void setOutputBundtPanDimension1(Double input) { outputBundtPanDimension1.setValue(input); }
     void setOutputBundtPanDimension2(Double input) { outputBundtPanDimension2.setValue(input); }
+    void setInputBundtConversionFactor(ConversionFactorsRecord input) {
+        Log.i("VMB","setInputBundtConversionFactor");
+        inputBundtConversionFactor.setValue(input);
+    }
+    void setOutputBundtConversionFactor(ConversionFactorsRecord input) {
+        Log.i("VMB","setOutputBundtConversionFactor");
+        outputBundtConversionFactor.setValue(input);
+    }
+    void setInputRectangularConversionFactor(ConversionFactorsRecord input) {
+        Log.i("VMB","setInputRectangularConversionFactor");
+        inputRectangularConversionFactor.setValue(input);
+    }
+    void setOutputRectangularConversionFactor(ConversionFactorsRecord input) {
+        Log.i("VMB","setOutputRectangularConversionFactor");
+        outputRectangularConversionFactor.setValue(input);
+    }
+    void setInputCircularConversionFactor(ConversionFactorsRecord input) {
+        Log.i("VMB","setInputCircularConversionFactor");
+        inputCircularConversionFactor.setValue(input);
+    }
+    void setOutputCircularConversionFactor(ConversionFactorsRecord input) {
+        Log.i("VMB","setOutputCircularConversionFactor");
+        outputCircularConversionFactor.setValue(input);
+    }
 
     /**
      * setup the sources for the output value to trigger recalculation
@@ -231,6 +221,14 @@ public class ViewModelBaking extends AndroidViewModel {
                 outputValue.setValue(calculateOutputValue());
             }
         });
+
+        //observe changes to the conversion factors
+        outputValue.addSource(conversionFactorGlobalOutput, new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                outputValue.setValue(calculateOutputValue());
+            }
+        });
     }
 
     /**
@@ -242,7 +240,7 @@ public class ViewModelBaking extends AndroidViewModel {
             return 0.0;
         } else {
             if (areaInput.getValue() != 0.0 && areaOutput.getValue() != 0.0) {
-                return inputValueMutable.getValue()*areaOutput.getValue()/areaInput.getValue();
+                return inputValueMutable.getValue()*(areaOutput.getValue()/areaInput.getValue())*conversionFactorGlobalOutput.getValue();
             } else {
                 return 0.0;
             }
@@ -377,6 +375,244 @@ public class ViewModelBaking extends AndroidViewModel {
             return areaOuter-areaInner;
         } else {
             return 0.0;
+        }
+    }
+
+    /**
+     * add sources for checking whether OD is less than ID
+     * only observe changes to OD value - only want to throw error when editing OD value
+     */
+    private void mediatorIsErrorODltIDOutputInit() {
+        isErrorODltIDOutput.addSource(outputBundtPanDimension1, new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                if (outputBundtPanDimension1.getValue() < outputBundtPanDimension2.getValue()) {
+                    isErrorODltIDOutput.setValue(true);
+                } else {
+                    isErrorODltIDOutput.setValue(false);
+                }
+            }
+        });
+    }
+
+    /**
+     * add sources for checking whether ID is less than OD
+     * only observe changes to ID value - only want to throw error when editing ID value
+     */
+    private void mediatorIsErrorIDgtODOutputInit() {
+        isErrorIDgtODOutput.addSource(outputBundtPanDimension2, new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                if (outputBundtPanDimension1.getValue() < outputBundtPanDimension2.getValue()) {
+                    isErrorIDgtODOutput.setValue(true);
+                } else {
+                    isErrorIDgtODOutput.setValue(false);
+                }
+            }
+        });
+    }
+
+    /**
+     * add sources for checking whether OD is less than ID
+     * only observe changes to OD value - only want to throw error when editing OD value
+     */
+    private void mediatorIsErrorODltIDInputInit() {
+        isErrorODltIDInput.addSource(inputBundtPanDimension1, new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                if (inputBundtPanDimension1.getValue() < inputBundtPanDimension2.getValue()) {
+                    isErrorODltIDInput.setValue(true);
+                } else {
+                    isErrorODltIDInput.setValue(false);
+                }
+            }
+        });
+    }
+
+    /**
+     * add sources for checking whether ID is less than OD
+     * only observe changes to ID value - only want to throw error when editing ID value
+     */
+    private void mediatorIsErrorIDgtODInputInit() {
+        isErrorIDgtODInput.addSource(inputBundtPanDimension2, new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                if (inputBundtPanDimension1.getValue() < inputBundtPanDimension2.getValue()) {
+                    isErrorIDgtODInput.setValue(true);
+                } else {
+                    isErrorIDgtODInput.setValue(false);
+                }
+            }
+        });
+    }
+
+    /**
+     * add sources to select the correct conversion factor based on selected pan type
+     */
+    private void mediatorConversionFactorOutputPanInit() {
+        //add sources for output pan type
+        conversionFactorOutputPan.addSource(panTypeOutputMutable, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                conversionFactorOutputPan.setValue(calculateOutputConversionFactor());
+            }
+        });
+
+        //add source for changes to conversion factors
+        conversionFactorOutputPan.addSource(outputBundtConversionFactor, new Observer<ConversionFactorsRecord>() {
+            @Override
+            public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
+                conversionFactorOutputPan.setValue(calculateOutputConversionFactor());
+            }
+        });
+
+        //add source for changes to conversion factors
+        conversionFactorOutputPan.addSource(outputCircularConversionFactor, new Observer<ConversionFactorsRecord>() {
+            @Override
+            public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
+                conversionFactorOutputPan.setValue(calculateOutputConversionFactor());
+            }
+        });
+
+        //add source for changes to conversion factors
+        conversionFactorOutputPan.addSource(outputRectangularConversionFactor, new Observer<ConversionFactorsRecord>() {
+            @Override
+            public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
+                conversionFactorOutputPan.setValue(calculateOutputConversionFactor());
+            }
+        });
+    }
+
+    /**
+     * switch between cases to get the correct conversion factor
+     * calculates area conversion factor (i.e. mm^2)
+     * @return the conversion factor for the output pan
+     */
+    private Double calculateOutputConversionFactor() {
+        if (panTypeOutputMutable.getValue() == 0) {
+            if (outputRectangularConversionFactor.getValue() != null) {
+                Log.i("VMB","calculateOutputConversionFactor, rectangular not null");
+                return outputRectangularConversionFactor.getValue().getConversionFactor()*outputRectangularConversionFactor.getValue().getConversionFactor();
+            } else {
+                Log.i("VMB","calculateOutputConversionFactor, rectangular is null");
+                return 1.0;
+            }
+        } else if (panTypeOutputMutable.getValue() == 1) {
+            if (outputCircularConversionFactor.getValue() != null) {
+                Log.i("VMB","calculateOutputConversionFactor, circular not null");
+                return outputCircularConversionFactor.getValue().getConversionFactor()*outputCircularConversionFactor.getValue().getConversionFactor();
+            } else {
+                Log.i("VMB","calculateOutputConversionFactor, circular is null");
+                return 1.0;
+            }
+        } else if (panTypeOutputMutable.getValue() == 2) {
+            if (outputBundtConversionFactor.getValue() != null) {
+                Log.i("VMB","calculateOutputConversionFactor, bundt not null");
+                return outputBundtConversionFactor.getValue().getConversionFactor()*outputBundtConversionFactor.getValue().getConversionFactor();
+            } else {
+                Log.i("VMB","calculateOutputConversionFactor, bundt is null");
+                return 1.0;
+            }
+        } else {
+            Log.i("VMB","calculateOutputConversionFactor, unknown pan type");
+            return 1.0;
+        }
+    }
+
+    /**
+     * add sources to select the correct conversion factor based on selected pan type
+     */
+    private void mediatorConversionFactorInputPanInit() {
+        //add sources for output pan type
+        conversionFactorInputPan.addSource(panTypeInputMutable, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                conversionFactorInputPan.setValue(calculateInputConversionFactor());
+            }
+        });
+
+        //add source for changes to conversion factors
+        conversionFactorInputPan.addSource(inputBundtConversionFactor, new Observer<ConversionFactorsRecord>() {
+            @Override
+            public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
+                conversionFactorInputPan.setValue(calculateInputConversionFactor());
+            }
+        });
+
+        //add source for changes to conversion factors
+        conversionFactorInputPan.addSource(inputCircularConversionFactor, new Observer<ConversionFactorsRecord>() {
+            @Override
+            public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
+                conversionFactorInputPan.setValue(calculateInputConversionFactor());
+            }
+        });
+
+        //add source for changes to conversion factors
+        conversionFactorInputPan.addSource(inputRectangularConversionFactor, new Observer<ConversionFactorsRecord>() {
+            @Override
+            public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
+                conversionFactorInputPan.setValue(calculateInputConversionFactor());
+            }
+        });
+    }
+
+    /**
+     * switch between cases to get the correct conversion factor
+     * @return the conversion factor for the input pan
+     */
+    private Double calculateInputConversionFactor() {
+        if (panTypeInputMutable.getValue() == 0) {
+            if (inputRectangularConversionFactor.getValue() != null) {
+                return inputRectangularConversionFactor.getValue().getConversionFactor()*inputRectangularConversionFactor.getValue().getConversionFactor();
+            } else {
+                return 1.0;
+            }
+        } else if (panTypeInputMutable.getValue() == 1) {
+            if (inputCircularConversionFactor.getValue() != null) {
+                return inputCircularConversionFactor.getValue().getConversionFactor()*inputCircularConversionFactor.getValue().getConversionFactor();
+            } else {
+                return 1.0;
+            }
+        } else if (panTypeInputMutable.getValue() == 2) {
+            if (inputBundtConversionFactor.getValue() != null) {
+                return inputBundtConversionFactor.getValue().getConversionFactor()*inputBundtConversionFactor.getValue().getConversionFactor();
+            } else {
+                return 1.0;
+            }
+        } else {
+            return 1.0;
+        }
+    }
+
+    /**
+     * add sources for checking changes to the cake type and selected conversion factor
+     */
+    private void mediatorConversionFactorInit() {
+        conversionFactorGlobalOutput.addSource(conversionFactorInputPan, new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                conversionFactorGlobalOutput.setValue(calculateGlobalOutputConversionFactor());
+            }
+        });
+
+        conversionFactorGlobalOutput.addSource(conversionFactorOutputPan, new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                conversionFactorGlobalOutput.setValue(calculateGlobalOutputConversionFactor());
+            }
+        });
+    }
+
+    /**
+     * calculate the global conversion factor
+     * @return the global conversion factor
+     */
+    private Double calculateGlobalOutputConversionFactor() {
+        if (conversionFactorOutputPan.getValue() != null
+        && conversionFactorInputPan.getValue() != null) {
+            return conversionFactorOutputPan.getValue()/conversionFactorInputPan.getValue();
+        } else {
+            return 1.0;
         }
     }
 }

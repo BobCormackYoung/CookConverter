@@ -4,13 +4,11 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,8 +20,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.youngsoft.cookconverter.R;
 import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
 import com.youngsoft.cookconverter.data.IngredientsRecord;
-
-import org.w3c.dom.Text;
+import com.youngsoft.cookconverter.ui.util.IngredientsSpinnerAdapter;
+import com.youngsoft.cookconverter.ui.util.MeasuresSpinnerAdapter;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -57,14 +55,6 @@ public class FragmentMeasures extends Fragment {
         setObservers(); //init viewmodel observers
         etInputValue.setText("0.0"); //TODO: can this be removed?
     }
-
-
-
-
-
-
-
-
 
 
     /**
@@ -143,17 +133,6 @@ public class FragmentMeasures extends Fragment {
             }
         });
     }
-
-
-
-
-
-
-
-
-
-
-
 
     /**
      * set observers for the viewmodel and update view when changed
