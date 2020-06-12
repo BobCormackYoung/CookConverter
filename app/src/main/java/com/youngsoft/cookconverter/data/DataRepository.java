@@ -16,6 +16,7 @@ public class DataRepository {
     private LiveData<List<PanTypeRecord>> allPanTypeRecords;
     private LiveData<List<ConversionFactorsRecord>> allMassVolumeConversionFactors;
     private LiveData<List<ConversionFactorsRecord>> allDistanceConversionFactors;
+    private LiveData<List<RecipeList>> allRecipeList;
 
     public DataRepository(Application application) {
         DataDatabase dataDatabase = DataDatabase.getInstance(application);
@@ -25,6 +26,7 @@ public class DataRepository {
         allIngredientsRecords = dataDao.getAllIngredientsRecordsSortById();
         allPanTypeRecords = dataDao.getAllPanTypeRecordsSortById();
         allDistanceConversionFactors = dataDao.getAllDistanceConversionFactors();
+        allRecipeList = dataDao.getAllRecipeListSortById();
     }
 
     public LiveData<List<ConversionFactorsRecord>> getAllConversionFactorsRecords() {

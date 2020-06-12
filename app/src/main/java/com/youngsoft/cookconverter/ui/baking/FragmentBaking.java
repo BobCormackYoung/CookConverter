@@ -45,12 +45,15 @@ public class FragmentBaking extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setListeners();
         setObservers();
+        etInputValue.setText("0.0");
         //create adapter for the tab layout
         TabLayoutAdapter adapterTabLayoutInput = new TabLayoutAdapter(getChildFragmentManager(), viewModelBaking, true);
         TabLayoutAdapter adapterTabLayoutOutput = new TabLayoutAdapter(getChildFragmentManager(), viewModelBaking, false);
 
         viewPagerTabLayoutInput.setAdapter(adapterTabLayoutInput);
         viewPagerTabLayoutOutput.setAdapter(adapterTabLayoutOutput);
+        viewPagerTabLayoutInput.setOffscreenPageLimit(3);
+        viewPagerTabLayoutOutput.setOffscreenPageLimit(3);
 
         tabLayoutInput.setupWithViewPager(viewPagerTabLayoutInput);
         tabLayoutOutput.setupWithViewPager(viewPagerTabLayoutOutput);

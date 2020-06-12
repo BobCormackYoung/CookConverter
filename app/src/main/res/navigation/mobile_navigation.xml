@@ -3,23 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_measures">
 
     <fragment
-        android:id="@+id/navigation_home"
+        android:id="@+id/navigation_measures"
         android:name="com.youngsoft.cookconverter.ui.measures.FragmentMeasures"
         android:label="@string/title_measures"
         tools:layout="@layout/fragment_measures" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_baking"
         android:name="com.youngsoft.cookconverter.ui.baking.FragmentBaking"
         android:label="@string/title_baking"
         tools:layout="@layout/fragment_baking" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_servings"
         android:name="com.youngsoft.cookconverter.ui.servings.FragmentServings"
         android:label="@string/title_servings"
         tools:layout="@layout/fragment_servings" />
+
+    <fragment
+        android:id="@+id/navigation_ingredients"
+        android:name="com.youngsoft.cookconverter.ui.ingredients.FragmentIngredients"
+        android:label="@string/title_ingredients"
+        tools:layout="@layout/fragment_ingredients" />
+
 </navigation>

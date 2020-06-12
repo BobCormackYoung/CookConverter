@@ -11,7 +11,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.Executors;
 
-@Database(entities = {ConversionFactorsRecord.class, IngredientsRecord.class, PanTypeRecord.class}, version = 1, exportSchema = false)
+@Database(entities = {ConversionFactorsRecord.class, IngredientsRecord.class, PanTypeRecord.class, RecipeList.class}, version = 1, exportSchema = false)
 public abstract class DataDatabase extends RoomDatabase {
 
     private static DataDatabase instance;
