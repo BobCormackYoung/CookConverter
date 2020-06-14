@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.youngsoft.cookconverter.R;
 import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
 import com.youngsoft.cookconverter.data.IngredientsRecord;
+import com.youngsoft.cookconverter.ui.save.BottomSheetSaveMeasurement;
 import com.youngsoft.cookconverter.ui.util.IngredientsSpinnerAdapter;
 import com.youngsoft.cookconverter.ui.util.MeasuresSpinnerAdapter;
 
@@ -38,6 +40,8 @@ public class FragmentMeasures extends Fragment {
     private IngredientsSpinnerAdapter spinnerIngredients;
     private TextInputEditText etInputValue;
     private TextInputEditText etOutputValue;
+    private Button btSaveMeasure;
+    private BottomSheetSaveMeasurement bottomSheetSaveMeasurement;
     private Context context;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -132,6 +136,15 @@ public class FragmentMeasures extends Fragment {
 
             }
         });
+
+        //set save button listener
+        btSaveMeasure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetSaveMeasurement = new BottomSheetSaveMeasurement( 1);
+                bottomSheetSaveMeasurement.show(getChildFragmentManager(), "saveDataBottomSheet");
+            }
+        });
     }
 
     /**
@@ -192,25 +205,6 @@ public class FragmentMeasures extends Fragment {
                 spOutput.setAdapter(spinnerAdapterOutput);
             }
         });
-
-        /**
-        //observe changes to the subset list of conversion factors
-        viewModelMeasures.getSubsetConversionFactors().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
-            @Override
-            public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
-                ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
-                conversionFactorsRecords.toArray(outputArray);
-                for(int i=0; i<outputArray.length; i++){
-                    Log.i("FM","Element at the index "+i+" is ::"+outputArray[i].getName());
-                }
-
-                spinnerAdapterOutput = new MeasuresSpinnerAdapter(context, outputArray);
-                spOutput.setAdapter(spinnerAdapterOutput);
-            }
-        });
-         **/
-
-
     }
 
 
@@ -229,6 +223,7 @@ public class FragmentMeasures extends Fragment {
         etInputValue = root.findViewById(R.id.tiet_measures_input);
         etOutputValue = root.findViewById(R.id.tiet_measures_output);
         spIngredients = root.findViewById(R.id.sp_measure_ingredients);
+        btSaveMeasure = root.findViewById(R.id.bt_save_measures);
     }
 
 }

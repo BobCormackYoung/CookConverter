@@ -6,8 +6,8 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.NumberPicker;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.youngsoft.cookconverter.R;
+import com.youngsoft.cookconverter.ui.save.BottomSheetSaveMeasurement;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -28,6 +29,8 @@ public class FragmentServings extends Fragment {
     private TextInputEditText etOutputValue;
     private NumberPicker npInputServing;
     private NumberPicker npOutputServing;
+    private Button btSaveServing;
+    private BottomSheetSaveMeasurement bottomSheetSaveMeasurement;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewModelServings = ViewModelProviders.of(this).get(ViewModelServings.class);
@@ -40,10 +43,9 @@ public class FragmentServings extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initNumberPickers();
-        etInputValue.setText("0.0");
         setListeners();
         setObservers();
-        etInputValue.setText("0.0");
+        etInputValue.setText("0.0"); //is this needed
     }
 
     private void initNumberPickers() {
@@ -65,7 +67,7 @@ public class FragmentServings extends Fragment {
             @Override
             public void onChanged(Double aDouble) {
                 //check if value is too small to be worth displaying
-                if (aDouble*1000 < 1) {
+                if (aDouble * 1000 < 1) {
                     etOutputValue.setText("0.0");
                 } else {
                     DecimalFormat decimalFormat = new DecimalFormat("#,##0.###");
@@ -127,6 +129,18 @@ public class FragmentServings extends Fragment {
                 viewModelServings.setOutputServingSize(newVal);
             }
         });
+
+        //set listener for save button
+        btSaveServing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //bottomSheetSaveMeasurement = new BottomSheetSaveMeasurement(viewModelServings, 3);
+                bottomSheetSaveMeasurement = new BottomSheetSaveMeasurement( 3);
+                bottomSheetSaveMeasurement.show(getChildFragmentManager(), "saveDataBottomSheet");
+                //TODO: send data from fragmentViewModel to ActivityViewModel (possible?)
+                //TODO: open a bottomsheetdialogfragment that will look at the activity viewmodel and save the required data
+            }
+        });
     }
 
 
@@ -135,5 +149,6 @@ public class FragmentServings extends Fragment {
         etOutputValue = root.findViewById(R.id.tiet_fs_output_value);
         npInputServing = root.findViewById(R.id.np_servings_input);
         npOutputServing = root.findViewById(R.id.np_servings_output);
+        btSaveServing = root.findViewById(R.id.bt_save_serving);
     }
 }

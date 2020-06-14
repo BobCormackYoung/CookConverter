@@ -6,6 +6,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +18,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
 import com.youngsoft.cookconverter.R;
+import com.youngsoft.cookconverter.ui.save.BottomSheetSaveMeasurement;
 import com.youngsoft.cookconverter.ui.util.WrapContentHeightViewPager;
 
 import java.text.DecimalFormat;
@@ -31,6 +33,8 @@ public class FragmentBaking extends Fragment {
     private TabLayout tabLayoutOutput;
     private TextInputEditText etInputValue;
     private TextInputEditText etOutputValue;
+    private Button btSaveBaking;
+    private BottomSheetSaveMeasurement bottomSheetSaveMeasurement;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewModelBaking = ViewModelProviders.of(this).get(ViewModelBaking.class);
@@ -131,13 +135,22 @@ public class FragmentBaking extends Fragment {
 
             }
         });
+
+        //set listener for save button
+        btSaveBaking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetSaveMeasurement = new BottomSheetSaveMeasurement( 2);
+                bottomSheetSaveMeasurement.show(getChildFragmentManager(), "saveDataBottomSheet");
+            }
+        });
     }
 
     /**
      * set livedata observers
      */
     private void setObservers() {
-        viewModelBaking.getOutputValue().observe(getViewLifecycleOwner(), new Observer<Double>() {
+        viewModelBaking.getMediatorOutput().observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
                 //check if value is too small to be worth displaying
@@ -162,5 +175,6 @@ public class FragmentBaking extends Fragment {
         tabLayoutOutput = root.findViewById(R.id.tl_baking_output);
         etInputValue = root.findViewById(R.id.tiet_fb_input_value);
         etOutputValue = root.findViewById(R.id.tiet_fb_output_value);
+        btSaveBaking = root.findViewById(R.id.bt_save_baking);
     }
 }

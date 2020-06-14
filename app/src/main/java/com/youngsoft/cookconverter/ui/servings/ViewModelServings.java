@@ -1,7 +1,6 @@
 package com.youngsoft.cookconverter.ui.servings;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -9,9 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 
-import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
 import com.youngsoft.cookconverter.data.DataRepository;
 
 public class ViewModelServings extends AndroidViewModel {
@@ -72,8 +69,7 @@ public class ViewModelServings extends AndroidViewModel {
      * @return the output value
      */
     private Double calculateOutput() {
-        Log.i("VMS","mediatorConversionFactor = "+ mediatorConversionFactor.getValue()
-        + " inputValue = "+ inputValue.getValue());
+
         if (mediatorConversionFactor.getValue() != null && inputValue.getValue() != null) {
             return mediatorConversionFactor.getValue()*inputValue.getValue();
         } else {

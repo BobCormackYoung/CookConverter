@@ -17,9 +17,6 @@ import java.util.List;
 
 public class ViewModelBaking extends AndroidViewModel {
 
-    //TODO: add dimensional conversions
-    //TODO: add error checking for bundt pan ID > OD and OD < ID
-
     private DataRepository dataRepository;
 
     private static Double PI = 3.14159265359;
@@ -142,7 +139,7 @@ public class ViewModelBaking extends AndroidViewModel {
     public LiveData<Integer> getPanTypeOutputMutable() {
         return panTypeOutputMutable;
     }
-    public LiveData<Double> getOutputValue() {
+    public LiveData<Double> getMediatorOutput() {
         return outputValue;
     }
     public LiveData<Boolean> getIsErrorODltIDInput() { return isErrorODltIDInput; }
@@ -172,27 +169,21 @@ public class ViewModelBaking extends AndroidViewModel {
     void setOutputBundtPanDimension1(Double input) { outputBundtPanDimension1.setValue(input); }
     void setOutputBundtPanDimension2(Double input) { outputBundtPanDimension2.setValue(input); }
     void setInputBundtConversionFactor(ConversionFactorsRecord input) {
-        Log.i("VMB","setInputBundtConversionFactor");
         inputBundtConversionFactor.setValue(input);
     }
     void setOutputBundtConversionFactor(ConversionFactorsRecord input) {
-        Log.i("VMB","setOutputBundtConversionFactor");
         outputBundtConversionFactor.setValue(input);
     }
     void setInputRectangularConversionFactor(ConversionFactorsRecord input) {
-        Log.i("VMB","setInputRectangularConversionFactor");
         inputRectangularConversionFactor.setValue(input);
     }
     void setOutputRectangularConversionFactor(ConversionFactorsRecord input) {
-        Log.i("VMB","setOutputRectangularConversionFactor");
         outputRectangularConversionFactor.setValue(input);
     }
     void setInputCircularConversionFactor(ConversionFactorsRecord input) {
-        Log.i("VMB","setInputCircularConversionFactor");
         inputCircularConversionFactor.setValue(input);
     }
     void setOutputCircularConversionFactor(ConversionFactorsRecord input) {
-        Log.i("VMB","setOutputCircularConversionFactor");
         outputCircularConversionFactor.setValue(input);
     }
 
@@ -491,30 +482,23 @@ public class ViewModelBaking extends AndroidViewModel {
     private Double calculateOutputConversionFactor() {
         if (panTypeOutputMutable.getValue() == 0) {
             if (outputRectangularConversionFactor.getValue() != null) {
-                Log.i("VMB","calculateOutputConversionFactor, rectangular not null");
                 return outputRectangularConversionFactor.getValue().getConversionFactor()*outputRectangularConversionFactor.getValue().getConversionFactor();
             } else {
-                Log.i("VMB","calculateOutputConversionFactor, rectangular is null");
                 return 1.0;
             }
         } else if (panTypeOutputMutable.getValue() == 1) {
             if (outputCircularConversionFactor.getValue() != null) {
-                Log.i("VMB","calculateOutputConversionFactor, circular not null");
                 return outputCircularConversionFactor.getValue().getConversionFactor()*outputCircularConversionFactor.getValue().getConversionFactor();
             } else {
-                Log.i("VMB","calculateOutputConversionFactor, circular is null");
                 return 1.0;
             }
         } else if (panTypeOutputMutable.getValue() == 2) {
             if (outputBundtConversionFactor.getValue() != null) {
-                Log.i("VMB","calculateOutputConversionFactor, bundt not null");
                 return outputBundtConversionFactor.getValue().getConversionFactor()*outputBundtConversionFactor.getValue().getConversionFactor();
             } else {
-                Log.i("VMB","calculateOutputConversionFactor, bundt is null");
                 return 1.0;
             }
         } else {
-            Log.i("VMB","calculateOutputConversionFactor, unknown pan type");
             return 1.0;
         }
     }

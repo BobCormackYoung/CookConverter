@@ -80,7 +80,6 @@ public class ViewModelMeasures extends AndroidViewModel {
         subsetConversionFactorList = Transformations.switchMap(mediatorSubsetConversionFactorFilter, new Function<SubsetConversionFactorFilter, LiveData<List<ConversionFactorsRecord>>>() {
             @Override
             public LiveData<List<ConversionFactorsRecord>> apply(SubsetConversionFactorFilter input) {
-                Log.i("VMM","Transformation, CFR = " + input.conversionFactorsRecord.getName() + " IR = " + input.ingredientsRecord.getName());
                 return dataRepository.getSubsetConversionFactors(input.conversionFactorsRecord, input.ingredientsRecord);
             }
         });
@@ -94,7 +93,7 @@ public class ViewModelMeasures extends AndroidViewModel {
 
 
     //get the converted value
-    LiveData<Double> getMediatorOutput() {
+    public LiveData<Double> getMediatorOutput() {
         return mediatorOutput;
     }
 
@@ -138,7 +137,6 @@ public class ViewModelMeasures extends AndroidViewModel {
 
     //set the selected ingredient
     void setIngredientSelected(IngredientsRecord input) {
-        Log.i("VMM","setIngredientSelected " + input.getName());
         ingredientSelected.setValue(input);
     }
 
