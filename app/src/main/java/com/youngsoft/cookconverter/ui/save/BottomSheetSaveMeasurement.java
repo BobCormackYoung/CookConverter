@@ -1,10 +1,13 @@
 package com.youngsoft.cookconverter.ui.save;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
@@ -21,6 +24,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.youngsoft.cookconverter.R;
 import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
+import com.youngsoft.cookconverter.data.IngredientsRecord;
 import com.youngsoft.cookconverter.ui.baking.ViewModelBaking;
 import com.youngsoft.cookconverter.ui.measures.ViewModelMeasures;
 import com.youngsoft.cookconverter.ui.servings.ViewModelServings;
@@ -36,6 +40,8 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
     private ViewModelServings viewModelServings;
     private ViewModelSaveMeasurement viewModelSaveMeasurement;
     private int launchCase; //1 = measures, 2 = baking, 3 = servings
+
+    private ViewModel viewModelMeasures2;
 
     private TextInputEditText etMeasurementName;
     private TextInputEditText etMeasurementValue;
@@ -111,6 +117,32 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
                 spMeasurementUnit.setAdapter(spinnerAdapterUnits);
             }
         });
+
+        //observe the output value
+        viewModelSaveMeasurement.getMeasurementValue().observe(getViewLifecycleOwner(), new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                if (aDouble != null) { //check if the value is null
+                    if (aDouble * 1000 < 1) { //check is smaller than usable significant figures
+                        etMeasurementValue.setText("0.0");
+                    } else { //else display in required format
+                        DecimalFormat decimalFormat = new DecimalFormat("#,##0.###");
+                        etMeasurementValue.setText(decimalFormat.format(aDouble));
+                    }
+                } else { //if null, display as empty
+                    etMeasurementValue.setText("");
+                }
+
+            }
+        });
+
+        //observe whether data is ready for save
+        viewModelSaveMeasurement.getIsDataCompleteForSave().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                dataCompleteForSave = aBoolean;
+            }
+        });
     }
 
     /**
@@ -121,13 +153,8 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
         viewModelMeasures.getMediatorOutput().observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
-                if (aDouble * 1000 < 1) {
-                    etMeasurementValue.setText("0.0");
-                } else {
-                    DecimalFormat decimalFormat = new DecimalFormat("#,##0.###");
-                    etMeasurementValue.setText(decimalFormat.format(aDouble));
-                }
-                viewModelMeasures.getMediatorOutput().removeObserver(this);
+                viewModelSaveMeasurement.setMeasurementValue(aDouble); //save the output value into the viewmodel for the dialogfragment
+                viewModelMeasures.getMediatorOutput().removeObserver(this); //remove the observer, no longer want to observe changes to the output value
             }
         });
     }
@@ -140,13 +167,8 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
         viewModelBaking.getMediatorOutput().observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
-                if (aDouble * 1000 < 1) {
-                    etMeasurementValue.setText("0.0");
-                } else {
-                    DecimalFormat decimalFormat = new DecimalFormat("#,##0.###");
-                    etMeasurementValue.setText(decimalFormat.format(aDouble));
-                }
-                viewModelBaking.getMediatorOutput().removeObserver(this);
+                viewModelSaveMeasurement.setMeasurementValue(aDouble); //save the output value into the viewmodel for the dialogfragment
+                viewModelBaking.getMediatorOutput().removeObserver(this); //remove the observer, no longer want to observe changes to the output value
             }
         });
 
@@ -160,13 +182,8 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
         viewModelServings.getMediatorOutput().observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
-                if (aDouble * 1000 < 1) {
-                    etMeasurementValue.setText("0.0");
-                } else {
-                    DecimalFormat decimalFormat = new DecimalFormat("#,##0.###");
-                    etMeasurementValue.setText(decimalFormat.format(aDouble));
-                }
-                viewModelServings.getMediatorOutput().removeObserver(this);
+                viewModelSaveMeasurement.setMeasurementValue(aDouble); //save the output value into the viewmodel for the dialogfragment
+                viewModelServings.getMediatorOutput().removeObserver(this); //remove the observer, no longer want to observe changes to the output value
             }
         });
     }
@@ -189,10 +206,43 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                 if (dataCompleteForSave) {
-                    dismiss();
+                    viewModelSaveMeasurement.saveData(); //save the data
+                    //dismiss();
                 } else {
                     Toast.makeText(getContext(),"Missing data required for save!", Toast.LENGTH_LONG).show();
                 }
+
+            }
+        });
+
+        //observe text box for ingredient name
+        etMeasurementName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                viewModelSaveMeasurement.setMeasurementName(s.toString()); //save the data to the viewmodel
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        //listen for changes to the measurement unit spinner value
+        spMeasurementUnit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ConversionFactorsRecord selectedItem = spinnerAdapterUnits.getItem(position);
+                viewModelSaveMeasurement.setMeasurementUnit(selectedItem);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
