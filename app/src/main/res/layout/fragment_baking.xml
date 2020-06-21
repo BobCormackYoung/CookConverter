@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:baselineAligned="false">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_fb_input_value"
@@ -27,7 +28,7 @@
                 android:id="@+id/tiet_fb_input_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Input Value"
+                android:hint="@string/title_convert_from"
                 android:inputType="numberDecimal"
                 tools:text="10" />
 
@@ -45,7 +46,7 @@
                 android:id="@+id/tiet_fb_output_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Output Value"
+                android:hint="@string/title_convert_to"
                 android:inputType="numberDecimal"
                 tools:text="10" />
 
@@ -57,7 +58,7 @@
         android:id="@+id/bt_save_baking"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="save"
+        android:text="@string/button_save"
         android:layout_margin="16dp"/>
 
     <TextView
@@ -80,7 +81,7 @@
                 android:background="@color/colorPrimaryLight"
                 android:gravity="center"
                 android:padding="8dp"
-                android:text="Convert from this pan..." />
+                android:text="@string/heading_convert_from_this_pan" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -128,7 +129,7 @@
                 android:background="@color/colorPrimaryLight"
                 android:gravity="center"
                 android:padding="8dp"
-                android:text="...To this pan!" />
+                android:text="@string/heading_to_this_pan" />
 
             <TextView
                 android:layout_width="match_parent"

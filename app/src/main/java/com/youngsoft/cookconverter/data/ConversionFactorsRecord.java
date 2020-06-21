@@ -12,7 +12,7 @@ public class ConversionFactorsRecord {
 
     private String name;
     private double conversionFactor; //mass vs Kg, volume vs m^3, distance vs m
-    private int type; //1 = mass, 2 = volume, 3 = distance
+    private int type; //1 = mass, 2 = volume, 3 = distance, 4  = pieces
 
     public ConversionFactorsRecord(String name, double conversionFactor, int type) {
         this.name = name;
@@ -50,7 +50,8 @@ public class ConversionFactorsRecord {
               new ConversionFactorsRecord("cm",0.01,3),
               new ConversionFactorsRecord("mm",0.001,3),
               new ConversionFactorsRecord("inch",0.0254,3),
-              new ConversionFactorsRecord("foot",0.3048,3)
+              new ConversionFactorsRecord("foot",0.3048,3),
+              new ConversionFactorsRecord("pieces",1,4)
       };
     }
 

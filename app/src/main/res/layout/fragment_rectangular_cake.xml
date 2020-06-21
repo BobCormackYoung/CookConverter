@@ -17,7 +17,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Units: "
+            android:text="@string/title_units"
             android:layout_weight="5"/>
 
         <androidx.appcompat.widget.AppCompatSpinner
@@ -32,7 +32,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/ll_til_holder">
+        android:id="@+id/ll_til_holder"
+        android:baselineAligned="false">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_frc_width_input"
@@ -49,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
                 tools:text="10"
-                android:hint="Pan Width"/>
+                android:hint="@string/title_pan_width"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -68,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
                 tools:text="10"
-                android:hint="Pan Length"/>
+                android:hint="@string/title_pan_length"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

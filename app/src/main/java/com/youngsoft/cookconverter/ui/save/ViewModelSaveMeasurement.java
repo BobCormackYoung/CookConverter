@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer;
 
 import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
 import com.youngsoft.cookconverter.data.DataRepository;
+import com.youngsoft.cookconverter.data.RecipeList;
 
 import java.util.List;
 
@@ -115,5 +116,7 @@ public class ViewModelSaveMeasurement extends AndroidViewModel {
      */
     public void saveData() {
         Log.i("VMSM", "Save Data: " + isDataCompleteForSaveMediator + " : " + measurementName.getValue() + " : " + measurementUnit.getValue().getName() + " : " + measurementValue.getValue() );
+        //save the value to the recipe list
+        dataRepository.addSingleRecipeList(new RecipeList(measurementName.getValue(), measurementValue.getValue(), measurementUnit.getValue().getId()));
     }
 }

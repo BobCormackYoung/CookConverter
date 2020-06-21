@@ -1,10 +1,12 @@
 package com.youngsoft.cookconverter.data;
 
 import android.app.Application;
+import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+import java.util.concurrent.Executors;
 
 public class DataRepository {
 
@@ -46,15 +48,55 @@ public class DataRepository {
         return allIngredientsRecords;
     }
 
+    public LiveData<List<RecipeList>> getAllRecipeListRecords() {
+        return allRecipeList;
+    }
+
     public LiveData<List<PanTypeRecord>> getAllPanTypeRecords() {
         return allPanTypeRecords;
     }
 
     public LiveData<List<ConversionFactorsRecord>> getSubsetConversionFactors(ConversionFactorsRecord inputConversionFactor, IngredientsRecord inputIngredients) {
         if (inputIngredients.getType() == 0) {
+            //if no ingredient selected, return only a subset of conversion factors of the same type as the selected type
             return dataDao.getSubsetConversionFactors(inputConversionFactor.getType());
         } else {
-            return allMassVolumeConversionFactors;
+            if (inputConversionFactor.getType() == 4) {
+                //if the selected conversion factor is "pieces", allow only pieces to be returned
+                //cannot convert from pieces to kilograms for example
+                return dataDao.getSubsetConversionFactors(inputConversionFactor.getType());
+            } else {
+                //if a different type of conversion factor, allow conversion to mass of volume
+                return allMassVolumeConversionFactors;
+            }
         }
+    }
+
+    public void addSingleRecipeList(final RecipeList recipeList) {
+        //run the task to add data asynchronously
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                dataDao.insertMultipleRecipeListRecords(recipeList);
+            }
+        });
+    }
+
+    public void deleteAllRecipeListItems() {
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                dataDao.deleteAllRecipeListItems();
+            }
+        });
+    }
+
+    public void deleteSingleRecipeListItem(final Integer input) {
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                dataDao.deleteSingleRecipeListItem(input);
+            }
+        });
     }
 }

@@ -137,8 +137,6 @@ public class FragmentServings extends Fragment {
                 //bottomSheetSaveMeasurement = new BottomSheetSaveMeasurement(viewModelServings, 3);
                 bottomSheetSaveMeasurement = new BottomSheetSaveMeasurement( 3);
                 bottomSheetSaveMeasurement.show(getChildFragmentManager(), "saveDataBottomSheet");
-                //TODO: send data from fragmentViewModel to ActivityViewModel (possible?)
-                //TODO: open a bottomsheetdialogfragment that will look at the activity viewmodel and save the required data
             }
         });
     }

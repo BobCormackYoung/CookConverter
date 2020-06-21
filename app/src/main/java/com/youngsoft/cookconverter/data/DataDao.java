@@ -42,4 +42,10 @@ public interface DataDao {
 
     @Query("SELECT * FROM ConversionFactorsRecord_Table WHERE type = 3")
     LiveData<List<ConversionFactorsRecord>> getAllDistanceConversionFactors();
+
+    @Query("DELETE FROM RecipeList_Table")
+    void deleteAllRecipeListItems();
+
+    @Query("DELETE FROM RecipeList_Table WHERE id = :index")
+    void deleteSingleRecipeListItem(int index);
 }

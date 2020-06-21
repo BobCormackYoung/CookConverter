@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -21,7 +20,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ingredient"
+        android:text="@string/title_ingredient"
         android:textSize="12sp"
         android:layout_marginLeft="4dp"/>
 
@@ -60,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
                 tools:text="10"
-                android:hint="Convert From"/>
+                android:hint="@string/title_convert_from"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
                 tools:text="20"
-                android:hint="Convert To"
+                android:hint="@string/title_convert_to"
                 android:editable="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -111,7 +110,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="save"/>
+        android:text="@string/button_save"/>
 
 </LinearLayout>
 

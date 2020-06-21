@@ -13,11 +13,8 @@ import com.youngsoft.cookconverter.data.DataRepository;
 
 public class ViewModelServings extends AndroidViewModel {
 
-    private DataRepository dataRepository;
-
     //Mutable live data values
     private MutableLiveData<Double> inputValue;
-    private MutableLiveData<Double> outputValue;
     private MutableLiveData<Integer> inputServingSize;
     private MutableLiveData<Integer> outputServingSize;
 
@@ -27,7 +24,6 @@ public class ViewModelServings extends AndroidViewModel {
 
     public ViewModelServings(@NonNull Application application) {
         super(application);
-        dataRepository = new DataRepository(application);
 
         initLiveData();
 
@@ -132,9 +128,6 @@ public class ViewModelServings extends AndroidViewModel {
     }
 
     //Getters
-    public LiveData<Double> getInputValue() {
-        return inputValue;
-    }
     public LiveData<Double> getMediatorOutput() {
         return mediatorOutput;
     }

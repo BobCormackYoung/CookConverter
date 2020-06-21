@@ -207,7 +207,7 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
             public void onClick(View v) {
                 if (dataCompleteForSave) {
                     viewModelSaveMeasurement.saveData(); //save the data
-                    //dismiss();
+                    dismiss();
                 } else {
                     Toast.makeText(getContext(),"Missing data required for save!", Toast.LENGTH_LONG).show();
                 }

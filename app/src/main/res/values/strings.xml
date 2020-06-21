@@ -5,4 +5,22 @@
     <string name="title_servings">Servings</string>
     <string name="ingredient_note">Only required for converting between weight and volume</string>
     <string name="title_ingredients">Ingredients</string>
+    <string name="title_ingredient_name">Ingredient Name</string>
+    <string name="title_measurement_value">Measurement Value</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_save">Save</string>
+    <string name="title_convert_from">Convert From</string>
+    <string name="title_convert_to">Convert To</string>
+    <string name="heading_convert_from_this_pan">Convert from this pan...</string>
+    <string name="heading_to_this_pan">...To this pan!</string>
+    <string name="title_units">Units:</string>
+    <string name="title_pan_outer_diameter">Pan Outer Diameter</string>
+    <string name="title_pan_inner_diameter">Pan Inner Diameter</string>
+    <string name="title_pan_diameter">Pan Diameter</string>
+    <string name="button_clear_list">Clear List</string>
+    <string name="title_ingredient">Ingredient</string>
+    <string name="title_pan_width">Pan Width</string>
+    <string name="title_pan_length">Pan Length</string>
+    <string name="title_input_serving">Input serving...</string>
+    <string name="title_output_serving">...Output Serving</string>
 </resources>

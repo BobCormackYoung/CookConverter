@@ -29,7 +29,6 @@ public class ViewModelMeasures extends AndroidViewModel {
 
     //Mutable live data values
     private MutableLiveData<Double> inputValue;
-    private MutableLiveData<Double> outputValue;
     private MutableLiveData<ConversionFactorsRecord> conversionFactorInputID;
     private MutableLiveData<ConversionFactorsRecord> conversionFactorOutputID;
     private MutableLiveData<IngredientsRecord> ingredientSelected;
@@ -50,10 +49,6 @@ public class ViewModelMeasures extends AndroidViewModel {
         //set initial input value for conversion to 0
         inputValue = new MutableLiveData<>();
         inputValue.setValue(0.0);
-
-        //set initial output value from conversion to 0
-        outputValue = new MutableLiveData<>();
-        outputValue.setValue(0.0);
 
         //set initial ingredient
         ingredientSelected = new MutableLiveData<>();
