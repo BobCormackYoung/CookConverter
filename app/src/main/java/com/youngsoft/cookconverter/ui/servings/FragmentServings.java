@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.youngsoft.cookconverter.R;
@@ -33,7 +33,7 @@ public class FragmentServings extends Fragment {
     private BottomSheetSaveMeasurement bottomSheetSaveMeasurement;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        viewModelServings = ViewModelProviders.of(this).get(ViewModelServings.class);
+        viewModelServings = new ViewModelProvider(this).get(ViewModelServings.class);
         View root = inflater.inflate(R.layout.fragment_servings, container, false);
         mapViews(root);
         return root;

@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.youngsoft.cookconverter.R;
@@ -45,7 +45,7 @@ public class FragmentMeasures extends Fragment {
     private Context context;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        viewModelMeasures = ViewModelProviders.of(this).get(ViewModelMeasures.class);
+        viewModelMeasures = new ViewModelProvider(this).get(ViewModelMeasures.class);
         View root = inflater.inflate(R.layout.fragment_measures, container, false);
         mapViews(root); //map views for the root layout
         return root;

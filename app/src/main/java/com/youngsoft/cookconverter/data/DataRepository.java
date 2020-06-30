@@ -1,7 +1,6 @@
 package com.youngsoft.cookconverter.data;
 
 import android.app.Application;
-import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
@@ -11,28 +10,30 @@ import java.util.concurrent.Executors;
 public class DataRepository {
 
     private final String TAG = "DataRepository";
-    private DataDao dataDao;
+    private final DataDao dataDao;
 
-    private LiveData<List<ConversionFactorsRecord>> allConversionFactorsRecords;
-    private LiveData<List<IngredientsRecord>> allIngredientsRecords;
-    private LiveData<List<PanTypeRecord>> allPanTypeRecords;
-    private LiveData<List<ConversionFactorsRecord>> allMassVolumeConversionFactors;
-    private LiveData<List<ConversionFactorsRecord>> allDistanceConversionFactors;
-    private LiveData<List<RecipeList>> allRecipeList;
+    //private final LiveData<List<ConversionFactorsRecord>> allConversionFactorsRecords;
+    private final LiveData<List<IngredientsRecord>> allIngredientsRecords;
+    //private final LiveData<List<PanTypeRecord>> allPanTypeRecords;
+    private final LiveData<List<ConversionFactorsRecord>> allMassVolumeConversionFactors;
+    private final LiveData<List<ConversionFactorsRecord>> allDistanceConversionFactors;
+    private final LiveData<List<RecipeList>> allRecipeList;
+    private final LiveData<List<RecipeWithConversionFactor>> allRecipeWithConversionFactor;
 
     public DataRepository(Application application) {
         DataDatabase dataDatabase = DataDatabase.getInstance(application);
         dataDao = dataDatabase.dataDao();
-        allConversionFactorsRecords = dataDao.getAllConversionFactorsRecordsSortById();
+        //allConversionFactorsRecords = dataDao.getAllConversionFactorsRecordsSortById();
         allMassVolumeConversionFactors = dataDao.getAllMassVolumeConversionFactors();
         allIngredientsRecords = dataDao.getAllIngredientsRecordsSortById();
-        allPanTypeRecords = dataDao.getAllPanTypeRecordsSortById();
+        //allPanTypeRecords = dataDao.getAllPanTypeRecordsSortById();
         allDistanceConversionFactors = dataDao.getAllDistanceConversionFactors();
         allRecipeList = dataDao.getAllRecipeListSortById();
+        allRecipeWithConversionFactor = dataDao.getRecipeWithConversionFactor();
     }
 
-    public LiveData<List<ConversionFactorsRecord>> getAllConversionFactorsRecords() {
-        return allConversionFactorsRecords;
+    public LiveData<List<RecipeWithConversionFactor>> getAllRecipeWithConversionFactor() {
+        return allRecipeWithConversionFactor;
     }
 
     public LiveData<List<ConversionFactorsRecord>> getAllDistanceConversionFactors() {
@@ -52,10 +53,6 @@ public class DataRepository {
         return allRecipeList;
     }
 
-    public LiveData<List<PanTypeRecord>> getAllPanTypeRecords() {
-        return allPanTypeRecords;
-    }
-
     public LiveData<List<ConversionFactorsRecord>> getSubsetConversionFactors(ConversionFactorsRecord inputConversionFactor, IngredientsRecord inputIngredients) {
         if (inputIngredients.getType() == 0) {
             //if no ingredient selected, return only a subset of conversion factors of the same type as the selected type
@@ -72,12 +69,13 @@ public class DataRepository {
         }
     }
 
-    public void addSingleRecipeList(final RecipeList recipeList) {
+    public void addSingleRecipeList(final RecipeList recipeList, final long conversionFactorId) {
         //run the task to add data asynchronously
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                dataDao.insertMultipleRecipeListRecords(recipeList);
+                long newRecipeListID = dataDao.insertSingleRecipeListRecords(recipeList);
+                dataDao.insertRecipeConversionFactorCrossReference(new RecipeConversionFactorCrossReference(newRecipeListID, conversionFactorId));
             }
         });
     }
@@ -87,15 +85,17 @@ public class DataRepository {
             @Override
             public void run() {
                 dataDao.deleteAllRecipeListItems();
+                dataDao.RecipeConversionFactorCrossReference();
             }
         });
     }
 
-    public void deleteSingleRecipeListItem(final Integer input) {
+    public void deleteSingleRecipeListItem(final Long input) {
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
                 dataDao.deleteSingleRecipeListItem(input);
+                dataDao.deleteSingleRecipeConversionFactorCrossReference(input);
             }
         });
     }

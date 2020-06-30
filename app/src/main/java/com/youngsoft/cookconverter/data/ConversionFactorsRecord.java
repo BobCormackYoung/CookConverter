@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 public class ConversionFactorsRecord {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long conversionFactorID;
 
     private String name;
     private double conversionFactor; //mass vs Kg, volume vs m^3, distance vs m
@@ -22,7 +22,7 @@ public class ConversionFactorsRecord {
 
     @Ignore
     public ConversionFactorsRecord(String name, double conversionFactor, int type, int id) {
-        this.id = id;
+        this.conversionFactorID = id;
         this.name = name;
         this.conversionFactor = conversionFactor;
         this.type = type;
@@ -55,12 +55,12 @@ public class ConversionFactorsRecord {
       };
     }
 
-    public int getId() {
-        return id;
+    public long getConversionFactorID() {
+        return conversionFactorID;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setConversionFactorID(long conversionFactorID) {
+        this.conversionFactorID = conversionFactorID;
     }
 
     public String getName() {

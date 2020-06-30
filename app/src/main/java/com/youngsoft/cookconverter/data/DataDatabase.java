@@ -1,7 +1,6 @@
 package com.youngsoft.cookconverter.data;
 
 import android.content.Context;
-import android.provider.ContactsContract;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -11,7 +10,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.Executors;
 
-@Database(entities = {ConversionFactorsRecord.class, IngredientsRecord.class, PanTypeRecord.class, RecipeList.class}, version = 1, exportSchema = false)
+@Database(entities = {ConversionFactorsRecord.class, IngredientsRecord.class, PanTypeRecord.class, RecipeList.class, RecipeConversionFactorCrossReference.class}, version = 1, exportSchema = false)
 public abstract class DataDatabase extends RoomDatabase {
 
     private static DataDatabase instance;
@@ -30,7 +29,7 @@ public abstract class DataDatabase extends RoomDatabase {
     }
 
     //populate the database with required data
-    private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
+    private static final RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);

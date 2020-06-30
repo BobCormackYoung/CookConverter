@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Transaction;
 
 import java.util.List;
 
@@ -20,24 +21,24 @@ public interface DataDao {
     void insertMultiplePanTypeRecords(PanTypeRecord... panTypeRecords);
 
     @Insert
-    void insertMultipleRecipeListRecords(RecipeList... recipeLists);
+    long insertSingleRecipeListRecords(RecipeList recipeList);
 
-    @Query("SELECT * FROM ConversionFactorsRecord_Table ORDER BY id")
+    @Insert
+    void insertRecipeConversionFactorCrossReference(RecipeConversionFactorCrossReference recipeConversionFactorCrossReference);
+
+    @Query("SELECT * FROM ConversionFactorsRecord_Table ORDER BY conversionFactorID")
     LiveData<List<ConversionFactorsRecord>> getAllConversionFactorsRecordsSortById();
 
     @Query("SELECT * FROM IngredientsRecord_Table ORDER BY id")
     LiveData<List<IngredientsRecord>> getAllIngredientsRecordsSortById();
 
-    @Query("SELECT * FROM PanTypeRecord_Table ORDER BY id")
-    LiveData<List<PanTypeRecord>> getAllPanTypeRecordsSortById();
-
-    @Query("SELECT * FROM RecipeList_Table ORDER BY id")
+    @Query("SELECT * FROM RecipeList_Table ORDER BY recipeListID")
     LiveData<List<RecipeList>> getAllRecipeListSortById();
 
     @Query("SELECT * FROM ConversionFactorsRecord_Table WHERE type = :index")
     LiveData<List<ConversionFactorsRecord>> getSubsetConversionFactors(int index);
 
-    @Query("SELECT * FROM ConversionFactorsRecord_Table WHERE type IN (1,2)")
+    @Query("SELECT * FROM ConversionFactorsRecord_Table WHERE type IN (1,2,4)")
     LiveData<List<ConversionFactorsRecord>> getAllMassVolumeConversionFactors();
 
     @Query("SELECT * FROM ConversionFactorsRecord_Table WHERE type = 3")
@@ -46,6 +47,16 @@ public interface DataDao {
     @Query("DELETE FROM RecipeList_Table")
     void deleteAllRecipeListItems();
 
-    @Query("DELETE FROM RecipeList_Table WHERE id = :index")
-    void deleteSingleRecipeListItem(int index);
+    @Query("DELETE FROM RecipeConversionFactorCrossReference")
+    void RecipeConversionFactorCrossReference();
+
+    @Query("DELETE FROM RecipeList_Table  WHERE recipeListID = :index")
+    void deleteSingleRecipeListItem(long index);
+
+    @Query("DELETE FROM RecipeConversionFactorCrossReference WHERE recipeListID = :index")
+    void deleteSingleRecipeConversionFactorCrossReference(long index);
+
+    @Transaction
+    @Query("SELECT * FROM RecipeList_Table ORDER BY recipeListID")
+    LiveData<List<RecipeWithConversionFactor>> getRecipeWithConversionFactor();
 }

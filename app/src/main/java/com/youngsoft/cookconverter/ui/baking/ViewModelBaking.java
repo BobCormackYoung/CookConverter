@@ -1,7 +1,6 @@
 package com.youngsoft.cookconverter.ui.baking;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -17,9 +16,9 @@ import java.util.List;
 
 public class ViewModelBaking extends AndroidViewModel {
 
-    private DataRepository dataRepository;
+    private final DataRepository dataRepository;
 
-    private static Double PI = 3.14159265359;
+    private static final Double PI = 3.14159265359;
 
     //livedata
     private LiveData<List<ConversionFactorsRecord>> conversionFactorsRecordLiveData;
@@ -47,16 +46,16 @@ public class ViewModelBaking extends AndroidViewModel {
 
 
     //Mediator livedata
-    private MediatorLiveData<Double> outputValue;
-    private MediatorLiveData<Double> areaInput;
-    private MediatorLiveData<Double> areaOutput;
-    private MediatorLiveData<Boolean> isErrorODltIDInput;
-    private MediatorLiveData<Boolean> isErrorIDgtODInput;
-    private MediatorLiveData<Boolean> isErrorODltIDOutput;
-    private MediatorLiveData<Boolean> isErrorIDgtODOutput;
-    private MediatorLiveData<Double> conversionFactorGlobalOutput;
-    private MediatorLiveData<Double> conversionFactorInputPan;
-    private MediatorLiveData<Double> conversionFactorOutputPan;
+    private final MediatorLiveData<Double> outputValue;
+    private final MediatorLiveData<Double> areaInput;
+    private final MediatorLiveData<Double> areaOutput;
+    private final MediatorLiveData<Boolean> isErrorODltIDInput;
+    private final MediatorLiveData<Boolean> isErrorIDgtODInput;
+    private final MediatorLiveData<Boolean> isErrorODltIDOutput;
+    private final MediatorLiveData<Boolean> isErrorIDgtODOutput;
+    private final MediatorLiveData<Double> conversionFactorGlobalOutput;
+    private final MediatorLiveData<Double> conversionFactorInputPan;
+    private final MediatorLiveData<Double> conversionFactorOutputPan;
 
     public ViewModelBaking(@NonNull Application application) {
         super(application);

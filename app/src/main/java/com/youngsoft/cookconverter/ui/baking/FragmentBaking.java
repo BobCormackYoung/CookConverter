@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
@@ -37,7 +37,7 @@ public class FragmentBaking extends Fragment {
     private BottomSheetSaveMeasurement bottomSheetSaveMeasurement;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        viewModelBaking = ViewModelProviders.of(this).get(ViewModelBaking.class);
+        viewModelBaking = new ViewModelProvider(this).get(ViewModelBaking.class);
         View root = inflater.inflate(R.layout.fragment_baking, container, false);
         mapViews(root);
 
@@ -117,7 +117,7 @@ public class FragmentBaking extends Fragment {
                 if (etInputValue.getText().toString().isEmpty()) {
                     viewModelBaking.setInputValueMutable(0.0);
                 } else {
-                    Double temp = null;
+                    Double temp;
                     //try to catch error associated with leading decimal
                     try {
                         temp = DecimalFormat.getNumberInstance().parse(etInputValue.getText().toString()).doubleValue();

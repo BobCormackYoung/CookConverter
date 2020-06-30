@@ -26,11 +26,11 @@ import java.util.List;
 
 public class FragmentRectangularCake extends Fragment {
 
-    private ViewModelBaking viewModelBaking;
+    private final ViewModelBaking viewModelBaking;
     private Spinner spFRCUnits;
     private TextInputEditText etDimensionWidth;
     private TextInputEditText etDimensionLength;
-    private boolean isInput;
+    private final boolean isInput;
     private MeasuresSpinnerAdapter measuresSpinnerAdapter;
     private Context context;
 
@@ -83,7 +83,7 @@ public class FragmentRectangularCake extends Fragment {
                 if (etDimensionWidth.getText().toString().isEmpty()) {
                     saveDimension1EditTextValue(0.0);
                 } else {
-                    Double temp = null;
+                    Double temp;
                     //try to catch error associated with leading decimal
                     try {
                         temp = DecimalFormat.getNumberInstance().parse(etDimensionWidth.getText().toString()).doubleValue();
@@ -114,7 +114,7 @@ public class FragmentRectangularCake extends Fragment {
                 if (etDimensionLength.getText().toString().isEmpty()) {
                     saveDimension2EditTextValue(0.0);
                 } else {
-                    Double temp = null;
+                    Double temp;
                     //try to catch error associated with leading decimal
                     try {
                         temp = DecimalFormat.getNumberInstance().parse(etDimensionLength.getText().toString()).doubleValue();

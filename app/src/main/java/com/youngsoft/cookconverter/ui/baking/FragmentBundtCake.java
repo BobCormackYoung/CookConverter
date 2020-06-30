@@ -19,7 +19,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.youngsoft.cookconverter.R;
 import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
-import com.youngsoft.cookconverter.ui.util.IngredientsSpinnerAdapter;
 import com.youngsoft.cookconverter.ui.util.MeasuresSpinnerAdapter;
 
 import java.text.DecimalFormat;
@@ -28,13 +27,13 @@ import java.util.List;
 
 public class FragmentBundtCake extends Fragment {
 
-    private ViewModelBaking viewModelBaking;
+    private final ViewModelBaking viewModelBaking;
     private Spinner spFBCUnits;
     private TextInputEditText etOuterDiameter;
     private TextInputEditText etInnerDiameter;
     private TextInputLayout tilOuterDiameter;
     private TextInputLayout tilInnerDiameter;
-    private boolean isInput;
+    private final boolean isInput;
     private MeasuresSpinnerAdapter measuresSpinnerAdapter;
     private Context context;
 
@@ -135,7 +134,7 @@ public class FragmentBundtCake extends Fragment {
                 if (etOuterDiameter.getText().toString().isEmpty()) {
                     saveOuterDiameterEditTextValue(0.0);
                 } else {
-                    Double temp = null;
+                    Double temp;
                     //try to catch error associated with leading decimal
                     try {
                         temp = DecimalFormat.getNumberInstance().parse(etOuterDiameter.getText().toString()).doubleValue();
@@ -165,7 +164,7 @@ public class FragmentBundtCake extends Fragment {
                 if (etInnerDiameter.getText().toString().isEmpty()) {
                     saveInnerDiameterEditTextValue(0.0);
                 } else {
-                    Double temp = null;
+                    Double temp;
                     //try to catch error associated with leading decimal
                     try {
                         temp = DecimalFormat.getNumberInstance().parse(etInnerDiameter.getText().toString()).doubleValue();

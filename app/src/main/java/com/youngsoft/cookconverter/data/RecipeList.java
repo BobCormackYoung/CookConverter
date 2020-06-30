@@ -7,24 +7,24 @@ import androidx.room.PrimaryKey;
 public class RecipeList {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long recipeListID;
 
     private String name;
     private double value; //value
-    private int conversionFactor; //id of the conversion factor type
+    private long conversionFactor; //id of the conversion factor type
 
-    public RecipeList(String name, double value, int conversionFactor) {
+    public RecipeList(String name, double value, long conversionFactor) {
         this.name = name;
         this.value = value;
         this.conversionFactor = conversionFactor;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setRecipeListID(long recipeListID) {
+        this.recipeListID = recipeListID;
     }
 
-    public int getId() {
-        return id;
+    public long getRecipeListID() {
+        return recipeListID;
     }
 
     public String getName() {
@@ -43,7 +43,7 @@ public class RecipeList {
         this.value = value;
     }
 
-    public int getConversionFactor() {
+    public long getConversionFactor() {
         return conversionFactor;
     }
 

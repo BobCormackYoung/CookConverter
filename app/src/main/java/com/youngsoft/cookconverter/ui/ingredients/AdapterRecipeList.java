@@ -1,6 +1,5 @@
 package com.youngsoft.cookconverter.ui.ingredients;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,16 +12,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
 import com.youngsoft.cookconverter.R;
-import com.youngsoft.cookconverter.data.RecipeList;
+import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
+import com.youngsoft.cookconverter.data.RecipeWithConversionFactor;
 
 import java.text.DecimalFormat;
 
-public class AdapterRecipeList extends ListAdapter<RecipeList, AdapterRecipeList.RecipeListHolder> {
+public class AdapterRecipeList extends ListAdapter<RecipeWithConversionFactor, AdapterRecipeList.RecipeListHolder> {
 
 
-    private OnDeleteClickListener onDeleteClickListener;
+    private final OnDeleteClickListener onDeleteClickListener;
 
-    protected AdapterRecipeList(@NonNull DiffUtil.ItemCallback<RecipeList> diffCallback, OnDeleteClickListener onDeleteClickListener) {
+    protected AdapterRecipeList(@NonNull DiffUtil.ItemCallback<RecipeWithConversionFactor> diffCallback, OnDeleteClickListener onDeleteClickListener) {
         super(diffCallback);
         this.onDeleteClickListener = onDeleteClickListener;
     }
@@ -32,33 +32,35 @@ public class AdapterRecipeList extends ListAdapter<RecipeList, AdapterRecipeList
     public RecipeListHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.cardview_recipe, parent, false);
-        return new AdapterRecipeList.RecipeListHolder(itemView);
+        return new RecipeListHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecipeListHolder holder, int position) {
-        final RecipeList currentItem =getItem(position);
-        holder.tvRecipeIngredientName.setText(currentItem.getName());
+        final RecipeWithConversionFactor currentItem =getItem(position);
+        holder.tvRecipeIngredientName.setText(currentItem.recipeList.getName());
 
         DecimalFormat decimalFormat = new DecimalFormat("#,##0.###");
-        holder.tvRecipeIngredientAmount.setText(decimalFormat.format(currentItem.getValue()));
+        holder.tvRecipeIngredientAmount.setText(decimalFormat.format(currentItem.recipeList.getValue()));
 
-        holder.tvRecipeIngredientUnit.setText(Integer.toString(currentItem.getId()));
+        ConversionFactorsRecord currentConversionFactorRecord = currentItem.conversionFactorsRecords.get(0);
+
+        holder.tvRecipeIngredientUnit.setText(currentConversionFactorRecord.getName());
 
         holder.btDeleteSingleIngredient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onDeleteClickListener.onDeleteClick(currentItem.getId());
+                onDeleteClickListener.onDeleteClick(currentItem.recipeList.getRecipeListID());
             }
         });
     }
 
-    public class RecipeListHolder extends RecyclerView.ViewHolder {
+    public static class RecipeListHolder extends RecyclerView.ViewHolder {
 
-        MaterialTextView tvRecipeIngredientName;
-        MaterialTextView tvRecipeIngredientAmount;
-        MaterialTextView tvRecipeIngredientUnit;
-        MaterialButton btDeleteSingleIngredient;
+        final MaterialTextView tvRecipeIngredientName;
+        final MaterialTextView tvRecipeIngredientAmount;
+        final MaterialTextView tvRecipeIngredientUnit;
+        final MaterialButton btDeleteSingleIngredient;
 
         public RecipeListHolder(@NonNull View itemView) {
             super(itemView);
@@ -70,6 +72,6 @@ public class AdapterRecipeList extends ListAdapter<RecipeList, AdapterRecipeList
     }
 
     public interface OnDeleteClickListener {
-        void onDeleteClick(int index);
+        void onDeleteClick(long index);
     }
 }

@@ -26,10 +26,10 @@ import java.util.List;
 
 public class FragmentCircularCake extends Fragment {
 
-    private ViewModelBaking viewModelBaking;
+    private final ViewModelBaking viewModelBaking;
     private Spinner spFCCUnits;
     private TextInputEditText etDimension;
-    private boolean isInput;
+    private final boolean isInput;
     private MeasuresSpinnerAdapter measuresSpinnerAdapter;
     private Context context;
 
@@ -82,7 +82,7 @@ public class FragmentCircularCake extends Fragment {
                 if (etDimension.getText().toString().isEmpty()) {
                     saveEditTextValue(0.0);
                 } else {
-                    Double temp = null;
+                    Double temp;
                     //try to catch error associated with leading decimal
                     try {
                         temp = DecimalFormat.getNumberInstance().parse(etDimension.getText().toString()).doubleValue();

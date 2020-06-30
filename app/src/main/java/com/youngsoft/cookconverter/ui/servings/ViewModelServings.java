@@ -9,8 +9,6 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import com.youngsoft.cookconverter.data.DataRepository;
-
 public class ViewModelServings extends AndroidViewModel {
 
     //Mutable live data values
@@ -19,8 +17,8 @@ public class ViewModelServings extends AndroidViewModel {
     private MutableLiveData<Integer> outputServingSize;
 
     //Mediator live data values
-    private MediatorLiveData<Double> mediatorOutput;
-    private MediatorLiveData<Double> mediatorConversionFactor;
+    private final MediatorLiveData<Double> mediatorOutput;
+    private final MediatorLiveData<Double> mediatorConversionFactor;
 
     public ViewModelServings(@NonNull Application application) {
         super(application);

@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 public class IngredientsRecord {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
 
     private String name;
     private int type; //1 = solid, 2 = liquid
@@ -38,11 +38,11 @@ public class IngredientsRecord {
         };
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

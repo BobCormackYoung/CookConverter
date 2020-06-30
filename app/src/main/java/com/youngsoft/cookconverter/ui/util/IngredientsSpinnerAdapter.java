@@ -12,7 +12,7 @@ import com.youngsoft.cookconverter.data.IngredientsRecord;
 public class IngredientsSpinnerAdapter extends ArrayAdapter<IngredientsRecord> {
 
     //array of spinner values
-    private IngredientsRecord[] values;
+    private final IngredientsRecord[] values;
 
     public IngredientsSpinnerAdapter(Context context, IngredientsRecord[] values) {
         super(context, 0, values);

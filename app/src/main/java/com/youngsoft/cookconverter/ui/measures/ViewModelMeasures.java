@@ -1,7 +1,6 @@
 package com.youngsoft.cookconverter.ui.measures;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.arch.core.util.Function;
@@ -20,23 +19,23 @@ import java.util.List;
 
 public class ViewModelMeasures extends AndroidViewModel {
 
-    private DataRepository dataRepository;
+    private final DataRepository dataRepository;
 
     //Live Data from Database
-    private LiveData<List<ConversionFactorsRecord>> allConversionFactors;
-    private LiveData<List<IngredientsRecord>> allIngredients;
-    private LiveData<List<ConversionFactorsRecord>> subsetConversionFactorList;
+    private final LiveData<List<ConversionFactorsRecord>> allConversionFactors;
+    private final LiveData<List<IngredientsRecord>> allIngredients;
+    private final LiveData<List<ConversionFactorsRecord>> subsetConversionFactorList;
 
     //Mutable live data values
-    private MutableLiveData<Double> inputValue;
-    private MutableLiveData<ConversionFactorsRecord> conversionFactorInputID;
-    private MutableLiveData<ConversionFactorsRecord> conversionFactorOutputID;
-    private MutableLiveData<IngredientsRecord> ingredientSelected;
+    private final MutableLiveData<Double> inputValue;
+    private final MutableLiveData<ConversionFactorsRecord> conversionFactorInputID;
+    private final MutableLiveData<ConversionFactorsRecord> conversionFactorOutputID;
+    private final MutableLiveData<IngredientsRecord> ingredientSelected;
 
     //Mediator live data values
-    private MediatorLiveData<Double> mediatorOutput;
-    private MediatorLiveData<Double> mediatorConversionFactor;
-    private MediatorLiveData<SubsetConversionFactorFilter> mediatorSubsetConversionFactorFilter;
+    private final MediatorLiveData<Double> mediatorOutput;
+    private final MediatorLiveData<Double> mediatorConversionFactor;
+    private final MediatorLiveData<SubsetConversionFactorFilter> mediatorSubsetConversionFactorFilter;
 
 
     //Constructor

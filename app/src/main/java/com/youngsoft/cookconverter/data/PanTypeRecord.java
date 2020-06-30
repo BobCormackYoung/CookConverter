@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 public class PanTypeRecord {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
 
     private String name;
     private int type; //1 = rectangular, 2 = circular, 3 = bundt
@@ -33,11 +33,11 @@ public class PanTypeRecord {
         };
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

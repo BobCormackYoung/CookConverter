@@ -1,7 +1,6 @@
 package com.youngsoft.cookconverter.ui.save;
 
 import android.app.Application;
-import android.text.BoringLayout;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -19,7 +18,7 @@ import java.util.List;
 
 public class ViewModelSaveMeasurement extends AndroidViewModel {
 
-    private DataRepository dataRepository;
+    private final DataRepository dataRepository;
 
     //Live Data from Database
     private LiveData<List<ConversionFactorsRecord>> allConversionFactors;
@@ -30,7 +29,7 @@ public class ViewModelSaveMeasurement extends AndroidViewModel {
     private MutableLiveData<ConversionFactorsRecord> measurementUnit;
 
     //Mediator Live Data
-    private MediatorLiveData<Boolean> isDataCompleteForSaveMediator;
+    private final MediatorLiveData<Boolean> isDataCompleteForSaveMediator;
 
     public ViewModelSaveMeasurement(@NonNull Application application) {
         super(application);
@@ -117,6 +116,6 @@ public class ViewModelSaveMeasurement extends AndroidViewModel {
     public void saveData() {
         Log.i("VMSM", "Save Data: " + isDataCompleteForSaveMediator + " : " + measurementName.getValue() + " : " + measurementUnit.getValue().getName() + " : " + measurementValue.getValue() );
         //save the value to the recipe list
-        dataRepository.addSingleRecipeList(new RecipeList(measurementName.getValue(), measurementValue.getValue(), measurementUnit.getValue().getId()));
+        dataRepository.addSingleRecipeList(new RecipeList(measurementName.getValue(), measurementValue.getValue(), measurementUnit.getValue().getConversionFactorID()), measurementUnit.getValue().getConversionFactorID());
     }
 }

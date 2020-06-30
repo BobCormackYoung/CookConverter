@@ -5,14 +5,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.lifecycle.ViewModel;
 
 public class TabLayoutAdapter extends FragmentPagerAdapter {
 
     //3 tabs, 3 fragments
     private static final int NUM_ITEMS = 3;
-    private ViewModelBaking viewModelBaking; //viewmodel for the baking fragment
-    private boolean isInput; //is this an input tabLayout or output
+    private final ViewModelBaking viewModelBaking; //viewmodel for the baking fragment
+    private final boolean isInput; //is this an input tabLayout or output
 
     public TabLayoutAdapter(@NonNull FragmentManager fm, ViewModelBaking viewModel, boolean isInput) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);

@@ -8,23 +8,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.youngsoft.cookconverter.R;
 import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
-import com.youngsoft.cookconverter.data.IngredientsRecord;
 import com.youngsoft.cookconverter.ui.baking.ViewModelBaking;
 import com.youngsoft.cookconverter.ui.measures.ViewModelMeasures;
 import com.youngsoft.cookconverter.ui.servings.ViewModelServings;
@@ -39,9 +35,7 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
     private ViewModelBaking viewModelBaking;
     private ViewModelServings viewModelServings;
     private ViewModelSaveMeasurement viewModelSaveMeasurement;
-    private int launchCase; //1 = measures, 2 = baking, 3 = servings
-
-    private ViewModel viewModelMeasures2;
+    private final int launchCase; //1 = measures, 2 = baking, 3 = servings
 
     private TextInputEditText etMeasurementName;
     private TextInputEditText etMeasurementValue;
@@ -64,15 +58,21 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.bottomsheet_save_measurement, container, false);
-        viewModelSaveMeasurement = ViewModelProviders.of(this).get(ViewModelSaveMeasurement.class);
+        viewModelSaveMeasurement = new ViewModelProvider(this).get(ViewModelSaveMeasurement.class);
 
         //find the viewmodels from the parent fragment depending on which was used to launch this fragment
         if (launchCase == 1) {
-            viewModelMeasures = ViewModelProviders.of(getParentFragment()).get(ViewModelMeasures.class);
+            if (getParentFragment() != null) {
+                viewModelMeasures = new ViewModelProvider(getParentFragment()).get(ViewModelMeasures.class);
+            }
         } else if (launchCase == 2) {
-            viewModelBaking = ViewModelProviders.of(getParentFragment()).get(ViewModelBaking.class);
+            if (getParentFragment() != null) {
+                viewModelBaking = new ViewModelProvider(getParentFragment()).get(ViewModelBaking.class);
+            }
         } else if (launchCase == 3) {
-            viewModelServings = ViewModelProviders.of(getParentFragment()).get(ViewModelServings.class);
+            if (getParentFragment() != null) {
+                viewModelServings = new ViewModelProvider(getParentFragment()).get(ViewModelServings.class);
+            }
         } else {
             Log.i("BSSM","No parent fragment?");
         }

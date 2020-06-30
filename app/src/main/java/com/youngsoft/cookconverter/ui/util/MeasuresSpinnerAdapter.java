@@ -12,7 +12,7 @@ import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
 public class MeasuresSpinnerAdapter extends ArrayAdapter<ConversionFactorsRecord> {
 
         // Your custom values for the spinner (User)
-        private ConversionFactorsRecord[] values;
+        private final ConversionFactorsRecord[] values;
 
         public MeasuresSpinnerAdapter(Context context, ConversionFactorsRecord[] values) {
             super(context, 0, values);

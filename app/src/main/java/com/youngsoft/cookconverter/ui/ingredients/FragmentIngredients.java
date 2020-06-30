@@ -1,31 +1,26 @@
 package com.youngsoft.cookconverter.ui.ingredients;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.content.DialogInterface;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.button.MaterialButton;
 import com.youngsoft.cookconverter.R;
-import com.youngsoft.cookconverter.data.RecipeList;
+import com.youngsoft.cookconverter.data.RecipeWithConversionFactor;
 
 import java.util.List;
-import java.util.Objects;
 
 public class FragmentIngredients extends Fragment implements AdapterRecipeList.OnDeleteClickListener {
 
@@ -34,13 +29,9 @@ public class FragmentIngredients extends Fragment implements AdapterRecipeList.O
     private RecyclerView rvRecipeList;
     private AdapterRecipeList adapterRecipeList;
 
-    public static FragmentIngredients newInstance() {
-        return new FragmentIngredients();
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        viewModelIngredients = ViewModelProviders.of(this).get(ViewModelIngredients.class);
+        viewModelIngredients = new ViewModelProvider(this).get(ViewModelIngredients.class);
         View root = inflater.inflate(R.layout.fragment_ingredients, container, false);
         mapViews(root);
         return root;
@@ -53,14 +44,14 @@ public class FragmentIngredients extends Fragment implements AdapterRecipeList.O
         rvRecipeList.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvRecipeList.setHasFixedSize(true);
 
-        adapterRecipeList = new AdapterRecipeList(new DiffUtil.ItemCallback<RecipeList>() {
+        adapterRecipeList = new AdapterRecipeList(new DiffUtil.ItemCallback<RecipeWithConversionFactor>() {
             @Override
-            public boolean areItemsTheSame(@NonNull RecipeList oldItem, @NonNull RecipeList newItem) {
+            public boolean areItemsTheSame(@NonNull RecipeWithConversionFactor oldItem, @NonNull RecipeWithConversionFactor newItem) {
                 return false;
             }
 
             @Override
-            public boolean areContentsTheSame(@NonNull RecipeList oldItem, @NonNull RecipeList newItem) {
+            public boolean areContentsTheSame(@NonNull RecipeWithConversionFactor oldItem, @NonNull RecipeWithConversionFactor newItem) {
                 return false;
             }
         }, this);
@@ -74,10 +65,19 @@ public class FragmentIngredients extends Fragment implements AdapterRecipeList.O
      * set up livedata observers for the view
      */
     private void setObservers() {
-        //observe the list of data
+        /** //observe the list of data
         viewModelIngredients.getAllRecipeListRecords().observe(getViewLifecycleOwner(), new Observer<List<RecipeList>>() {
             @Override
             public void onChanged(List<RecipeList> recipeLists) {
+                adapterRecipeList.submitList(recipeLists);
+                adapterRecipeList.notifyDataSetChanged();
+            }
+        }); **/
+
+        //observe the list of data
+        viewModelIngredients.getAllRecipeWithConversionFactor().observe(getViewLifecycleOwner(), new Observer<List<RecipeWithConversionFactor>>() {
+            @Override
+            public void onChanged(List<RecipeWithConversionFactor> recipeLists) {
                 adapterRecipeList.submitList(recipeLists);
                 adapterRecipeList.notifyDataSetChanged();
             }
@@ -120,7 +120,7 @@ public class FragmentIngredients extends Fragment implements AdapterRecipeList.O
     }
 
     @Override
-    public void onDeleteClick(final int index) {
+    public void onDeleteClick(final long index) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.Theme_MaterialComponents_Light_Dialog_Alert)
                 .setMessage("Are you sure you'd like to delete this single ingredient?")
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
