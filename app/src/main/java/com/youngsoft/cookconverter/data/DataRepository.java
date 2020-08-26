@@ -1,6 +1,7 @@
 package com.youngsoft.cookconverter.data;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -16,6 +17,8 @@ public class DataRepository {
     private final LiveData<List<IngredientsRecord>> allIngredientsRecords;
     //private final LiveData<List<PanTypeRecord>> allPanTypeRecords;
     private final LiveData<List<ConversionFactorsRecord>> allMassVolumeConversionFactors;
+    private final LiveData<List<ConversionFactorsRecord>> allMassConversionFactors;
+    private final LiveData<List<ConversionFactorsRecord>> allVolumeConversionFactors;
     private final LiveData<List<ConversionFactorsRecord>> allDistanceConversionFactors;
     private final LiveData<List<RecipeList>> allRecipeList;
     private final LiveData<List<RecipeWithConversionFactor>> allRecipeWithConversionFactor;
@@ -25,6 +28,8 @@ public class DataRepository {
         dataDao = dataDatabase.dataDao();
         //allConversionFactorsRecords = dataDao.getAllConversionFactorsRecordsSortById();
         allMassVolumeConversionFactors = dataDao.getAllMassVolumeConversionFactors();
+        allMassConversionFactors = dataDao.getAllMassConversionFactors();
+        allVolumeConversionFactors = dataDao.getAllVolumeConversionFactors();
         allIngredientsRecords = dataDao.getAllIngredientsRecordsSortById();
         //allPanTypeRecords = dataDao.getAllPanTypeRecordsSortById();
         allDistanceConversionFactors = dataDao.getAllDistanceConversionFactors();
@@ -42,6 +47,16 @@ public class DataRepository {
 
     public LiveData<List<ConversionFactorsRecord>> getAllMassVolumeConversionFactors() {
         return allMassVolumeConversionFactors;
+    }
+
+    public LiveData<List<ConversionFactorsRecord>> getAllMassConversionFactors() {
+        Log.i("DataRepository","getAllMassConversionFactors");
+        return allMassConversionFactors;
+    }
+
+    public LiveData<List<ConversionFactorsRecord>> getAllVolumeConversionFactors() {
+        Log.i("DataRepository","getAllVolumeConversionFactors");
+        return allVolumeConversionFactors;
     }
 
 
@@ -67,6 +82,16 @@ public class DataRepository {
                 return allMassVolumeConversionFactors;
             }
         }
+    }
+
+    /**
+     * Simplified method to get a subset list of conversion factors based on type
+     * @param conversionFactorType where 1 = mass, 2 = volume, 3 = distance, 4  = pieces
+     * @return livedata list of ConversionFactorRecords
+     */
+    public LiveData<List<ConversionFactorsRecord>> getSimpleSubsetConversionFactors(int conversionFactorType) {
+        Log.i("DataRepository","getSimpleSubsetConversionFactors");
+        return dataDao.getSubsetConversionFactors(conversionFactorType);
     }
 
     public void addSingleRecipeList(final RecipeList recipeList, final long conversionFactorId) {

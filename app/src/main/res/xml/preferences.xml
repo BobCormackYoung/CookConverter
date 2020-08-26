@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        android:key="preference_default_mass_unit"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="kg"
+        android:title="Default mass unit"
+        app:iconSpaceReserved="false"/>
+
+    <Preference
+        android:key="preference_default_volume_unit"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="litre"
+        android:title="Default volume unit"
+        app:iconSpaceReserved="false"/>
+
+    <PreferenceCategory
+        android:title="APP INFO"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:defaultValue="Default value"
+            android:editable="false"
+            android:key="preference_build_number"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:summary="@string/versionCode"
+            android:title="Build Number"
+            app:iconSpaceReserved="false"/>
+
+        <Preference
+            android:defaultValue="Default value"
+            android:editable="false"
+            android:key="preference_version"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:summary="@string/versionName"
+            android:title="Version"
+            app:iconSpaceReserved="false"/>
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

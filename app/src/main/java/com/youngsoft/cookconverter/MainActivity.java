@@ -1,14 +1,22 @@
 package com.youngsoft.cookconverter;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import android.preference.PreferenceManager;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.youngsoft.cookconverter.ui.preferences.FragmentPreferences;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,6 +25,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
+
+        Toolbar toolbarMainActivity = findViewById(R.id.toolbar_main_activity);
+        setSupportActionBar(toolbarMainActivity);
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -25,6 +37,65 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+        // Set default shared preferences on first load
+        setDefaultSharedPreferences();
+
     }
 
+    /**
+     * set the default shared preferences the first time this is called
+     */
+    private void setDefaultSharedPreferences() {
+
+        // Sets default values only once, first time this is called.
+        // The third argument is a boolean that indicates whether
+        // the default values should be set more than once. When false,
+        // the system sets the default values only if this method has never
+        // been called in the past.
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+        // Get the 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        if (preferences.getInt(FragmentPreferences.KEY_PREF_DEFAULT_MASS_UNIT, -1) == -1) {
+            editor.putInt(FragmentPreferences.KEY_PREF_DEFAULT_MASS_UNIT, 1);
+            editor.commit();
+        }
+
+        if (preferences.getInt(FragmentPreferences.KEY_PREF_DEFAULT_VOLUME_UNIT, -1) == -1) {
+            editor.putInt(FragmentPreferences.KEY_PREF_DEFAULT_VOLUME_UNIT, 7);
+            editor.commit();
+        }
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.actionbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        return NavigationUI.onNavDestinationSelected(item, navController)
+                || super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController.popBackStack();
+        findViewById(R.id.nav_view).setVisibility(View.VISIBLE);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        findViewById(R.id.nav_view).setVisibility(View.VISIBLE);
+        super.onBackPressed();
+    }
 }

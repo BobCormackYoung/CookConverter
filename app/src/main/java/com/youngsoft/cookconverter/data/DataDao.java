@@ -41,6 +41,12 @@ public interface DataDao {
     @Query("SELECT * FROM ConversionFactorsRecord_Table WHERE type IN (1,2,4)")
     LiveData<List<ConversionFactorsRecord>> getAllMassVolumeConversionFactors();
 
+    @Query("SELECT * FROM ConversionFactorsRecord_Table WHERE type = 1")
+    LiveData<List<ConversionFactorsRecord>> getAllMassConversionFactors();
+
+    @Query("SELECT * FROM ConversionFactorsRecord_Table WHERE type = 2")
+    LiveData<List<ConversionFactorsRecord>> getAllVolumeConversionFactors();
+
     @Query("SELECT * FROM ConversionFactorsRecord_Table WHERE type = 3")
     LiveData<List<ConversionFactorsRecord>> getAllDistanceConversionFactors();
 

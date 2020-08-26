@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Settings, should always be in the overflow -->
+    <item android:id="@+id/navigation_preferences"
+        android:title="Settings"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/action_licences"
+        android:title="Licences"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/action_bug_report"
+        android:title="Report problem"
+        app:showAsAction="never"/>
+
+</menu>
