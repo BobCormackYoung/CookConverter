@@ -4,19 +4,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Preference
-        android:key="preference_default_mass_unit"
+        android:key="preference_default_unit"
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:summary="kg"
-        android:title="Default mass unit"
-        app:iconSpaceReserved="false"/>
-
-    <Preference
-        android:key="preference_default_volume_unit"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:summary="litre"
-        android:title="Default volume unit"
+        android:title="Default Measurement Unit"
         app:iconSpaceReserved="false"/>
 
     <PreferenceCategory

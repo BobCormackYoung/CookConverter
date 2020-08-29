@@ -26,16 +26,13 @@ public class FragmentPreferences extends PreferenceFragmentCompat implements Dia
     Fragment fragment;
     ViewModelPreferences viewModelPreferences;
     SharedPreferences preferences;
-    Preference pfDefaultMassUnit;
-    Preference pfDefaultVolumeUnit;
+    Preference pfDefaultUnit;
 
     //public key values for preferences
-    public static final String KEY_PREF_DEFAULT_MASS_UNIT = "preference_default_mass_unit";
-    public static final String KEY_PREF_DEFAULT_VOLUME_UNIT = "preference_default_volume_unit";
+    public static final String KEY_PREF_DEFAULT_UNIT = "preference_default_unit";
 
     //conversion factors lists
-    List<ConversionFactorsRecord> massConversionFactors;
-    List<ConversionFactorsRecord> volumeConversionFactors;
+    List<ConversionFactorsRecord> allConversionFactors;
 
 
     public FragmentPreferences() {
@@ -71,29 +68,15 @@ public class FragmentPreferences extends PreferenceFragmentCompat implements Dia
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         // Shared preference for default displayed mass unit
-        pfDefaultMassUnit = findPreference(KEY_PREF_DEFAULT_MASS_UNIT);
-        pfDefaultMassUnit.setSummary(" ");
-
-        //Shared preference for default displayed volume unit
-        pfDefaultVolumeUnit = findPreference(KEY_PREF_DEFAULT_VOLUME_UNIT);
-        pfDefaultVolumeUnit.setSummary(" ");
+        pfDefaultUnit = findPreference(KEY_PREF_DEFAULT_UNIT);
+        pfDefaultUnit.setSummary(" ");
 
         // Set an onclick listener for the mass unit preference
         // Allows picking the mass unit from a list tied to the viewmodel livedata
-        pfDefaultMassUnit.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        pfDefaultUnit.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
-                DialogUnitPicker massUnitPickerFragment = new DialogUnitPicker(FragmentPreferences.this, massConversionFactors);
-                massUnitPickerFragment.show(getChildFragmentManager(), "massUnitPickerFragment");
-                return true;
-            }
-        });
-
-        // Set an onclick listener for the volume unit preference
-        // Allows picking the volume unit from a list tied to the viewmodel livedata
-        pfDefaultVolumeUnit.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
-                DialogUnitPicker volumeUnitPickerFragment = new DialogUnitPicker(FragmentPreferences.this, volumeConversionFactors);
-                volumeUnitPickerFragment.show(getChildFragmentManager(), "volumeUnitPickerFragment");
+                DialogUnitPicker massUnitPickerFragment = new DialogUnitPicker(FragmentPreferences.this, allConversionFactors);
+                massUnitPickerFragment.show(getChildFragmentManager(), "defaultUnitPickerFragment");
                 return true;
             }
         });
@@ -122,41 +105,23 @@ public class FragmentPreferences extends PreferenceFragmentCompat implements Dia
     private void setObservers() {
         Log.i("FragPref","setObservers");
         //observe changes to the list of mass conversion factors
-        viewModelPreferences.getMassConversionFactors().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
+        viewModelPreferences.getAllConversionFactors().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
             @Override
             public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
                 //massConversionFactors.clear();
-                massConversionFactors = conversionFactorsRecords;
+                allConversionFactors = conversionFactorsRecords;
                 Log.i("FragPref","List changed, size = " + conversionFactorsRecords.size());
                 //TODO: put this logic in the viewmodel?
-                updateMassPreferenceView();
-            }
-        });
-
-        //observe changes to the list of volume conversion factors
-        viewModelPreferences.getVolumeConversionFactors().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
-            @Override
-            public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
-                //volumeConversionFactors.clear();
-                volumeConversionFactors = conversionFactorsRecords;
-                Log.i("FragPref","List changed, size = " + conversionFactorsRecords.size());
-                //TODO: put this logic in the viewmodel?
-                updateVolumePreferenceView();
+                updateUnitPreferenceView();
             }
         });
     }
 
 
-    public void updateMassPreferenceView() {
-        int preferenceValueMass = preferences.getInt(KEY_PREF_DEFAULT_MASS_UNIT,1);
-        String preferenceNameMass = searchList(preferenceValueMass, massConversionFactors);
-        pfDefaultMassUnit.setSummary(preferenceNameMass);
-    }
-
-    private void updateVolumePreferenceView() {
-        int preferenceValueVolume = preferences.getInt(KEY_PREF_DEFAULT_VOLUME_UNIT,7);
-        String preferenceNameVolume = searchList(preferenceValueVolume, volumeConversionFactors);
-        pfDefaultVolumeUnit.setSummary(preferenceNameVolume);
+    public void updateUnitPreferenceView() {
+        int preferenceValueMass = preferences.getInt(KEY_PREF_DEFAULT_UNIT,1);
+        String preferenceNameMass = searchList(preferenceValueMass, allConversionFactors);
+        pfDefaultUnit.setSummary(preferenceNameMass);
     }
 
     @Override
@@ -165,15 +130,9 @@ public class FragmentPreferences extends PreferenceFragmentCompat implements Dia
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = preferences.edit();
 
-        if (conversionFactorsRecord.getType() == 1) {
-            editor.putInt(this.KEY_PREF_DEFAULT_MASS_UNIT, (int) conversionFactorsRecord.getConversionFactorID());
-            editor.commit();
-            updateMassPreferenceView();
-        } else {
-            editor.putInt(this.KEY_PREF_DEFAULT_VOLUME_UNIT, (int) conversionFactorsRecord.getConversionFactorID());
-            editor.commit();
-            updateVolumePreferenceView();
-        }
+        editor.putInt(this.KEY_PREF_DEFAULT_UNIT, (int) conversionFactorsRecord.getConversionFactorID());
+        editor.commit();
+        updateUnitPreferenceView();
     }
 
 }

@@ -59,15 +59,15 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = preferences.edit();
 
-        if (preferences.getInt(FragmentPreferences.KEY_PREF_DEFAULT_MASS_UNIT, -1) == -1) {
-            editor.putInt(FragmentPreferences.KEY_PREF_DEFAULT_MASS_UNIT, 1);
+        if (preferences.getInt(FragmentPreferences.KEY_PREF_DEFAULT_UNIT, -1) == -1) {
+            editor.putInt(FragmentPreferences.KEY_PREF_DEFAULT_UNIT, 1);
             editor.commit();
         }
 
-        if (preferences.getInt(FragmentPreferences.KEY_PREF_DEFAULT_VOLUME_UNIT, -1) == -1) {
-            editor.putInt(FragmentPreferences.KEY_PREF_DEFAULT_VOLUME_UNIT, 7);
-            editor.commit();
-        }
+        //if (preferences.getInt(FragmentPreferences.KEY_PREF_DEFAULT_VOLUME_UNIT, -1) == -1) {
+        //    editor.putInt(FragmentPreferences.KEY_PREF_DEFAULT_VOLUME_UNIT, 7);
+        //    editor.commit();
+        //}
 
     }
 

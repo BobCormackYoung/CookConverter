@@ -17,29 +17,19 @@ public class ViewModelPreferences extends AndroidViewModel {
     private final DataRepository dataRepository;
 
     //Live Data from Database
-    private final LiveData<List<ConversionFactorsRecord>> massConversionFactors;
-    private final LiveData<List<ConversionFactorsRecord>> volumeConversionFactors;
+    private final LiveData<List<ConversionFactorsRecord>> allConversionFactors;
 
     public ViewModelPreferences(@NonNull Application application) {
         super(application);
         Log.i("FragPref","ViewModelPreferences constructor");
         dataRepository = new DataRepository(application);
-        //massConversionFactors = dataRepository.getSimpleSubsetConversionFactors(1);
-        //volumeConversionFactors = dataRepository.getSimpleSubsetConversionFactors(2);
-        massConversionFactors = dataRepository.getAllMassConversionFactors();
-        volumeConversionFactors = dataRepository.getAllVolumeConversionFactors();
+        allConversionFactors = dataRepository.getAllMassVolumeConversionFactors();
     }
 
     //return list of all mss conversion factor records
-    LiveData<List<ConversionFactorsRecord>> getMassConversionFactors() {
-        Log.i("FragPref","ViewModelPreferences getMassConversionFactors");
-        return massConversionFactors;
-    }
-
-    //return list of all mss conversion factor records
-    LiveData<List<ConversionFactorsRecord>> getVolumeConversionFactors() {
-        Log.i("FragPref","ViewModelPreferences getVolumeConversionFactors");
-        return volumeConversionFactors;
+    LiveData<List<ConversionFactorsRecord>> getAllConversionFactors() {
+        Log.i("FragPref","ViewModelPreferences getAllConversionFactors");
+        return allConversionFactors;
     }
 
 
