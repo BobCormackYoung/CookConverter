@@ -1,7 +1,6 @@
 package com.youngsoft.cookconverter.data;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -49,17 +48,6 @@ public class DataRepository {
         return allMassVolumeConversionFactors;
     }
 
-    public LiveData<List<ConversionFactorsRecord>> getAllMassConversionFactors() {
-        Log.i("DataRepository","getAllMassConversionFactors");
-        return allMassConversionFactors;
-    }
-
-    public LiveData<List<ConversionFactorsRecord>> getAllVolumeConversionFactors() {
-        Log.i("DataRepository","getAllVolumeConversionFactors");
-        return allVolumeConversionFactors;
-    }
-
-
     public LiveData<List<IngredientsRecord>> getAllIngredientsRecords() {
         return allIngredientsRecords;
     }
@@ -90,7 +78,6 @@ public class DataRepository {
      * @return livedata list of ConversionFactorRecords
      */
     public LiveData<List<ConversionFactorsRecord>> getSimpleSubsetConversionFactors(int conversionFactorType) {
-        Log.i("DataRepository","getSimpleSubsetConversionFactors");
         return dataDao.getSubsetConversionFactors(conversionFactorType);
     }
 
@@ -123,5 +110,9 @@ public class DataRepository {
                 dataDao.deleteSingleRecipeConversionFactorCrossReference(input);
             }
         });
+    }
+
+    public LiveData<ConversionFactorsRecord> getSingleConversionFactor(int id) {
+        return dataDao.getSingleConversionFactor(id);
     }
 }

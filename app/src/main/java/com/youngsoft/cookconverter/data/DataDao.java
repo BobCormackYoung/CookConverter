@@ -50,6 +50,9 @@ public interface DataDao {
     @Query("SELECT * FROM ConversionFactorsRecord_Table WHERE type = 3")
     LiveData<List<ConversionFactorsRecord>> getAllDistanceConversionFactors();
 
+    @Query("SELECT * FROM ConversionFactorsRecord_Table WHERE conversionFactorID = :index LIMIT 1")
+    LiveData<ConversionFactorsRecord> getSingleConversionFactor(int index);
+
     @Query("DELETE FROM RecipeList_Table")
     void deleteAllRecipeListItems();
 

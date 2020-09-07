@@ -1,6 +1,8 @@
 package com.youngsoft.cookconverter.ui.measures;
 
 import android.app.Application;
+import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.arch.core.util.Function;
@@ -10,6 +12,7 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.Transformations;
+import androidx.preference.PreferenceManager;
 
 import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
 import com.youngsoft.cookconverter.data.DataRepository;
@@ -17,22 +20,30 @@ import com.youngsoft.cookconverter.data.IngredientsRecord;
 
 import java.util.List;
 
+import static com.youngsoft.cookconverter.ui.preferences.FragmentPreferences.KEY_PREF_DEFAULT_UNIT;
+
 public class ViewModelMeasures extends AndroidViewModel {
 
     private final DataRepository dataRepository;
+
+    SharedPreferences preferences;
 
     //Live Data from Database
     private final LiveData<List<ConversionFactorsRecord>> allConversionFactors;
     private final LiveData<List<IngredientsRecord>> allIngredients;
     private final LiveData<List<ConversionFactorsRecord>> subsetConversionFactorList;
+    private final LiveData<ConversionFactorsRecord> sharedPreferenceConversionFactor;
 
     //Mutable live data values
     private final MutableLiveData<Double> inputValue;
     private final MutableLiveData<ConversionFactorsRecord> conversionFactorInputID;
     private final MutableLiveData<ConversionFactorsRecord> conversionFactorOutputID;
     private final MutableLiveData<IngredientsRecord> ingredientSelected;
+    //private final MutableLiveData<ConversionFactorsRecord>
 
     //Mediator live data values
+    private final MediatorLiveData<ConversionFactorsRecord> mediatorInputConversionFactor;
+    private final MediatorLiveData<ConversionFactorsRecord> mediatorOutputConversionFactor;
     private final MediatorLiveData<Double> mediatorOutput;
     private final MediatorLiveData<Double> mediatorConversionFactor;
     private final MediatorLiveData<SubsetConversionFactorFilter> mediatorSubsetConversionFactorFilter;
@@ -41,9 +52,16 @@ public class ViewModelMeasures extends AndroidViewModel {
     //Constructor
     public ViewModelMeasures(@NonNull Application application) {
         super(application);
+
+        Log.i("ViewModelMeasures","ViewModel Constructor");
+
         dataRepository = new DataRepository(application);
         allConversionFactors = dataRepository.getAllMassVolumeConversionFactors();
         allIngredients = dataRepository.getAllIngredientsRecords();
+
+        //get the sharedpreference livedata value
+        preferences = PreferenceManager.getDefaultSharedPreferences(getApplication());
+        sharedPreferenceConversionFactor = dataRepository.getSingleConversionFactor(preferences.getInt(KEY_PREF_DEFAULT_UNIT,1));
 
         //set initial input value for conversion to 0
         inputValue = new MutableLiveData<>();
@@ -55,8 +73,14 @@ public class ViewModelMeasures extends AndroidViewModel {
         //set initial input/output conversion values
         conversionFactorInputID = new MutableLiveData<>();
         conversionFactorOutputID = new MutableLiveData<>();
-        //conversionFactorInputID.setValue(new ConversionFactorsRecord("dummy",1,-1,-1));
-        //conversionFactorOutputID.setValue(new ConversionFactorsRecord("dummy",1,-1, -1));
+
+        //create the mediator value for the input conversion value
+        mediatorInputConversionFactor = new MediatorLiveData<>();
+        mediatorInputConversionFactorInit();
+
+        //create the mediator value for the output conversion value
+        mediatorOutputConversionFactor = new MediatorLiveData<>();
+        mediatorOutputConversionFactorInit();
 
         //create the mediator filter for the output values
         mediatorSubsetConversionFactorFilter = new MediatorLiveData<>();
@@ -79,11 +103,6 @@ public class ViewModelMeasures extends AndroidViewModel {
         });
 
     }
-
-
-
-
-
 
 
     //get the converted value
@@ -111,6 +130,16 @@ public class ViewModelMeasures extends AndroidViewModel {
         return subsetConversionFactorList;
     }
 
+    //return input conversion factor
+    LiveData<ConversionFactorsRecord> getInputConversionFactor() {
+        return mediatorInputConversionFactor;
+    }
+
+    //return output conversion factor
+    LiveData<ConversionFactorsRecord> getOutputConversionFactor() {
+        return mediatorOutputConversionFactor;
+    }
+
 
 
 
@@ -136,7 +165,56 @@ public class ViewModelMeasures extends AndroidViewModel {
 
 
 
+    private void mediatorInputConversionFactorInit() {
 
+        //observe the user selected input value
+        mediatorInputConversionFactor.addSource(conversionFactorInputID, new Observer<ConversionFactorsRecord>() {
+            @Override
+            public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
+                Log.i("ViewModelMeasures", "mediatorInputConversionFactorInit conversionFactorInputID "
+                        + conversionFactorInputID.getValue().getName());
+                mediatorInputConversionFactor.setValue(conversionFactorInputID.getValue());
+            }
+        });
+
+        //observe the shared preference value
+        mediatorInputConversionFactor.addSource(sharedPreferenceConversionFactor, new Observer<ConversionFactorsRecord>() {
+            @Override
+            public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
+                Log.i("ViewModelMeasures", "mediatorInputConversionFactorInit sharedPreferenceConversionFactor "
+                 + sharedPreferenceConversionFactor.getValue().getName());
+                mediatorInputConversionFactor.setValue(sharedPreferenceConversionFactor.getValue());
+                //mediatorInputConversionFactor.removeSource(sharedPreferenceConversionFactor);
+            }
+        });
+
+    }
+
+
+    private void mediatorOutputConversionFactorInit() {
+
+        //observe the user selected input value
+        mediatorOutputConversionFactor.addSource(conversionFactorOutputID, new Observer<ConversionFactorsRecord>() {
+            @Override
+            public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
+                Log.i("ViewModelMeasures", "mediatorOutputConversionFactorInit conversionFactorOutputID "
+                        + conversionFactorOutputID.getValue().getName());
+                mediatorOutputConversionFactor.setValue(conversionFactorOutputID.getValue());
+            }
+        });
+
+        //observe the shared preference value
+        mediatorOutputConversionFactor.addSource(sharedPreferenceConversionFactor, new Observer<ConversionFactorsRecord>() {
+            @Override
+            public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
+                Log.i("ViewModelMeasures", "mediatorOutputConversionFactorInit sharedPreferenceConversionFactor "
+                        + sharedPreferenceConversionFactor.getValue().getName());
+                mediatorOutputConversionFactor.setValue(sharedPreferenceConversionFactor.getValue());
+                //mediatorOutputConversionFactor.removeSource(sharedPreferenceConversionFactor);
+            }
+        });
+
+    }
 
 
 
