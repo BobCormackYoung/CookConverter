@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbarMainActivity = findViewById(R.id.toolbar_main_activity);
         setSupportActionBar(toolbarMainActivity);
+        toolbarMainActivity.setTitleTextColor(getResources().getColor(R.color.colorPrimaryDark));
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.

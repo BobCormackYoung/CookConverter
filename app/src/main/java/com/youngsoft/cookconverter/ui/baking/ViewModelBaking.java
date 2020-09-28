@@ -1,6 +1,7 @@
 package com.youngsoft.cookconverter.ui.baking;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -293,6 +294,7 @@ public class ViewModelBaking extends AndroidViewModel {
         if (panTypeOutputMutable.getValue() == 0) {
             return outputRectangularPanDimension1.getValue()*outputRectangularPanDimension2.getValue();
         } else if (panTypeOutputMutable.getValue() == 1) {
+            Log.i("viewmodelbaking","output "  + (outputCircularPanDimension.getValue()/2)*(outputCircularPanDimension.getValue()/2)*PI);
             return (outputCircularPanDimension.getValue()/2)*(outputCircularPanDimension.getValue()/2)*PI;
         } else if (panTypeOutputMutable.getValue() == 2) {
             Double areaOuter = (outputBundtPanDimension1.getValue()/2)*(outputBundtPanDimension1.getValue()/2)*PI;
@@ -351,13 +353,14 @@ public class ViewModelBaking extends AndroidViewModel {
     }
 
     /**
-     * calculate the output value based on which pan type is currently selected
+     * calculate the input value based on which pan type is currently selected
      * @return the pan area
      */
     private Double calculateInputPanArea() {
         if (panTypeInputMutable.getValue() == 0) {
             return inputRectangularPanDimension1.getValue()*inputRectangularPanDimension2.getValue();
         } else if (panTypeInputMutable.getValue() == 1) {
+            Log.i("viewmodelbaking","input "  + (inputCircularPanDimension.getValue()/2)*(inputCircularPanDimension.getValue()/2)*PI);
             return (inputCircularPanDimension.getValue()/2)*(inputCircularPanDimension.getValue()/2)*PI;
         } else if (panTypeInputMutable.getValue() == 2) {
             Double areaOuter = (inputBundtPanDimension1.getValue()/2)*(inputBundtPanDimension1.getValue()/2)*PI;

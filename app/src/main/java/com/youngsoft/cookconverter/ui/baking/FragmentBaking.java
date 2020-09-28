@@ -40,7 +40,6 @@ public class FragmentBaking extends Fragment {
         viewModelBaking = new ViewModelProvider(this).get(ViewModelBaking.class);
         View root = inflater.inflate(R.layout.fragment_baking, container, false);
         mapViews(root);
-
         return root;
     }
 
