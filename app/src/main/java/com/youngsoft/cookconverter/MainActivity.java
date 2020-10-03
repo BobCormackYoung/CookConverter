@@ -1,6 +1,7 @@
 package com.youngsoft.cookconverter;
 
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -28,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbarMainActivity = findViewById(R.id.toolbar_main_activity);
         setSupportActionBar(toolbarMainActivity);
-        toolbarMainActivity.setTitleTextColor(getResources().getColor(R.color.colorPrimaryDark));
+        toolbarMainActivity.setTitleTextColor(getResources().getColor(R.color.colorPrimaryLight));
+        toolbarMainActivity.getOverflowIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryLight), PorterDuff.Mode.SRC_ATOP);
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.

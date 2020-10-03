@@ -55,13 +55,24 @@
 
         </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
+        <com.google.android.material.button.MaterialButton style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:id="@+id/bt_delete_single_ingredient"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="D"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"/>
+            android:backgroundTint="@color/cardview_light_background"
+            app:icon="@drawable/ic_delete_24px"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:rippleColor="@color/colorPrimaryLight"
+            app:iconTint="@color/colorPrimary"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:minWidth="96dp"
+            android:minHeight="48dp"/>
 
     </LinearLayout>
 
