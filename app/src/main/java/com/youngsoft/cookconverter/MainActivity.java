@@ -1,5 +1,6 @@
 package com.youngsoft.cookconverter;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -8,16 +9,20 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.navigation.ActivityNavigator;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.youngsoft.cookconverter.ui.preferences.FragmentPreferences;
+import com.youngsoft.cookconverter.ui.preferences.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -83,9 +88,35 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.onNavDestinationSelected(item, navController)
-                || super.onOptionsItemSelected(item);
+
+        ActivityNavigator activityNavigator = new ActivityNavigator(this);
+
+        switch (item.getItemId()) {
+            // action with ID  was selected
+            case R.id.action_licences:
+                Intent intent = new Intent(this, OssLicensesMenuActivity.class);
+                startActivity(intent);
+                break;
+            // action with ID action_settings was selected
+            case R.id.action_preferences:
+                activityNavigator.navigate(activityNavigator
+                        .createDestination()
+                        .setIntent(new Intent(this, SettingsActivity.class)), null, null, null);
+                break;
+            // action with ID  was selected
+            case R.id.action_bug_report:
+                Toast.makeText(this, "Bug report selected", Toast.LENGTH_SHORT)
+                        .show();
+                break;
+            default:
+                break;
+        }
+
+        return true;
+
+        //NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        //return NavigationUI.onNavDestinationSelected(item, navController)
+        //        || super.onOptionsItemSelected(item);
     }
 
     @Override

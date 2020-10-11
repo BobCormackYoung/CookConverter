@@ -21,4 +21,26 @@
         <item name="android:minHeight">48dp</item>
     </style>
 
+    <style name="LicensesTheme" parent="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorControlNormal">@color/colorPrimaryDark</item>
+        <item name="android:actionBarStyle">@style/LicensesTheme.ActionBarStyle</item>
+    </style>
+
+    <style name="LicensesTheme.ActionBarStyle" parent="@android:style/Widget.Material.ActionBar">
+        <item name="android:textColorPrimary">@color/colorPrimary</item>
+        <item name="android:titleTextStyle">@style/LicensesTheme.ActionBar.TitleTextStyle</item>
+        <item name="android:navigationIcon">@style/LicensesTheme.ActionBar.Button.Navigation</item>
+    </style>
+
+    <style name="LicensesTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance.Material.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="LicensesTheme.ActionBar.Button.Navigation" parent="@android:style/Widget.Toolbar.Button.Navigation">
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
 </resources>
