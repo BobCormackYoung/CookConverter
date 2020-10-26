@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:paddingTop="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="8dp"
+            tools:text="debug"
+            android:gravity="center"
+            android:id="@+id/tv_pansize_bottomsheet_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:textAppearance="?attr/textAppearanceHeadline6"/>
+
+        <view
+            android:id="@+id/vp_baking_tablayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            class="com.youngsoft.cookconverter.ui.util.WrapContentHeightViewPager">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tl_baking"
+                style="@style/Widget.MaterialComponents.TabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabMode="auto" />
+
+        </view>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="16dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bt_pansize_cancel"
+                android:layout_marginRight="8dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/button_cancel"
+                android:layout_weight="1"
+                style="?attr/materialButtonOutlinedStyle"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bt_pansize_save"
+                android:layout_marginLeft="8dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/button_save"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+

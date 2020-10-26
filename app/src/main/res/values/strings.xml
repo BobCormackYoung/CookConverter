@@ -23,4 +23,24 @@
     <string name="title_pan_length">Pan Length</string>
     <string name="title_input_serving">Input serving...</string>
     <string name="title_output_serving">...Output Serving</string>
+    <string name="title_input_pan">Input Pan</string>
+    <string name="title_type">Type:</string>
+    <string name="default_type">Rectangular</string>
+    <string name="title_dimension_1">Dimension 1:</string>
+    <string name="title_dimension_2">Dimension 2:</string>
+    <string name="button_edit">EDIT</string>
+    <string name="title_output_pan">Output Pan</string>
+    <string name="title_input_pan_type">Input Pan Type</string>
+    <string name="title_output_pan_type">Output Pan Type</string>
+    <string name="title_unknown_pan_type">Unknown Pan Type...</string>
+    <string name="pan_type_rectangular">Rectangular</string>
+    <string name="dimension_rectangular_1">\"Length: \"</string>
+    <string name="dimensions_rectangular_2">\"Width: \"</string>
+    <string name="pan_type_circular">Circular</string>
+    <string name="dimensions_circular">\"Diameter: \"</string>
+    <string name="pan_type_bundt">Bundt</string>
+    <string name="dimensions_bundt_1">\"Outer Diameter: \"</string>
+    <string name="dimensions_bundt_2">\"Inner Diameter: \"</string>
+    <string name="pan_type_unknown">Unknown</string>
+    <string name="dimensions_unknown">\"Unknown: \"</string>
 </resources>

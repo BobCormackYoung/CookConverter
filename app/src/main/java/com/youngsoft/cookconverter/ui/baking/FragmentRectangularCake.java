@@ -26,7 +26,8 @@ import java.util.List;
 
 public class FragmentRectangularCake extends Fragment {
 
-    private final ViewModelBaking viewModelBaking;
+    //private final ViewModelBaking viewModelBaking;
+    private final ViewModelPanSize viewModelPanSize;
     private Spinner spFRCUnits;
     private TextInputEditText etDimensionWidth;
     private TextInputEditText etDimensionLength;
@@ -34,8 +35,8 @@ public class FragmentRectangularCake extends Fragment {
     private MeasuresSpinnerAdapter measuresSpinnerAdapter;
     private Context context;
 
-    FragmentRectangularCake(ViewModelBaking viewModel, boolean isInput) {
-        viewModelBaking = viewModel;
+    FragmentRectangularCake(ViewModelPanSize viewModel, boolean isInput) {
+        viewModelPanSize = viewModel;
         this.isInput = isInput;
     }
 
@@ -53,12 +54,14 @@ public class FragmentRectangularCake extends Fragment {
         setObservers();
     }
 
-    //observe changes to livedata for updating views
+    /**
+     * observe changes to livedata for updating views
+     */
     private void setObservers() {
 
         //observe changes to the list of conversion factors
         //update adapter when a change is observed
-        viewModelBaking.getConversionFactorsRecordLiveData().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
+        viewModelPanSize.getConversionFactorsRecordLiveData().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
             @Override
             public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
                 ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
@@ -69,7 +72,9 @@ public class FragmentRectangularCake extends Fragment {
         });
     }
 
-    //set view listeners for edit texts
+    /**
+     * set view listeners for edit texts
+     */
     private void setListeners() {
         //listener for width
         etDimensionWidth.addTextChangedListener(new TextWatcher() {
@@ -83,7 +88,7 @@ public class FragmentRectangularCake extends Fragment {
                 if (etDimensionWidth.getText().toString().isEmpty()) {
                     saveDimension1EditTextValue(0.0);
                 } else {
-                    Double temp;
+                    double temp;
                     //try to catch error associated with leading decimal
                     try {
                         temp = DecimalFormat.getNumberInstance().parse(etDimensionWidth.getText().toString()).doubleValue();
@@ -114,7 +119,7 @@ public class FragmentRectangularCake extends Fragment {
                 if (etDimensionLength.getText().toString().isEmpty()) {
                     saveDimension2EditTextValue(0.0);
                 } else {
-                    Double temp;
+                    double temp;
                     //try to catch error associated with leading decimal
                     try {
                         temp = DecimalFormat.getNumberInstance().parse(etDimensionLength.getText().toString()).doubleValue();
@@ -138,11 +143,7 @@ public class FragmentRectangularCake extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 ConversionFactorsRecord selectedItem = measuresSpinnerAdapter.getItem(position);
-                if (isInput) {
-                    viewModelBaking.setInputRectangularConversionFactor(selectedItem);
-                } else {
-                    viewModelBaking.setOutputRectangularConversionFactor(selectedItem);
-                }
+                viewModelPanSize.setRectangularConversionFactor(selectedItem);
             }
 
             @Override
@@ -152,25 +153,26 @@ public class FragmentRectangularCake extends Fragment {
         });
     }
 
-    //save the width to input or output pan variable in viewmodel
+    /**
+     * save the width to input or output pan variable in viewmodel
+     * @param v Double input value
+     */
     private void saveDimension1EditTextValue(Double v) {
-        if (isInput) {
-            viewModelBaking.setInputRectangularPanDimension1(v);
-        } else {
-            viewModelBaking.setOutputRectangularPanDimension1(v);
-        }
+        viewModelPanSize.setRectangularPanDimension1(v);
     }
 
-    //save the length to input or output pan variable in viewmodel
+    /**
+     * save the length to input or output pan variable in viewmodel
+     * @param v Double input value
+     */
     private void saveDimension2EditTextValue(Double v) {
-        if (isInput) {
-            viewModelBaking.setInputRectangularPanDimension2(v);
-        } else {
-            viewModelBaking.setOutputRectangularPanDimension2(v);
-        }
+        viewModelPanSize.setRectangularPanDimension2(v);
     }
 
-    //map views to object variables
+    /**
+     * map views to object variables
+     * @param root View input that contains the views for mapping
+     */
     private void mapViews(View root) {
         spFRCUnits = root.findViewById(R.id.sp_frc_input_units);
         etDimensionWidth = root.findViewById(R.id.tiet_frc_width_input);

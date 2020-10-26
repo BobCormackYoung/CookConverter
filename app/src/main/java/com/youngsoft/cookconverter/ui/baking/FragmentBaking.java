@@ -7,19 +7,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
 import com.youngsoft.cookconverter.R;
+import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
 import com.youngsoft.cookconverter.ui.save.BottomSheetSaveMeasurement;
-import com.youngsoft.cookconverter.ui.util.WrapContentHeightViewPager;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -27,14 +26,30 @@ import java.text.ParseException;
 public class FragmentBaking extends Fragment {
 
     private ViewModelBaking viewModelBaking;
-    private WrapContentHeightViewPager viewPagerTabLayoutInput;
-    private TabLayout tabLayoutInput;
-    private WrapContentHeightViewPager viewPagerTabLayoutOutput;
-    private TabLayout tabLayoutOutput;
     private TextInputEditText etInputValue;
     private TextInputEditText etOutputValue;
     private Button btSaveBaking;
     private BottomSheetSaveMeasurement bottomSheetSaveMeasurement;
+
+    private TextView tvInputPanType;
+    private TextView tvOutputPanType;
+    private TextView tvInputDim1Name;
+    private TextView tvOutputDim1Name;
+    private TextView tvInputDim2Name;
+    private TextView tvOutputDim2Name;
+    private TextView tvInputDim1Value;
+    private TextView tvOutputDim1Value;
+    private TextView tvInputDim2Value;
+    private TextView tvOutputDim2Value;
+    private TextView tvInputDim1Unit;
+    private TextView tvOutputDim1Unit;
+    private TextView tvInputDim2Unit;
+    private TextView tvOutputDim2Unit;
+
+    //DEBUG
+    private BottomSheetPanSize bottomSheetPanSize;
+    private Button btLaunchInputBottomSheet;
+    private Button btLaunchOutputBottomSheet;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewModelBaking = new ViewModelProvider(this).get(ViewModelBaking.class);
@@ -49,60 +64,12 @@ public class FragmentBaking extends Fragment {
         setListeners();
         setObservers();
         etInputValue.setText("0.0");
-        //create adapter for the tab layout
-        TabLayoutAdapter adapterTabLayoutInput = new TabLayoutAdapter(getChildFragmentManager(), viewModelBaking, true);
-        TabLayoutAdapter adapterTabLayoutOutput = new TabLayoutAdapter(getChildFragmentManager(), viewModelBaking, false);
-
-        viewPagerTabLayoutInput.setAdapter(adapterTabLayoutInput);
-        viewPagerTabLayoutOutput.setAdapter(adapterTabLayoutOutput);
-        viewPagerTabLayoutInput.setOffscreenPageLimit(3);
-        viewPagerTabLayoutOutput.setOffscreenPageLimit(3);
-
-        tabLayoutInput.setupWithViewPager(viewPagerTabLayoutInput);
-        tabLayoutOutput.setupWithViewPager(viewPagerTabLayoutOutput);
-
     }
 
     /**
      * set view listeners
      */
     private void setListeners() {
-
-        //set listener for the input pan type
-        viewPagerTabLayoutInput.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                viewModelBaking.setPanTypeInputMutable(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
-        //set listener for the output pan type
-        viewPagerTabLayoutOutput.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                viewModelBaking.setPanTypeOutputMutable(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
 
         //set listener for the input edit text
         etInputValue.addTextChangedListener(new TextWatcher() {
@@ -116,7 +83,7 @@ public class FragmentBaking extends Fragment {
                 if (etInputValue.getText().toString().isEmpty()) {
                     viewModelBaking.setInputValueMutable(0.0);
                 } else {
-                    Double temp;
+                    double temp;
                     //try to catch error associated with leading decimal
                     try {
                         temp = DecimalFormat.getNumberInstance().parse(etInputValue.getText().toString()).doubleValue();
@@ -143,12 +110,29 @@ public class FragmentBaking extends Fragment {
                 bottomSheetSaveMeasurement.show(getChildFragmentManager(), "saveDataBottomSheet");
             }
         });
+
+        //DEBUG
+        btLaunchInputBottomSheet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetPanSize = new BottomSheetPanSize(1);
+                bottomSheetPanSize.show(getChildFragmentManager(),"panSizeBottomFragment");
+            }
+        });
+        btLaunchOutputBottomSheet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetPanSize = new BottomSheetPanSize(2);
+                bottomSheetPanSize.show(getChildFragmentManager(),"panSizeBottomFragment");
+            }
+        });
     }
 
     /**
      * set livedata observers
      */
     private void setObservers() {
+        //observe output value
         viewModelBaking.getMediatorOutput().observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
@@ -161,6 +145,127 @@ public class FragmentBaking extends Fragment {
                 }
             }
         });
+
+        //observe input pan type
+        viewModelBaking.getPanTypeInputMutable().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                if (integer == 0) {
+                    tvInputPanType.setText(R.string.pan_type_rectangular);
+                    tvInputDim1Name.setText(R.string.dimension_rectangular_1);
+                    tvInputDim2Name.setVisibility(View.VISIBLE);
+                    tvInputDim2Unit.setVisibility(View.VISIBLE);
+                    tvInputDim2Value.setVisibility(View.VISIBLE);
+                    tvInputDim2Name.setText(R.string.dimensions_rectangular_2);
+                } else if (integer == 1) {
+                    tvInputPanType.setText(R.string.pan_type_circular);
+                    tvInputDim1Name.setText(R.string.dimensions_circular);
+                    tvInputDim2Name.setVisibility(View.GONE);
+                    tvInputDim2Unit.setVisibility(View.GONE);
+                    tvInputDim2Value.setVisibility(View.GONE);
+                } else if (integer == 2) {
+                    tvInputPanType.setText(R.string.pan_type_bundt);
+                    tvInputDim1Name.setText(R.string.dimensions_bundt_1);
+                    tvInputDim2Name.setVisibility(View.VISIBLE);
+                    tvInputDim2Unit.setVisibility(View.VISIBLE);
+                    tvInputDim2Value.setVisibility(View.VISIBLE);
+                    tvInputDim2Name.setText(R.string.dimensions_bundt_2);
+                } else {
+                    tvInputPanType.setText(R.string.pan_type_unknown);
+                    tvInputDim1Name.setText(R.string.dimensions_unknown);
+                    tvInputDim2Name.setVisibility(View.VISIBLE);
+                    tvInputDim2Unit.setVisibility(View.VISIBLE);
+                    tvInputDim2Value.setVisibility(View.VISIBLE);
+                    tvInputDim2Name.setText(R.string.dimensions_unknown);
+                }
+            }
+        });
+
+        //observe output pan type
+        viewModelBaking.getPanTypeOutputMutable().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                if (integer == 0) {
+                    tvOutputPanType.setText(R.string.pan_type_rectangular);
+                    tvOutputDim1Name.setText(R.string.dimension_rectangular_1);
+                    tvOutputDim2Name.setVisibility(View.VISIBLE);
+                    tvOutputDim2Unit.setVisibility(View.VISIBLE);
+                    tvOutputDim2Value.setVisibility(View.VISIBLE);
+                    tvOutputDim2Name.setText(R.string.dimensions_rectangular_2);
+                } else if (integer == 1) {
+                    tvOutputPanType.setText(R.string.pan_type_circular);
+                    tvOutputDim1Name.setText(R.string.dimensions_circular);
+                    tvOutputDim2Name.setVisibility(View.GONE);
+                    tvOutputDim2Unit.setVisibility(View.GONE);
+                    tvOutputDim2Value.setVisibility(View.GONE);
+                } else if (integer == 2) {
+                    tvOutputPanType.setText(R.string.pan_type_bundt);
+                    tvOutputDim1Name.setText(R.string.dimensions_bundt_1);
+                    tvOutputDim2Name.setVisibility(View.VISIBLE);
+                    tvOutputDim2Unit.setVisibility(View.VISIBLE);
+                    tvOutputDim2Value.setVisibility(View.VISIBLE);
+                    tvOutputDim2Name.setText(R.string.dimensions_bundt_2);
+                } else {
+                    tvOutputPanType.setText(R.string.pan_type_unknown);
+                    tvOutputDim1Name.setText(R.string.dimensions_unknown);
+                    tvOutputDim2Name.setVisibility(View.VISIBLE);
+                    tvOutputDim2Unit.setVisibility(View.VISIBLE);
+                    tvOutputDim2Value.setVisibility(View.VISIBLE);
+                    tvOutputDim2Name.setText(R.string.dimensions_unknown);
+                }
+            }
+        });
+
+        //input conversion factor
+        viewModelBaking.getInputConversionFactor().observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
+            @Override
+            public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
+                tvInputDim1Unit.setText(conversionFactorsRecord.getName());
+                tvInputDim2Unit.setText(conversionFactorsRecord.getName());
+            }
+        });
+
+        //output conversion factor
+        viewModelBaking.getOutputConversionFactor().observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
+            @Override
+            public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
+                tvOutputDim1Unit.setText(conversionFactorsRecord.getName());
+                tvOutputDim2Unit.setText(conversionFactorsRecord.getName());
+            }
+        });
+
+        //input dimension 1
+        viewModelBaking.getInputPanDimension1().observe(getViewLifecycleOwner(), new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                tvInputDim1Value.setText(aDouble.toString());
+            }
+        });
+
+        //input dimension 2
+        viewModelBaking.getInputPanDimension2().observe(getViewLifecycleOwner(), new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                tvInputDim2Value.setText(aDouble.toString());
+            }
+        });
+
+        //output dimension 1
+        viewModelBaking.getOutputPanDimension1().observe(getViewLifecycleOwner(), new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                tvOutputDim1Value.setText(aDouble.toString());
+            }
+        });
+
+        //output dimension 2
+        viewModelBaking.getOutputPanDimension2().observe(getViewLifecycleOwner(), new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                tvOutputDim2Value.setText(aDouble.toString());
+            }
+        });
+
     }
 
     /**
@@ -168,12 +273,27 @@ public class FragmentBaking extends Fragment {
      * @param root input view used for mapping views
      */
     private void mapViews(View root) {
-        viewPagerTabLayoutInput = root.findViewById(R.id.vp_baking_tablayout_input);
-        tabLayoutInput = root.findViewById(R.id.tl_baking_input);
-        viewPagerTabLayoutOutput = root.findViewById(R.id.vp_baking_tablayout_output);
-        tabLayoutOutput = root.findViewById(R.id.tl_baking_output);
         etInputValue = root.findViewById(R.id.tiet_fb_input_value);
         etOutputValue = root.findViewById(R.id.tiet_fb_output_value);
         btSaveBaking = root.findViewById(R.id.bt_save_baking);
+
+        tvInputPanType = root.findViewById(R.id.tv_bakingfragment_input_pantype);
+        tvOutputPanType = root.findViewById(R.id.tv_bakingfragment_output_pantype);
+        tvInputDim1Name = root.findViewById(R.id.tv_bakingfragment_input_dim1_name);
+        tvOutputDim1Name = root.findViewById(R.id.tv_bakingfragment_output_dim1_name);
+        tvInputDim2Name = root.findViewById(R.id.tv_bakingfragment_input_dim2_name);
+        tvOutputDim2Name = root.findViewById(R.id.tv_bakingfragment_output_dim2_name);
+        tvInputDim1Value = root.findViewById(R.id.tv_bakingfragment_input_dim1_value);
+        tvOutputDim1Value = root.findViewById(R.id.tv_bakingfragment_output_dim1_value);
+        tvInputDim2Value = root.findViewById(R.id.tv_bakingfragment_input_dim2_value);
+        tvOutputDim2Value = root.findViewById(R.id.tv_bakingfragment_output_dim2_value);
+        tvInputDim1Unit = root.findViewById(R.id.tv_bakingfragment_input_dim1_units);
+        tvOutputDim1Unit = root.findViewById(R.id.tv_bakingfragment_output_dim1_units);
+        tvInputDim2Unit = root.findViewById(R.id.tv_bakingfragment_input_dim2_units);
+        tvOutputDim2Unit = root.findViewById(R.id.tv_bakingfragment_output_dim2_units);
+
+        //DEBUG
+        btLaunchInputBottomSheet = root.findViewById(R.id.bt_input_pan_edit);
+        btLaunchOutputBottomSheet = root.findViewById(R.id.bt_output_pan_edit);
     }
 }

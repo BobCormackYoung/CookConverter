@@ -27,7 +27,7 @@ import java.util.List;
 
 public class FragmentBundtCake extends Fragment {
 
-    private final ViewModelBaking viewModelBaking;
+    private final ViewModelPanSize viewModelPanSize;
     private Spinner spFBCUnits;
     private TextInputEditText etOuterDiameter;
     private TextInputEditText etInnerDiameter;
@@ -37,8 +37,8 @@ public class FragmentBundtCake extends Fragment {
     private MeasuresSpinnerAdapter measuresSpinnerAdapter;
     private Context context;
 
-    public FragmentBundtCake(ViewModelBaking viewModel, boolean isInput) {
-        viewModelBaking = viewModel;
+    public FragmentBundtCake(ViewModelPanSize viewModel, boolean isInput) {
+        viewModelPanSize = viewModel;
         this.isInput = isInput;
     }
 
@@ -60,19 +60,7 @@ public class FragmentBundtCake extends Fragment {
     private void setObservers() {
 
         //observe for ID value being larger than the OD value
-        viewModelBaking.getIsErrorIDgtODInput().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if (aBoolean) {
-                    tilInnerDiameter.setError("Too large!");
-                } else {
-                    tilInnerDiameter.setError(null);
-                }
-            }
-        });
-
-        //observe for ID value being larger than the OD value
-        viewModelBaking.getIsErrorIDgtODOutput().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        viewModelPanSize.getIsErrorIDgtOD().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
@@ -84,19 +72,7 @@ public class FragmentBundtCake extends Fragment {
         });
 
         //observe for OD value being smaller than the ID value
-        viewModelBaking.getIsErrorODltIDInput().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if (aBoolean) {
-                    tilOuterDiameter.setError("Too small!");
-                } else {
-                    tilOuterDiameter.setError(null);
-                }
-            }
-        });
-
-        //observe for OD value being smaller than the ID value
-        viewModelBaking.getIsErrorODltIDOutput().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        viewModelPanSize.getIsErrorODltID().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
@@ -109,7 +85,7 @@ public class FragmentBundtCake extends Fragment {
 
         //observe changes to the list of conversion factors
         //update adapter when a change is observed
-        viewModelBaking.getConversionFactorsRecordLiveData().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
+        viewModelPanSize.getConversionFactorsRecordLiveData().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
             @Override
             public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
                 ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
@@ -134,7 +110,7 @@ public class FragmentBundtCake extends Fragment {
                 if (etOuterDiameter.getText().toString().isEmpty()) {
                     saveOuterDiameterEditTextValue(0.0);
                 } else {
-                    Double temp;
+                    double temp;
                     //try to catch error associated with leading decimal
                     try {
                         temp = DecimalFormat.getNumberInstance().parse(etOuterDiameter.getText().toString()).doubleValue();
@@ -164,7 +140,7 @@ public class FragmentBundtCake extends Fragment {
                 if (etInnerDiameter.getText().toString().isEmpty()) {
                     saveInnerDiameterEditTextValue(0.0);
                 } else {
-                    Double temp;
+                    double temp;
                     //try to catch error associated with leading decimal
                     try {
                         temp = DecimalFormat.getNumberInstance().parse(etInnerDiameter.getText().toString()).doubleValue();
@@ -188,11 +164,7 @@ public class FragmentBundtCake extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 ConversionFactorsRecord selectedItem = measuresSpinnerAdapter.getItem(position);
-                if (isInput) {
-                    viewModelBaking.setInputBundtConversionFactor(selectedItem);
-                } else {
-                    viewModelBaking.setOutputBundtConversionFactor(selectedItem);
-                }
+                viewModelPanSize.setBundtConversionFactor(selectedItem);
             }
 
             @Override
@@ -204,20 +176,12 @@ public class FragmentBundtCake extends Fragment {
 
     //save the outer diameter value to the input or output pan variable in viewmodel
     private void saveOuterDiameterEditTextValue(Double v) {
-        if (isInput) {
-            viewModelBaking.setInputBundtPanDimension1(v);
-        } else {
-            viewModelBaking.setOutputBundtPanDimension1(v);
-        }
+        viewModelPanSize.setBundtPanDimension1(v);
     }
 
     //save the inner diameter value to the input or output pan variable in viewmodel
     private void saveInnerDiameterEditTextValue(Double v) {
-        if (isInput) {
-            viewModelBaking.setInputBundtPanDimension2(v);
-        } else {
-            viewModelBaking.setOutputBundtPanDimension2(v);
-        }
+        viewModelPanSize.setBundtPanDimension2(v);
     }
 
     //map views to object variables

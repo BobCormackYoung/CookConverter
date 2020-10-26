@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:padding="16dp"
     android:orientation="vertical">
 
@@ -64,7 +69,8 @@
             android:layout_height="wrap_content"
             android:text="@string/button_cancel"
             android:layout_weight="1"
-            android:layout_marginRight="8dp"/>
+            android:layout_marginRight="8dp"
+            style="?attr/materialButtonOutlinedStyle"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/bt_save_measurement"
@@ -77,3 +83,5 @@
     </LinearLayout>
 
 </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

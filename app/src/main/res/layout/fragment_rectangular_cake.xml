@@ -47,7 +47,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tiet_frc_width_input"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="54dp"
                 android:inputType="numberDecimal"
                 tools:text="10"
                 android:hint="@string/title_pan_width"/>
@@ -66,7 +66,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tiet_frc_length_input"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="54dp"
                 android:inputType="numberDecimal"
                 tools:text="10"
                 android:hint="@string/title_pan_length"/>

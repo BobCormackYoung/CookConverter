@@ -26,15 +26,15 @@ import java.util.List;
 
 public class FragmentCircularCake extends Fragment {
 
-    private final ViewModelBaking viewModelBaking;
+    private final ViewModelPanSize viewModelPanSize;
     private Spinner spFCCUnits;
     private TextInputEditText etDimension;
     private final boolean isInput;
     private MeasuresSpinnerAdapter measuresSpinnerAdapter;
     private Context context;
 
-    FragmentCircularCake(ViewModelBaking viewModel, boolean isInput) {
-        viewModelBaking = viewModel;
+    FragmentCircularCake(ViewModelPanSize viewModel, boolean isInput) {
+        viewModelPanSize = viewModel;
         this.isInput = isInput;
     }
 
@@ -57,7 +57,7 @@ public class FragmentCircularCake extends Fragment {
 
         //observe changes to the list of conversion factors
         //update adapter when a change is observed
-        viewModelBaking.getConversionFactorsRecordLiveData().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
+        viewModelPanSize.getConversionFactorsRecordLiveData().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
             @Override
             public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
                 ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
@@ -82,7 +82,7 @@ public class FragmentCircularCake extends Fragment {
                 if (etDimension.getText().toString().isEmpty()) {
                     saveEditTextValue(0.0);
                 } else {
-                    Double temp;
+                    double temp;
                     //try to catch error associated with leading decimal
                     try {
                         temp = DecimalFormat.getNumberInstance().parse(etDimension.getText().toString()).doubleValue();
@@ -106,11 +106,7 @@ public class FragmentCircularCake extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 ConversionFactorsRecord selectedItem = measuresSpinnerAdapter.getItem(position);
-                if (isInput) {
-                    viewModelBaking.setInputCircularConversionFactor(selectedItem);
-                } else {
-                    viewModelBaking.setOutputCircularConversionFactor(selectedItem);
-                }
+                viewModelPanSize.setCircularConversionFactor(selectedItem);
             }
 
             @Override
@@ -122,12 +118,7 @@ public class FragmentCircularCake extends Fragment {
 
     //save value for the pan diameter
     private void saveEditTextValue(double v) {
-        if (isInput) {
-            viewModelBaking.setInputCircularPanDimension(v);
-        } else {
-            viewModelBaking.setOutputCircularPanDimension(v);
-        }
-
+        viewModelPanSize.setCircularPanDimension(v);
     }
 
     //map views from the fragment

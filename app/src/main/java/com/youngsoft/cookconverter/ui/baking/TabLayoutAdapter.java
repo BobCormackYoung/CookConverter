@@ -10,12 +10,13 @@ public class TabLayoutAdapter extends FragmentPagerAdapter {
 
     //3 tabs, 3 fragments
     private static final int NUM_ITEMS = 3;
-    private final ViewModelBaking viewModelBaking; //viewmodel for the baking fragment
+    //private final ViewModelBaking viewModelBaking; //viewmodel for the baking fragment
+    private final ViewModelPanSize viewModelPanSize; //viewmodel for the baking fragment
     private final boolean isInput; //is this an input tabLayout or output
 
-    public TabLayoutAdapter(@NonNull FragmentManager fm, ViewModelBaking viewModel, boolean isInput) {
+    public TabLayoutAdapter(@NonNull FragmentManager fm, ViewModelPanSize viewModel, boolean isInput) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        viewModelBaking = viewModel;
+        viewModelPanSize = viewModel;
         this.isInput = isInput;
     }
 
@@ -25,13 +26,13 @@ public class TabLayoutAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
 
         if (position == 0) {
-            return new FragmentRectangularCake(viewModelBaking, isInput);
+            return new FragmentRectangularCake(viewModelPanSize, isInput);
         } else if (position == 1) {
-            return new FragmentCircularCake(viewModelBaking, isInput);
+            return new FragmentCircularCake(viewModelPanSize, isInput);
         } else if (position == 2) {
-            return new FragmentBundtCake(viewModelBaking, isInput);
+            return new FragmentBundtCake(viewModelPanSize, isInput);
         } else {
-            return new FragmentRectangularCake(viewModelBaking, isInput);
+            return new FragmentRectangularCake(viewModelPanSize, isInput);
         }
     }
 
