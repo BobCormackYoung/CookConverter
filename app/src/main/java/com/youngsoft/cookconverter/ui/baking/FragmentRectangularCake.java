@@ -103,6 +103,7 @@ public class FragmentRectangularCake extends Fragment {
                 Log.i("FRC","rectangularConversionFactor onChanged " + aConversionFactor.getConversionFactorID()+ " " + aConversionFactor.getName());
                 Log.i("FRC","rectangularConversionFactor onChanged " + ((int) (aConversionFactor.getConversionFactorID())-17));
                 spFRCUnits.setSelection((int) (aConversionFactor.getConversionFactorID())-17);
+                //TODO: this doesn't work
             }
         });
     }

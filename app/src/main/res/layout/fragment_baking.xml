@@ -220,10 +220,12 @@
 
                         </LinearLayout>
 
-                        <TextView
+                        <ImageView
+                            android:id="@+id/iv_input_pan_icon"
                             android:layout_width="56dp"
                             android:layout_height="56dp"
-                            android:text="debug"
+                            tools:background="@drawable/ic_rectangular_pan_96px"
+                            android:backgroundTint="@color/colorPrimary"
                             android:layout_weight="0"/>
 
                     </LinearLayout>
@@ -367,10 +369,12 @@
 
                         </LinearLayout>
 
-                        <TextView
+                        <ImageView
+                            android:id="@+id/iv_output_pan_icon"
                             android:layout_width="56dp"
                             android:layout_height="56dp"
-                            android:text="debug"
+                            tools:background="@drawable/ic_rectangular_pan_96px"
+                            android:backgroundTint="@color/colorPrimary"
                             android:layout_weight="0"/>
 
                     </LinearLayout>

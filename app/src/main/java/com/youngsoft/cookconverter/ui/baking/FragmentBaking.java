@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -45,6 +46,8 @@ public class FragmentBaking extends Fragment {
     private TextView tvOutputDim1Unit;
     private TextView tvInputDim2Unit;
     private TextView tvOutputDim2Unit;
+    private ImageView ivInputPanIcon;
+    private ImageView ivOutputPanIcon;
 
     //DEBUG
     private BottomSheetPanSize bottomSheetPanSize;
@@ -151,6 +154,7 @@ public class FragmentBaking extends Fragment {
             @Override
             public void onChanged(Integer integer) {
                 if (integer == 0) {
+                    ivInputPanIcon.setBackgroundResource(R.drawable.ic_rectangular_pan_96px);
                     tvInputPanType.setText(R.string.pan_type_rectangular);
                     tvInputDim1Name.setText(R.string.dimension_rectangular_1);
                     tvInputDim2Name.setVisibility(View.VISIBLE);
@@ -158,12 +162,14 @@ public class FragmentBaking extends Fragment {
                     tvInputDim2Value.setVisibility(View.VISIBLE);
                     tvInputDim2Name.setText(R.string.dimensions_rectangular_2);
                 } else if (integer == 1) {
+                    ivInputPanIcon.setBackgroundResource(R.drawable.ic_circular_pan_96px);
                     tvInputPanType.setText(R.string.pan_type_circular);
                     tvInputDim1Name.setText(R.string.dimensions_circular);
                     tvInputDim2Name.setVisibility(View.GONE);
                     tvInputDim2Unit.setVisibility(View.GONE);
                     tvInputDim2Value.setVisibility(View.GONE);
                 } else if (integer == 2) {
+                    ivInputPanIcon.setBackgroundResource(R.drawable.ic_bundt_pan_96px);
                     tvInputPanType.setText(R.string.pan_type_bundt);
                     tvInputDim1Name.setText(R.string.dimensions_bundt_1);
                     tvInputDim2Name.setVisibility(View.VISIBLE);
@@ -171,6 +177,7 @@ public class FragmentBaking extends Fragment {
                     tvInputDim2Value.setVisibility(View.VISIBLE);
                     tvInputDim2Name.setText(R.string.dimensions_bundt_2);
                 } else {
+                    ivInputPanIcon.setBackgroundResource(R.drawable.ic_rectangular_pan_96px);
                     tvInputPanType.setText(R.string.pan_type_unknown);
                     tvInputDim1Name.setText(R.string.dimensions_unknown);
                     tvInputDim2Name.setVisibility(View.VISIBLE);
@@ -186,6 +193,7 @@ public class FragmentBaking extends Fragment {
             @Override
             public void onChanged(Integer integer) {
                 if (integer == 0) {
+                    ivOutputPanIcon.setBackgroundResource(R.drawable.ic_rectangular_pan_96px);
                     tvOutputPanType.setText(R.string.pan_type_rectangular);
                     tvOutputDim1Name.setText(R.string.dimension_rectangular_1);
                     tvOutputDim2Name.setVisibility(View.VISIBLE);
@@ -193,12 +201,14 @@ public class FragmentBaking extends Fragment {
                     tvOutputDim2Value.setVisibility(View.VISIBLE);
                     tvOutputDim2Name.setText(R.string.dimensions_rectangular_2);
                 } else if (integer == 1) {
+                    ivOutputPanIcon.setBackgroundResource(R.drawable.ic_circular_pan_96px);
                     tvOutputPanType.setText(R.string.pan_type_circular);
                     tvOutputDim1Name.setText(R.string.dimensions_circular);
                     tvOutputDim2Name.setVisibility(View.GONE);
                     tvOutputDim2Unit.setVisibility(View.GONE);
                     tvOutputDim2Value.setVisibility(View.GONE);
                 } else if (integer == 2) {
+                    ivOutputPanIcon.setBackgroundResource(R.drawable.ic_bundt_pan_96px);
                     tvOutputPanType.setText(R.string.pan_type_bundt);
                     tvOutputDim1Name.setText(R.string.dimensions_bundt_1);
                     tvOutputDim2Name.setVisibility(View.VISIBLE);
@@ -206,6 +216,7 @@ public class FragmentBaking extends Fragment {
                     tvOutputDim2Value.setVisibility(View.VISIBLE);
                     tvOutputDim2Name.setText(R.string.dimensions_bundt_2);
                 } else {
+                    ivOutputPanIcon.setBackgroundResource(R.drawable.ic_rectangular_pan_96px);
                     tvOutputPanType.setText(R.string.pan_type_unknown);
                     tvOutputDim1Name.setText(R.string.dimensions_unknown);
                     tvOutputDim2Name.setVisibility(View.VISIBLE);
@@ -291,6 +302,8 @@ public class FragmentBaking extends Fragment {
         tvOutputDim1Unit = root.findViewById(R.id.tv_bakingfragment_output_dim1_units);
         tvInputDim2Unit = root.findViewById(R.id.tv_bakingfragment_input_dim2_units);
         tvOutputDim2Unit = root.findViewById(R.id.tv_bakingfragment_output_dim2_units);
+        ivInputPanIcon = root.findViewById(R.id.iv_input_pan_icon);
+        ivOutputPanIcon = root.findViewById(R.id.iv_output_pan_icon);
 
         //DEBUG
         btLaunchInputBottomSheet = root.findViewById(R.id.bt_input_pan_edit);

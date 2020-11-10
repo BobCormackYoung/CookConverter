@@ -89,6 +89,7 @@ public class FragmentCircularCake extends Fragment {
                 Log.i("FCC","circularConversionFactor onChanged " + aConversionFactor.getConversionFactorID()+ " " + aConversionFactor.getName());
                 Log.i("FCC","circularConversionFactor onChanged " + ((int) (aConversionFactor.getConversionFactorID())-17));
                 spFCCUnits.setSelection((int) (aConversionFactor.getConversionFactorID())-17);
+                //TODO: this doesn't work
             }
         });
     }

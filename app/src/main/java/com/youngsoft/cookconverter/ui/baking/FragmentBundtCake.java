@@ -132,6 +132,7 @@ public class FragmentBundtCake extends Fragment {
                 Log.i("FBC","bundtConversionFactor onChanged " + aConversionFactor.getConversionFactorID()+ " " + aConversionFactor.getName());
                 Log.i("FBC","bundtConversionFactor onChanged " + ((int) (aConversionFactor.getConversionFactorID())-17));
                 spFBCUnits.setSelection((int) (aConversionFactor.getConversionFactorID())-17);
+                //TODO: this doesn't work
             }
         });
 
