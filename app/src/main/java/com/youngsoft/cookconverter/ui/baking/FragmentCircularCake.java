@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -64,6 +66,29 @@ public class FragmentCircularCake extends Fragment {
                 conversionFactorsRecords.toArray(outputArray);
                 measuresSpinnerAdapter = new MeasuresSpinnerAdapter(context, outputArray);
                 spFCCUnits.setAdapter(measuresSpinnerAdapter);
+            }
+        });
+
+        //observe dimension 1, update the text view, then remove the observer
+        final LiveData<Double> circularPanDimension = viewModelPanSize.getCircularPanDimension();
+        circularPanDimension.observe(getViewLifecycleOwner(), new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                Log.i("FCC","circularPanDimension onChanged " + aDouble);
+                circularPanDimension.removeObserver(this);
+                etDimension.setText(aDouble.toString());
+            }
+        });
+
+        //observe conversion factor, update the spinner, then remove the observer
+        final LiveData<ConversionFactorsRecord> circularConversionFactor = viewModelPanSize.getCircularConversionFactor();
+        circularConversionFactor.observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
+            @Override
+            public void onChanged(ConversionFactorsRecord aConversionFactor) {
+                circularConversionFactor.removeObserver(this);
+                Log.i("FCC","circularConversionFactor onChanged " + aConversionFactor.getConversionFactorID()+ " " + aConversionFactor.getName());
+                Log.i("FCC","circularConversionFactor onChanged " + ((int) (aConversionFactor.getConversionFactorID())-17));
+                spFCCUnits.setSelection((int) (aConversionFactor.getConversionFactorID())-17);
             }
         });
     }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -26,7 +28,6 @@ import java.util.List;
 
 public class FragmentRectangularCake extends Fragment {
 
-    //private final ViewModelBaking viewModelBaking;
     private final ViewModelPanSize viewModelPanSize;
     private Spinner spFRCUnits;
     private TextInputEditText etDimensionWidth;
@@ -68,6 +69,40 @@ public class FragmentRectangularCake extends Fragment {
                 conversionFactorsRecords.toArray(outputArray);
                 measuresSpinnerAdapter = new MeasuresSpinnerAdapter(context, outputArray);
                 spFRCUnits.setAdapter(measuresSpinnerAdapter);
+            }
+        });
+
+        //observe dimension 1, update the text view, then remove the observer
+        final LiveData<Double> rectangularPanDimension1 = viewModelPanSize.getRectangularPanDimension1();
+        rectangularPanDimension1.observe(getViewLifecycleOwner(), new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                Log.i("FRC","rectangularPanDimension1 onChanged " + aDouble);
+                rectangularPanDimension1.removeObserver(this);
+                etDimensionWidth.setText(aDouble.toString());
+            }
+        });
+
+        //observe dimension 2, update the text view, then remove the observer
+        final LiveData<Double> rectangularPanDimension2 = viewModelPanSize.getRectangularPanDimension2();
+        rectangularPanDimension2.observe(getViewLifecycleOwner(), new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                Log.i("FRC","rectangularPanDimension2 onChanged " + aDouble);
+                rectangularPanDimension2.removeObserver(this);
+                etDimensionLength.setText(aDouble.toString());
+            }
+        });
+
+        //observe conversion factor, update the spinner, then remove the observer
+        final LiveData<ConversionFactorsRecord> rectangularConversionFactor = viewModelPanSize.getRectangularConversionFactor();
+        rectangularConversionFactor.observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
+            @Override
+            public void onChanged(ConversionFactorsRecord aConversionFactor) {
+                rectangularConversionFactor.removeObserver(this);
+                Log.i("FRC","rectangularConversionFactor onChanged " + aConversionFactor.getConversionFactorID()+ " " + aConversionFactor.getName());
+                Log.i("FRC","rectangularConversionFactor onChanged " + ((int) (aConversionFactor.getConversionFactorID())-17));
+                spFRCUnits.setSelection((int) (aConversionFactor.getConversionFactorID())-17);
             }
         });
     }

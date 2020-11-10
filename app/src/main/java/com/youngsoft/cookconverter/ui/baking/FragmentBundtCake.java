@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -92,8 +94,48 @@ public class FragmentBundtCake extends Fragment {
                 conversionFactorsRecords.toArray(outputArray);
                 measuresSpinnerAdapter = new MeasuresSpinnerAdapter(context, outputArray);
                 spFBCUnits.setAdapter(measuresSpinnerAdapter);
+                //Log.i("FBC","Adapter set");
+                //spFBCUnits.setSelection(0);
+                //Log.i("FBC","Selecting index 0");
             }
         });
+
+
+        //observe dimension 1, update the text view, then remove the observer
+        final LiveData<Double> bundtPanDimension1 = viewModelPanSize.getBundtPanDimension1();
+        bundtPanDimension1.observe(getViewLifecycleOwner(), new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                Log.i("FBC","bundtPanDimension1 onChanged " + aDouble);
+                bundtPanDimension1.removeObserver(this);
+                etOuterDiameter.setText(aDouble.toString());
+            }
+        });
+
+        //observe dimension 2, update the text view, then remove the observer
+        final LiveData<Double> bundtPanDimension2 = viewModelPanSize.getBundtPanDimension2();
+        bundtPanDimension2.observe(getViewLifecycleOwner(), new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                Log.i("FBC","bundtPanDimension2 onChanged " + aDouble);
+                bundtPanDimension2.removeObserver(this);
+                etInnerDiameter.setText(aDouble.toString());
+            }
+        });
+
+        //observe conversion factor, update the spinner, then remove the observer
+        final LiveData<ConversionFactorsRecord> bundtConversionFactor = viewModelPanSize.getBundtConversionFactor();
+        bundtConversionFactor.observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
+            @Override
+            public void onChanged(ConversionFactorsRecord aConversionFactor) {
+                bundtConversionFactor.removeObserver(this);
+                Log.i("FBC","bundtConversionFactor onChanged " + aConversionFactor.getConversionFactorID()+ " " + aConversionFactor.getName());
+                Log.i("FBC","bundtConversionFactor onChanged " + ((int) (aConversionFactor.getConversionFactorID())-17));
+                spFBCUnits.setSelection((int) (aConversionFactor.getConversionFactorID())-17);
+            }
+        });
+
+
     }
 
     //set listeners for fragment views
@@ -163,7 +205,9 @@ public class FragmentBundtCake extends Fragment {
         spFBCUnits.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //Log.i("FBC","Selected: " + position);
                 ConversionFactorsRecord selectedItem = measuresSpinnerAdapter.getItem(position);
+                //Log.i("FBC","Selected item: " + selectedItem.getName());
                 viewModelPanSize.setBundtConversionFactor(selectedItem);
             }
 

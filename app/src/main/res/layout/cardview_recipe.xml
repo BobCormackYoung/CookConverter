@@ -55,7 +55,8 @@
 
         </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:id="@+id/bt_delete_single_ingredient"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

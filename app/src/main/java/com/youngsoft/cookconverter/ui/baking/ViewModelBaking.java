@@ -44,6 +44,7 @@ public class ViewModelBaking extends AndroidViewModel {
     private final MediatorLiveData<Double> conversionFactorInputPan;
     private final MediatorLiveData<Double> conversionFactorOutputPan;
 
+
     public ViewModelBaking(@NonNull Application application) {
         super(application);
         dataRepository = new DataRepository(application);
@@ -90,6 +91,9 @@ public class ViewModelBaking extends AndroidViewModel {
         inputPanDimension2.setValue(0.0);
         outputPanDimension1.setValue(0.0);
         outputPanDimension2.setValue(0.0);
+        inputConversionFactor.setValue(new ConversionFactorsRecord("m",1,3,-1));
+        outputConversionFactor.setValue(new ConversionFactorsRecord("m",1,3,-1));
+        //TODO: initialise conversion factors from the conversion factors list
     }
 
     //getters

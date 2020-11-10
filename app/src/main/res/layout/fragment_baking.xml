@@ -40,7 +40,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingLeft="8dp">
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tiet_fb_output_value"
@@ -51,6 +52,27 @@
                 tools:text="10" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:id="@+id/bt_info_fragment_baking"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/cardview_light_background"
+            app:icon="@drawable/ic_info_24px"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconSize="36dp"
+            app:rippleColor="@color/colorPrimaryLight"
+            app:iconTint="@color/colorPrimary"
+            android:layout_gravity="center"
+            android:layout_weight="0"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:minWidth="96dp"
+            android:minHeight="48dp"/>
 
     </LinearLayout>
 
@@ -120,6 +142,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginRight="4dp"
                                     android:textStyle="bold"
                                     android:text="@string/title_type"/>
 
@@ -139,6 +162,7 @@
                                 <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginRight="4dp"
                                     android:orientation="vertical">
 
                                     <TextView
@@ -160,6 +184,7 @@
                                 <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginRight="4dp"
                                     android:orientation="vertical">
 
                                     <TextView
@@ -264,6 +289,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginRight="4dp"
                                     android:textStyle="bold"
                                     android:text="@string/title_type"/>
 
@@ -283,6 +309,7 @@
                                 <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginRight="4dp"
                                     android:orientation="vertical">
 
                                     <TextView
@@ -304,6 +331,7 @@
                                 <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginRight="4dp"
                                     android:orientation="vertical">
 
                                     <TextView

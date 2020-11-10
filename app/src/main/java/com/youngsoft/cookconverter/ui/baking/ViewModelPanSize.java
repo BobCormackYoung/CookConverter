@@ -1,6 +1,7 @@
 package com.youngsoft.cookconverter.ui.baking;
 
 import android.app.Application;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -101,6 +102,9 @@ public class ViewModelPanSize extends AndroidViewModel {
     public LiveData<Boolean> getIsErrorODltID() {
         return isErrorODltID;
     }
+    public LiveData<ConversionFactorsRecord> getBundtConversionFactor() { return bundtConversionFactor; }
+    public LiveData<ConversionFactorsRecord> getRectangularConversionFactor() { return rectangularConversionFactor; }
+    public LiveData<ConversionFactorsRecord> getCircularConversionFactor() { return circularConversionFactor; }
 
     //Setters
     public void setPanTypeMutable(Integer input) {
@@ -116,9 +120,11 @@ public class ViewModelPanSize extends AndroidViewModel {
         circularPanDimension.setValue(input);
     }
     public void setBundtPanDimension1(Double input) {
+        Log.i("VMPS","setBundtPanDimension1 " + input);
         bundtPanDimension1.setValue(input);
     }
     public void setBundtPanDimension2(Double input) {
+        Log.i("VMPS","setBundtPanDimension2 " + input);
         bundtPanDimension2.setValue(input);
     }
     public void setBundtConversionFactor(ConversionFactorsRecord input) {

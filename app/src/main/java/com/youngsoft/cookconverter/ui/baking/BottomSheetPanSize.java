@@ -1,6 +1,7 @@
 package com.youngsoft.cookconverter.ui.baking;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +11,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.tabs.TabLayout;
 import com.youngsoft.cookconverter.R;
+import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
 import com.youngsoft.cookconverter.ui.util.WrapContentHeightViewPager;
 
 public class BottomSheetPanSize extends BottomSheetDialogFragment {
@@ -84,6 +88,156 @@ public class BottomSheetPanSize extends BottomSheetDialogFragment {
 
         tabLayout.setupWithViewPager(viewPagerTabLayout);
 
+
+        setInputObservers();
+
+    }
+
+    private void setInputObservers() {
+        final Double[] dimension1 = {0.0};
+        final Double[] dimension2 = {0.0};
+        final ConversionFactorsRecord[] conversionFactors = new ConversionFactorsRecord[1];
+
+        if (launchCase == 1) {
+            //input value is require
+            final LiveData<Double> inputDimension1 = viewModelBaking.getInputPanDimension1();
+            inputDimension1.observe(getViewLifecycleOwner(), new Observer<Double>() {
+                @Override
+                public void onChanged(Double aDouble) {
+                    inputDimension1.removeObserver(this);
+                    Log.i("BSPS","inputPanDimension1: " + aDouble);
+                    dimension1[0] = aDouble;
+                }
+            });
+            final LiveData<Double> inputDimension2 = viewModelBaking.getInputPanDimension2();
+            inputDimension2.observe(getViewLifecycleOwner(), new Observer<Double>() {
+                @Override
+                public void onChanged(Double aDouble) {
+                    inputDimension2.removeObserver(this);
+                    Log.i("BSPS","inputPanDimension2: " + aDouble);
+                    dimension2[0] = aDouble;
+                }
+            });
+            final LiveData<ConversionFactorsRecord> inputConversionFactor = viewModelBaking.getInputConversionFactor();
+            inputConversionFactor.observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
+                @Override
+                public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
+                    inputConversionFactor.removeObserver(this);
+                    Log.i("BSPS","conversionFactorsRecord: " + conversionFactorsRecord.getName());
+                    conversionFactors[0] = conversionFactorsRecord;
+                }
+            });
+            final LiveData<Integer> inputPanType = viewModelBaking.getPanTypeInputMutable();
+            inputPanType.observe(getViewLifecycleOwner(), new Observer<Integer>() {
+                @Override
+                public void onChanged(Integer integer) {
+                    inputPanType.removeObserver(this);
+                    Log.i("BSPS","panType: " + integer);
+                    tabLayout.getTabAt(integer).select();
+                    updateLiveData(integer, dimension1, dimension2, conversionFactors);
+                }
+            });
+        } else if (launchCase == 2) {
+            //output value required
+            final LiveData<Double> outputDimension1 = viewModelBaking.getOutputPanDimension1();
+            outputDimension1.observe(getViewLifecycleOwner(), new Observer<Double>() {
+                @Override
+                public void onChanged(Double aDouble) {
+                    outputDimension1.removeObserver(this);
+                    Log.i("BSPS","inputPanDimension1: " + aDouble);
+                    dimension1[0] = aDouble;
+                }
+            });
+            final LiveData<Double> outputDimension2 = viewModelBaking.getOutputPanDimension2();
+            outputDimension2.observe(getViewLifecycleOwner(), new Observer<Double>() {
+                @Override
+                public void onChanged(Double aDouble) {
+                    outputDimension2.removeObserver(this);
+                    Log.i("BSPS","inputPanDimension2: " + aDouble);
+                    dimension2[0] = aDouble;
+                }
+            });
+            final LiveData<ConversionFactorsRecord> outputConversionFactor = viewModelBaking.getOutputConversionFactor();
+            outputConversionFactor.observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
+                @Override
+                public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
+                    outputConversionFactor.removeObserver(this);
+                    Log.i("BSPS","conversionFactorsRecord: " + conversionFactorsRecord.getName());
+                    conversionFactors[0] = conversionFactorsRecord;
+                }
+            });
+            final LiveData<Integer> outputPanType = viewModelBaking.getPanTypeOutputMutable();
+            outputPanType.observe(getViewLifecycleOwner(), new Observer<Integer>() {
+                @Override
+                public void onChanged(Integer integer) {
+                    outputPanType.removeObserver(this);
+                    Log.i("BSPS","panType: " + integer);
+                    tabLayout.getTabAt(integer).select();
+                    updateLiveData(integer, dimension1, dimension2, conversionFactors);
+                }
+            });
+        } else {
+            //input value as default
+            final LiveData<Double> inputDimension1 = viewModelBaking.getInputPanDimension1();
+            inputDimension1.observe(getViewLifecycleOwner(), new Observer<Double>() {
+                @Override
+                public void onChanged(Double aDouble) {
+                    inputDimension1.removeObserver(this);
+                    Log.i("BSPS","inputPanDimension1: " + aDouble);
+                    dimension1[0] = aDouble;
+                }
+            });
+            final LiveData<Double> inputDimension2 = viewModelBaking.getInputPanDimension2();
+            inputDimension2.observe(getViewLifecycleOwner(), new Observer<Double>() {
+                @Override
+                public void onChanged(Double aDouble) {
+                    inputDimension2.removeObserver(this);
+                    Log.i("BSPS","inputPanDimension2: " + aDouble);
+                    dimension2[0] = aDouble;
+                }
+            });
+            final LiveData<ConversionFactorsRecord> inputConversionFactor = viewModelBaking.getInputConversionFactor();
+            inputConversionFactor.observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
+                @Override
+                public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
+                    inputConversionFactor.removeObserver(this);
+                    Log.i("BSPS","conversionFactorsRecord: " + conversionFactorsRecord.getName());
+                    conversionFactors[0] = conversionFactorsRecord;
+                }
+            });
+            final LiveData<Integer> inputPanType = viewModelBaking.getPanTypeInputMutable();
+            inputPanType.observe(getViewLifecycleOwner(), new Observer<Integer>() {
+                @Override
+                public void onChanged(Integer integer) {
+                    inputPanType.removeObserver(this);
+                    Log.i("BSPS","panType: " + integer);
+                    tabLayout.getTabAt(integer).select();
+                    updateLiveData(integer, dimension1, dimension2, conversionFactors);
+                }
+            });
+        }
+    }
+
+    private void updateLiveData(Integer inputCase, Double[] dimension1, Double[] dimension2, ConversionFactorsRecord[] conversionFactors) {
+
+        if (inputCase == 0) {
+            viewModelPanSize.setRectangularPanDimension1(dimension1[0]);
+            viewModelPanSize.setRectangularPanDimension2(dimension2[0]);
+            viewModelPanSize.setRectangularConversionFactor(conversionFactors[0]);
+        } else if (inputCase == 1) {
+            viewModelPanSize.setCircularPanDimension(dimension1[0]);
+            viewModelPanSize.setCircularConversionFactor(conversionFactors[0]);
+        } else if (inputCase == 2) {
+            Log.i("BSPS","setBundtPanDimension1 " + dimension1[0]);
+            Log.i("BSPS","setBundtPanDimension2 " + dimension2[0]);
+            viewModelPanSize.setBundtPanDimension1(dimension1[0]);
+            viewModelPanSize.setBundtPanDimension2(dimension2[0]);
+            viewModelPanSize.setBundtConversionFactor(conversionFactors[0]);
+        } else {
+            viewModelPanSize.setRectangularPanDimension1(dimension1[0]);
+            viewModelPanSize.setRectangularPanDimension2(dimension2[0]);
+            viewModelPanSize.setRectangularConversionFactor(conversionFactors[0]);
+        }
     }
 
     /**
