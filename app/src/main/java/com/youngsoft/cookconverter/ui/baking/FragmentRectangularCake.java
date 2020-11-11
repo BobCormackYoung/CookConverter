@@ -42,13 +42,16 @@ public class FragmentRectangularCake extends Fragment {
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.i("FRC","onCreateView");
         View root = inflater.inflate(R.layout.fragment_rectangular_cake, container, false);
         mapViews(root);
+
         return root;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        Log.i("FRC","onViewCreated");
         super.onViewCreated(view, savedInstanceState);
         context = getActivity();
         setListeners();
@@ -69,6 +72,16 @@ public class FragmentRectangularCake extends Fragment {
                 conversionFactorsRecords.toArray(outputArray);
                 measuresSpinnerAdapter = new MeasuresSpinnerAdapter(context, outputArray);
                 spFRCUnits.setAdapter(measuresSpinnerAdapter);
+
+                //observe conversion factor, update the spinner, then remove the observer
+                final LiveData<ConversionFactorsRecord> rectangularConversionFactor = viewModelPanSize.getRectangularConversionFactor();
+                rectangularConversionFactor.observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
+                    @Override
+                    public void onChanged(ConversionFactorsRecord aConversionFactor) {
+                        rectangularConversionFactor.removeObserver(this);
+                        spFRCUnits.setSelection((int) (aConversionFactor.getConversionFactorID())-17);
+                    }
+                });
             }
         });
 
@@ -77,7 +90,6 @@ public class FragmentRectangularCake extends Fragment {
         rectangularPanDimension1.observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
-                Log.i("FRC","rectangularPanDimension1 onChanged " + aDouble);
                 rectangularPanDimension1.removeObserver(this);
                 etDimensionWidth.setText(aDouble.toString());
             }
@@ -88,24 +100,12 @@ public class FragmentRectangularCake extends Fragment {
         rectangularPanDimension2.observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
-                Log.i("FRC","rectangularPanDimension2 onChanged " + aDouble);
                 rectangularPanDimension2.removeObserver(this);
                 etDimensionLength.setText(aDouble.toString());
             }
         });
 
-        //observe conversion factor, update the spinner, then remove the observer
-        final LiveData<ConversionFactorsRecord> rectangularConversionFactor = viewModelPanSize.getRectangularConversionFactor();
-        rectangularConversionFactor.observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
-            @Override
-            public void onChanged(ConversionFactorsRecord aConversionFactor) {
-                rectangularConversionFactor.removeObserver(this);
-                Log.i("FRC","rectangularConversionFactor onChanged " + aConversionFactor.getConversionFactorID()+ " " + aConversionFactor.getName());
-                Log.i("FRC","rectangularConversionFactor onChanged " + ((int) (aConversionFactor.getConversionFactorID())-17));
-                spFRCUnits.setSelection((int) (aConversionFactor.getConversionFactorID())-17);
-                //TODO: this doesn't work
-            }
-        });
+
     }
 
     /**

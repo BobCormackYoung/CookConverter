@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +65,16 @@ public class FragmentCircularCake extends Fragment {
                 conversionFactorsRecords.toArray(outputArray);
                 measuresSpinnerAdapter = new MeasuresSpinnerAdapter(context, outputArray);
                 spFCCUnits.setAdapter(measuresSpinnerAdapter);
+
+                //observe conversion factor, update the spinner, then remove the observer
+                final LiveData<ConversionFactorsRecord> circularConversionFactor = viewModelPanSize.getCircularConversionFactor();
+                circularConversionFactor.observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
+                    @Override
+                    public void onChanged(ConversionFactorsRecord aConversionFactor) {
+                        circularConversionFactor.removeObserver(this);
+                        spFCCUnits.setSelection((int) (aConversionFactor.getConversionFactorID())-17);
+                    }
+                });
             }
         });
 
@@ -74,22 +83,8 @@ public class FragmentCircularCake extends Fragment {
         circularPanDimension.observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
-                Log.i("FCC","circularPanDimension onChanged " + aDouble);
                 circularPanDimension.removeObserver(this);
                 etDimension.setText(aDouble.toString());
-            }
-        });
-
-        //observe conversion factor, update the spinner, then remove the observer
-        final LiveData<ConversionFactorsRecord> circularConversionFactor = viewModelPanSize.getCircularConversionFactor();
-        circularConversionFactor.observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
-            @Override
-            public void onChanged(ConversionFactorsRecord aConversionFactor) {
-                circularConversionFactor.removeObserver(this);
-                Log.i("FCC","circularConversionFactor onChanged " + aConversionFactor.getConversionFactorID()+ " " + aConversionFactor.getName());
-                Log.i("FCC","circularConversionFactor onChanged " + ((int) (aConversionFactor.getConversionFactorID())-17));
-                spFCCUnits.setSelection((int) (aConversionFactor.getConversionFactorID())-17);
-                //TODO: this doesn't work
             }
         });
     }
