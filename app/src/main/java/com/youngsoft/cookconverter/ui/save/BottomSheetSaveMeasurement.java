@@ -3,7 +3,6 @@ package com.youngsoft.cookconverter.ui.save;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,7 +73,7 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
                 viewModelServings = new ViewModelProvider(getParentFragment()).get(ViewModelServings.class);
             }
         } else {
-            Log.i("BSSM","No parent fragment?");
+
         }
 
         mapViews(root);
@@ -98,7 +97,7 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
         } else if (launchCase == 3) {
             setServingObservers();
         } else {
-            Log.i("BSSM","No parent fragment?");
+
         }
 
     }

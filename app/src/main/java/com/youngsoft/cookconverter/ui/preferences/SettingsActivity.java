@@ -2,7 +2,6 @@ package com.youngsoft.cookconverter.ui.preferences;
 
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +18,6 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        Log.i("SettingsActivity","OnCreate called");
         Toolbar toolbarSettingsActivity = findViewById(R.id.toolbar_settings_activity);
         setSupportActionBar(toolbarSettingsActivity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

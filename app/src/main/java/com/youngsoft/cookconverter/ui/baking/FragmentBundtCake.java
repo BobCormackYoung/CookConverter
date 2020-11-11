@@ -195,9 +195,7 @@ public class FragmentBundtCake extends Fragment {
         spFBCUnits.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //Log.i("FBC","Selected: " + position);
                 ConversionFactorsRecord selectedItem = measuresSpinnerAdapter.getItem(position);
-                //Log.i("FBC","Selected item: " + selectedItem.getName());
                 viewModelPanSize.setBundtConversionFactor(selectedItem);
             }
 

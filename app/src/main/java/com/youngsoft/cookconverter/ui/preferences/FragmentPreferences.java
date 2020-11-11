@@ -2,7 +2,6 @@ package com.youngsoft.cookconverter.ui.preferences;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +40,6 @@ public class FragmentPreferences extends PreferenceFragmentCompat implements Dia
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        Log.i("FragPref","onCreatePreferences");
         // Load the preferences resource file
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
@@ -49,7 +47,6 @@ public class FragmentPreferences extends PreferenceFragmentCompat implements Dia
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.i("FragPref","onCreateView");
         // Instantiate the viewmodel for the preferences fragment
         // This will contain the sublists for the two measurement types
         viewModelPreferences = new ViewModelProvider(this).get(ViewModelPreferences.class);
@@ -59,7 +56,6 @@ public class FragmentPreferences extends PreferenceFragmentCompat implements Dia
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.i("FragPref","onViewCreated");
 
         //set livedata observers for the lists of conversion factors
         setObservers();
@@ -103,15 +99,12 @@ public class FragmentPreferences extends PreferenceFragmentCompat implements Dia
      * set observers for the livedata from the viewmodel
      */
     private void setObservers() {
-        Log.i("FragPref","setObservers");
         //observe changes to the list of mass conversion factors
         viewModelPreferences.getAllConversionFactors().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
             @Override
             public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
                 //massConversionFactors.clear();
                 allConversionFactors = conversionFactorsRecords;
-                Log.i("FragPref","List changed, size = " + conversionFactorsRecords.size());
-                //TODO: put this logic in the viewmodel?
                 updateUnitPreferenceView();
             }
         });

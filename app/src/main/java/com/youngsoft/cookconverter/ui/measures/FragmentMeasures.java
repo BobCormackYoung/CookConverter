@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,16 +71,12 @@ public class FragmentMeasures extends Fragment {
     public void onResume() {
         super.onResume();
         //update the shared preference default value in the viewmodel & views
-        Log.i("FragmentMeasures","OnResume");
         initDefaultUnit(preferences.getInt(KEY_PREF_DEFAULT_UNIT,1));
     }
 
     private void initDefaultUnit(int id) {
-        Log.i("FragmentMeasures","initDefaultUnit " + id);
         //spOutput.setSelection(id);
         spInput.setSelection(id-1);
-        //Log.i("FragmentMeasures","outputSelected " + spOutput.getSelectedItemPosition() + " " + spinnerAdapterOutput.getItem(id).getName());
-        //Log.i("FragmentMeasures","inputSelected " + spInput.getSelectedItemPosition() + " " + spinnerAdapterInput.getItem(id).getName());
     }
 
 
@@ -89,7 +84,6 @@ public class FragmentMeasures extends Fragment {
      * set listeners on the view fields & update the viewmodel when changed
      */
     private void setListeners() {
-        Log.i("FragmentMeasures","setListeners");
         //listen for changes to the input value edit text field
         etInputValue.addTextChangedListener(new TextWatcher() {
             @Override
@@ -124,7 +118,6 @@ public class FragmentMeasures extends Fragment {
         spInput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.i("FragmentMeasures","spInput.setOnItemSelectedListener " + position);
                 ConversionFactorsRecord selectedItem = spinnerAdapterInput.getItem(position);
                 viewModelMeasures.setConversionFactorInputID(selectedItem);
             }
@@ -139,7 +132,6 @@ public class FragmentMeasures extends Fragment {
         spOutput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.i("FragmentMeasures","spOutput.setOnItemSelectedListener " + position);
                 ConversionFactorsRecord selectedItem = spinnerAdapterOutput.getItem(position);
                 viewModelMeasures.setConversionFactorOutputID(selectedItem);
             }
@@ -178,12 +170,10 @@ public class FragmentMeasures extends Fragment {
      * set observers for the viewmodel and update view when changed
      */
     private void setObservers() {
-        Log.i("FragmentMeasures","setObservers");
         //observe changes to the output value
         viewModelMeasures.getMediatorOutput().observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
-                Log.i("FragmentMeasures","getMediatorOutput " + aDouble);
                 //check if value is too small to be worth displaying
                 if (aDouble*1000 < 1) {
                     etOutputValue.setText("0.0");
@@ -199,7 +189,6 @@ public class FragmentMeasures extends Fragment {
         viewModelMeasures.getAllConversionFactors().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
             @Override
             public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
-                Log.i("FragmentMeasures","getAllConversionFactors " + conversionFactorsRecords.size());
                 ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
                 conversionFactorsRecords.toArray(outputArray);
                 spinnerAdapterInput = new MeasuresSpinnerAdapter(context, outputArray);
@@ -211,7 +200,6 @@ public class FragmentMeasures extends Fragment {
         viewModelMeasures.getAllIngredients().observe(getViewLifecycleOwner(), new Observer<List<IngredientsRecord>>() {
             @Override
             public void onChanged(List<IngredientsRecord> ingredientsRecords) {
-                Log.i("FragmentMeasures","getAllIngredients " + ingredientsRecords.size());
                 IngredientsRecord[] outputArray = new IngredientsRecord[ingredientsRecords.size()];
                 ingredientsRecords.toArray(outputArray);
                 spinnerIngredients = new IngredientsSpinnerAdapter(context, outputArray);
@@ -231,25 +219,7 @@ public class FragmentMeasures extends Fragment {
         viewModelMeasures.getInputConversionFactor().observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
             @Override
             public void onChanged(ConversionFactorsRecord input) {
-                Log.i("FragmentMeasures", "getInputConversionFactor " + input.getName());
                 //check if the new selection is the same as currently selected, if yes, don't update the view
-                /**
-                if (spinnerAdapterInput.getItem(spInput.getSelectedItemPosition()).getConversionFactorID() ==
-                        input.getConversionFactorID()) {
-                    Log.i("FragmentMeasures", "getInputConversionFactor new same as selected");
-                } else {
-                    Log.i("FragmentMeasures", "getInputConversionFactor new different to selected");
-                    //cycle through all items in the adapter, and select the one that matches the viewmodel
-                    for (int i=0; i<spinnerAdapterInput.getCount()-1; i++) {
-                        if (spinnerAdapterInput.getItem(i).getConversionFactorID() == input.getConversionFactorID()) {
-                            spInput.setSelection(i);
-                            Log.i("FragmentMeasures", "getInputConversionFactor item " + i);
-                        } else {
-                            spInput.setSelection(0);
-                            Log.i("FragmentMeasures", "getInputConversionFactor default 0");
-                        }
-                    }
-                } **/
                 spInput.setSelection((int) input.getConversionFactorID()-1);
             }
         });
@@ -258,23 +228,7 @@ public class FragmentMeasures extends Fragment {
         viewModelMeasures.getOutputConversionFactor().observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
             @Override
             public void onChanged(ConversionFactorsRecord input) {
-                Log.i("FragmentMeasures", "getOutputConversionFactor " + input.getName());
                 //check if the new selection is the same as currently selected, if yes, don't update the view
-                /**if (spinnerAdapterOutput.getItem(spOutput.getSelectedItemPosition()).getConversionFactorID() ==
-                        input.getConversionFactorID()) {
-                    Log.i("FragmentMeasures", "getOutputConversionFactor new same as selected");
-                } else {
-                    //cycle through all items in the adapter, and select the one that matches the viewmodel
-                    for (int i=0; i<spinnerAdapterOutput.getCount()-1; i++) {
-                        if (spinnerAdapterOutput.getItem(i).getConversionFactorID() == input.getConversionFactorID()) {
-                            spOutput.setSelection(i);
-                            Log.i("FragmentMeasures", "getOutputConversionFactor item " + i);
-                        } else {
-                            spOutput.setSelection(0);
-                            Log.i("FragmentMeasures", "getOutputConversionFactor default 0");
-                        }
-                    }
-                }**/
             }
         });
 
@@ -282,7 +236,6 @@ public class FragmentMeasures extends Fragment {
         viewModelMeasures.getSubsetConversionFactors().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
             @Override
             public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
-                Log.i("FragmentMeasures","getSubsetConversionFactors " + conversionFactorsRecords.size());
                 ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
                 conversionFactorsRecords.toArray(outputArray);
                 spinnerAdapterOutput = new MeasuresSpinnerAdapter(context, outputArray);

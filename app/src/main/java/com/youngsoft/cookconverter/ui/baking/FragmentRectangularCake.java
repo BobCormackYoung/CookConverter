@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +41,6 @@ public class FragmentRectangularCake extends Fragment {
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.i("FRC","onCreateView");
         View root = inflater.inflate(R.layout.fragment_rectangular_cake, container, false);
         mapViews(root);
 
@@ -51,7 +49,6 @@ public class FragmentRectangularCake extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Log.i("FRC","onViewCreated");
         super.onViewCreated(view, savedInstanceState);
         context = getActivity();
         setListeners();

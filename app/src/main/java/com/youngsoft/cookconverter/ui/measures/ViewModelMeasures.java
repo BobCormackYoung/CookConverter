@@ -2,7 +2,6 @@ package com.youngsoft.cookconverter.ui.measures;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.arch.core.util.Function;
@@ -52,8 +51,6 @@ public class ViewModelMeasures extends AndroidViewModel {
     //Constructor
     public ViewModelMeasures(@NonNull Application application) {
         super(application);
-
-        Log.i("ViewModelMeasures","ViewModel Constructor");
 
         dataRepository = new DataRepository(application);
         allConversionFactors = dataRepository.getAllMassVolumeConversionFactors();
@@ -171,8 +168,6 @@ public class ViewModelMeasures extends AndroidViewModel {
         mediatorInputConversionFactor.addSource(conversionFactorInputID, new Observer<ConversionFactorsRecord>() {
             @Override
             public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
-                Log.i("ViewModelMeasures", "mediatorInputConversionFactorInit conversionFactorInputID "
-                        + conversionFactorInputID.getValue().getName());
                 mediatorInputConversionFactor.setValue(conversionFactorInputID.getValue());
             }
         });
@@ -181,8 +176,6 @@ public class ViewModelMeasures extends AndroidViewModel {
         mediatorInputConversionFactor.addSource(sharedPreferenceConversionFactor, new Observer<ConversionFactorsRecord>() {
             @Override
             public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
-                Log.i("ViewModelMeasures", "mediatorInputConversionFactorInit sharedPreferenceConversionFactor "
-                 + sharedPreferenceConversionFactor.getValue().getName());
                 mediatorInputConversionFactor.setValue(sharedPreferenceConversionFactor.getValue());
                 //mediatorInputConversionFactor.removeSource(sharedPreferenceConversionFactor);
             }
@@ -197,8 +190,6 @@ public class ViewModelMeasures extends AndroidViewModel {
         mediatorOutputConversionFactor.addSource(conversionFactorOutputID, new Observer<ConversionFactorsRecord>() {
             @Override
             public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
-                Log.i("ViewModelMeasures", "mediatorOutputConversionFactorInit conversionFactorOutputID "
-                        + conversionFactorOutputID.getValue().getName());
                 mediatorOutputConversionFactor.setValue(conversionFactorOutputID.getValue());
             }
         });
@@ -207,8 +198,6 @@ public class ViewModelMeasures extends AndroidViewModel {
         mediatorOutputConversionFactor.addSource(sharedPreferenceConversionFactor, new Observer<ConversionFactorsRecord>() {
             @Override
             public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
-                Log.i("ViewModelMeasures", "mediatorOutputConversionFactorInit sharedPreferenceConversionFactor "
-                        + sharedPreferenceConversionFactor.getValue().getName());
                 mediatorOutputConversionFactor.setValue(sharedPreferenceConversionFactor.getValue());
                 //mediatorOutputConversionFactor.removeSource(sharedPreferenceConversionFactor);
             }

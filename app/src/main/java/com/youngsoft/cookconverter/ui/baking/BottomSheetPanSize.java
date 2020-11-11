@@ -1,7 +1,6 @@
 package com.youngsoft.cookconverter.ui.baking;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,7 +104,6 @@ public class BottomSheetPanSize extends BottomSheetDialogFragment {
                 @Override
                 public void onChanged(Double aDouble) {
                     inputDimension1.removeObserver(this);
-                    Log.i("BSPS","inputPanDimension1: " + aDouble);
                     dimension1[0] = aDouble;
                 }
             });
@@ -114,7 +112,6 @@ public class BottomSheetPanSize extends BottomSheetDialogFragment {
                 @Override
                 public void onChanged(Double aDouble) {
                     inputDimension2.removeObserver(this);
-                    Log.i("BSPS","inputPanDimension2: " + aDouble);
                     dimension2[0] = aDouble;
                 }
             });
@@ -123,7 +120,6 @@ public class BottomSheetPanSize extends BottomSheetDialogFragment {
                 @Override
                 public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
                     inputConversionFactor.removeObserver(this);
-                    Log.i("BSPS","conversionFactorsRecord: " + conversionFactorsRecord.getName());
                     conversionFactors[0] = conversionFactorsRecord;
                 }
             });
@@ -132,7 +128,6 @@ public class BottomSheetPanSize extends BottomSheetDialogFragment {
                 @Override
                 public void onChanged(Integer integer) {
                     inputPanType.removeObserver(this);
-                    Log.i("BSPS","panType: " + integer);
                     tabLayout.getTabAt(integer).select();
                     updateLiveData(integer, dimension1, dimension2, conversionFactors);
                 }
@@ -144,7 +139,6 @@ public class BottomSheetPanSize extends BottomSheetDialogFragment {
                 @Override
                 public void onChanged(Double aDouble) {
                     outputDimension1.removeObserver(this);
-                    Log.i("BSPS","inputPanDimension1: " + aDouble);
                     dimension1[0] = aDouble;
                 }
             });
@@ -153,7 +147,6 @@ public class BottomSheetPanSize extends BottomSheetDialogFragment {
                 @Override
                 public void onChanged(Double aDouble) {
                     outputDimension2.removeObserver(this);
-                    Log.i("BSPS","inputPanDimension2: " + aDouble);
                     dimension2[0] = aDouble;
                 }
             });
@@ -162,7 +155,6 @@ public class BottomSheetPanSize extends BottomSheetDialogFragment {
                 @Override
                 public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
                     outputConversionFactor.removeObserver(this);
-                    Log.i("BSPS","conversionFactorsRecord: " + conversionFactorsRecord.getName());
                     conversionFactors[0] = conversionFactorsRecord;
                 }
             });
@@ -171,7 +163,6 @@ public class BottomSheetPanSize extends BottomSheetDialogFragment {
                 @Override
                 public void onChanged(Integer integer) {
                     outputPanType.removeObserver(this);
-                    Log.i("BSPS","panType: " + integer);
                     tabLayout.getTabAt(integer).select();
                     updateLiveData(integer, dimension1, dimension2, conversionFactors);
                 }
@@ -183,7 +174,6 @@ public class BottomSheetPanSize extends BottomSheetDialogFragment {
                 @Override
                 public void onChanged(Double aDouble) {
                     inputDimension1.removeObserver(this);
-                    Log.i("BSPS","inputPanDimension1: " + aDouble);
                     dimension1[0] = aDouble;
                 }
             });
@@ -192,7 +182,6 @@ public class BottomSheetPanSize extends BottomSheetDialogFragment {
                 @Override
                 public void onChanged(Double aDouble) {
                     inputDimension2.removeObserver(this);
-                    Log.i("BSPS","inputPanDimension2: " + aDouble);
                     dimension2[0] = aDouble;
                 }
             });
@@ -201,7 +190,6 @@ public class BottomSheetPanSize extends BottomSheetDialogFragment {
                 @Override
                 public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
                     inputConversionFactor.removeObserver(this);
-                    Log.i("BSPS","conversionFactorsRecord: " + conversionFactorsRecord.getName());
                     conversionFactors[0] = conversionFactorsRecord;
                 }
             });
@@ -210,8 +198,7 @@ public class BottomSheetPanSize extends BottomSheetDialogFragment {
                 @Override
                 public void onChanged(Integer integer) {
                     inputPanType.removeObserver(this);
-                    Log.i("BSPS","panType: " + integer);
-                    tabLayout.getTabAt(integer).select();
+                     tabLayout.getTabAt(integer).select();
                     updateLiveData(integer, dimension1, dimension2, conversionFactors);
                 }
             });
@@ -228,8 +215,6 @@ public class BottomSheetPanSize extends BottomSheetDialogFragment {
             viewModelPanSize.setCircularPanDimension(dimension1[0]);
             viewModelPanSize.setCircularConversionFactor(conversionFactors[0]);
         } else if (inputCase == 2) {
-            Log.i("BSPS","setBundtPanDimension1 " + dimension1[0]);
-            Log.i("BSPS","setBundtPanDimension2 " + dimension2[0]);
             viewModelPanSize.setBundtPanDimension1(dimension1[0]);
             viewModelPanSize.setBundtPanDimension2(dimension2[0]);
             viewModelPanSize.setBundtConversionFactor(conversionFactors[0]);

@@ -22,7 +22,6 @@ public class WrapContentHeightViewPager extends ViewPager {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        //Log.i("WCHVP","onMeasure called");
         int height = 0;
         int tabHeight = 0;
         for(int i = 0; i < getChildCount(); i++) {
@@ -32,10 +31,8 @@ public class WrapContentHeightViewPager extends ViewPager {
             if(h > height) height = h;
             //if(child.getId() == R.id.tl_baking_input || child.getId() == R.id.tl_baking_output || child.getId() == R.id.tl_baking) {
             if(child.getId() == R.id.tl_baking) {
-                //Log.i("WCHVP","i= " + i + " is TabLayout");
                 tabHeight=h;
             }
-            //Log.i("WCHVP","i=" + i + " of " + getChildCount() + " h=" + h + " of " + height + " child " + child);
         }
 
         if (height != 0) {

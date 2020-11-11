@@ -1,7 +1,6 @@
 package com.youngsoft.cookconverter.ui.save;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -114,7 +113,6 @@ public class ViewModelSaveMeasurement extends AndroidViewModel {
      * save this measurement data to the database
      */
     public void saveData() {
-        Log.i("VMSM", "Save Data: " + isDataCompleteForSaveMediator + " : " + measurementName.getValue() + " : " + measurementUnit.getValue().getName() + " : " + measurementValue.getValue() );
         //save the value to the recipe list
         dataRepository.addSingleRecipeList(new RecipeList(measurementName.getValue(), measurementValue.getValue(), measurementUnit.getValue().getConversionFactorID()), measurementUnit.getValue().getConversionFactorID());
     }
