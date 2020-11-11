@@ -133,11 +133,9 @@ public class ViewModelMeasures extends AndroidViewModel {
     }
 
     //return output conversion factor
-    LiveData<ConversionFactorsRecord> getOutputConversionFactor() {
+    public LiveData<ConversionFactorsRecord> getOutputConversionFactor() {
         return mediatorOutputConversionFactor;
     }
-
-
 
 
     //set the input value

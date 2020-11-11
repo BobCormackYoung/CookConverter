@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -106,17 +107,6 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
      * set the observers that are common to all launch cases
      */
     private void setCommonObservers() {
-        //observe the list of units
-        viewModelSaveMeasurement.getAllConversionFactors().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
-            @Override
-            public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
-                ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
-                conversionFactorsRecords.toArray(outputArray);
-                spinnerAdapterUnits = new MeasuresSpinnerAdapter(getContext(), outputArray);
-                spMeasurementUnit.setAdapter(spinnerAdapterUnits);
-            }
-        });
-
         //observe the output value
         viewModelSaveMeasurement.getMeasurementValue().observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
@@ -156,6 +146,27 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
                 viewModelMeasures.getMediatorOutput().removeObserver(this); //remove the observer, no longer want to observe changes to the output value
             }
         });
+
+        //observe the list of units
+        viewModelSaveMeasurement.getAllConversionFactors().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
+            @Override
+            public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
+                ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
+                conversionFactorsRecords.toArray(outputArray);
+                spinnerAdapterUnits = new MeasuresSpinnerAdapter(getContext(), outputArray);
+                spMeasurementUnit.setAdapter(spinnerAdapterUnits);
+
+                //observe conversion factor, update the spinner, then remove the observer
+                final LiveData<ConversionFactorsRecord> selectedConversionFactor = viewModelMeasures.getOutputConversionFactor();
+                selectedConversionFactor.observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
+                    @Override
+                    public void onChanged(ConversionFactorsRecord aConversionFactor) {
+                        selectedConversionFactor.removeObserver(this);
+                        spMeasurementUnit.setSelection((int) (aConversionFactor.getConversionFactorID() - 1));
+                    }
+                });
+            }
+        });
     }
 
     /**
@@ -171,6 +182,16 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
             }
         });
 
+        //observe the list of units
+        viewModelSaveMeasurement.getAllConversionFactors().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
+            @Override
+            public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
+                ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
+                conversionFactorsRecords.toArray(outputArray);
+                spinnerAdapterUnits = new MeasuresSpinnerAdapter(getContext(), outputArray);
+                spMeasurementUnit.setAdapter(spinnerAdapterUnits);
+            }
+        });
     }
 
     /**
@@ -183,6 +204,17 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
             public void onChanged(Double aDouble) {
                 viewModelSaveMeasurement.setMeasurementValue(aDouble); //save the output value into the viewmodel for the dialogfragment
                 viewModelServings.getMediatorOutput().removeObserver(this); //remove the observer, no longer want to observe changes to the output value
+            }
+        });
+
+        //observe the list of units
+        viewModelSaveMeasurement.getAllConversionFactors().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
+            @Override
+            public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
+                ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
+                conversionFactorsRecords.toArray(outputArray);
+                spinnerAdapterUnits = new MeasuresSpinnerAdapter(getContext(), outputArray);
+                spMeasurementUnit.setAdapter(spinnerAdapterUnits);
             }
         });
     }
