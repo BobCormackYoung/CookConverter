@@ -110,23 +110,53 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/title_input_pan"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:textColor="@color/colorPrimary"
-                        android:textAppearance="?attr/textAppearanceHeadline6"/>
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="16dp"
+                            android:paddingTop="8dp"
+                            android:paddingRight="16dp"
+                            android:paddingBottom="8dp"
+                            android:text="@string/title_input_pan"
+                            android:textAppearance="?attr/textAppearanceHeadline6"
+                            android:textColor="@color/colorPrimary"
+                            android:layout_weight="1"/>
+
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                            android:id="@+id/bt_input_pan_edit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/cardview_light_background"
+                            app:icon="@drawable/ic_edit_24px"
+                            app:iconGravity="textStart"
+                            app:iconPadding="0dp"
+                            app:rippleColor="@color/colorPrimaryLight"
+                            app:iconTint="@color/colorPrimary"
+                            app:cornerRadius="24dp"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:paddingLeft="12dp"
+                            android:paddingRight="12dp"
+                            android:minWidth="96dp"
+                            android:minHeight="48dp"/>
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:paddingLeft="16dp"
-                        android:paddingRight="16dp">
+                        android:paddingRight="16dp"
+                        android:layout_marginBottom="16dp">
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -143,11 +173,13 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginRight="4dp"
+                                    android:textAppearance="?attr/textAppearanceBody1"
                                     android:textStyle="bold"
                                     android:text="@string/title_type"/>
 
                                 <TextView
                                     android:id="@+id/tv_bakingfragment_input_pantype"
+                                    android:textAppearance="?attr/textAppearanceBody1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/default_type"/>
@@ -168,6 +200,7 @@
                                     <TextView
                                         android:id="@+id/tv_bakingfragment_input_dim1_name"
                                         android:layout_width="wrap_content"
+                                        android:textAppearance="?attr/textAppearanceBody1"
                                         android:layout_height="wrap_content"
                                         android:textStyle="bold"
                                         android:text="@string/title_dimension_1"/>
@@ -175,6 +208,7 @@
                                     <TextView
                                         android:id="@+id/tv_bakingfragment_input_dim2_name"
                                         android:layout_width="wrap_content"
+                                        android:textAppearance="?attr/textAppearanceBody1"
                                         android:layout_height="wrap_content"
                                         android:textStyle="bold"
                                         android:text="@string/title_dimension_2"/>
@@ -190,11 +224,13 @@
                                     <TextView
                                         android:id="@+id/tv_bakingfragment_input_dim1_value"
                                         android:layout_width="wrap_content"
+                                        android:textAppearance="?attr/textAppearanceBody1"
                                         android:layout_height="wrap_content"/>
 
                                     <TextView
                                         android:id="@+id/tv_bakingfragment_input_dim2_value"
                                         android:layout_width="wrap_content"
+                                        android:textAppearance="?attr/textAppearanceBody1"
                                         android:layout_height="wrap_content"/>
 
                                 </LinearLayout>
@@ -207,11 +243,13 @@
                                     <TextView
                                         android:id="@+id/tv_bakingfragment_input_dim1_units"
                                         android:layout_width="wrap_content"
+                                        android:textAppearance="?attr/textAppearanceBody1"
                                         android:layout_height="wrap_content"/>
 
                                     <TextView
                                         android:id="@+id/tv_bakingfragment_input_dim2_units"
                                         android:layout_width="wrap_content"
+                                        android:textAppearance="?attr/textAppearanceBody1"
                                         android:layout_height="wrap_content"/>
 
                                 </LinearLayout>
@@ -222,22 +260,13 @@
 
                         <ImageView
                             android:id="@+id/iv_input_pan_icon"
-                            android:layout_width="56dp"
-                            android:layout_height="56dp"
+                            android:layout_width="68dp"
+                            android:layout_height="68dp"
                             tools:background="@drawable/ic_rectangular_pan_96px"
                             android:backgroundTint="@color/colorPrimary"
                             android:layout_weight="0"/>
 
                     </LinearLayout>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/bt_input_pan_edit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/button_edit"
-                        android:layout_gravity="end"
-                        android:layout_margin="8dp"
-                        style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
                 </LinearLayout>
 
@@ -259,23 +288,53 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/title_output_pan"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:textColor="@color/colorPrimary"
-                        android:textAppearance="?attr/textAppearanceHeadline6"/>
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="16dp"
+                            android:paddingTop="8dp"
+                            android:paddingRight="16dp"
+                            android:paddingBottom="8dp"
+                            android:text="@string/title_output_pan"
+                            android:textAppearance="?attr/textAppearanceHeadline6"
+                            android:textColor="@color/colorPrimary"
+                            android:layout_weight="1"/>
+
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                            android:id="@+id/bt_output_pan_edit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/cardview_light_background"
+                            app:icon="@drawable/ic_edit_24px"
+                            app:iconGravity="textStart"
+                            app:iconPadding="0dp"
+                            app:rippleColor="@color/colorPrimaryLight"
+                            app:iconTint="@color/colorPrimary"
+                            app:cornerRadius="24dp"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:paddingLeft="12dp"
+                            android:paddingRight="12dp"
+                            android:minWidth="96dp"
+                            android:minHeight="48dp"/>
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:paddingLeft="16dp"
-                        android:paddingRight="16dp">
+                        android:paddingRight="16dp"
+                        android:layout_marginBottom="16dp">
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -292,12 +351,14 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginRight="4dp"
+                                    android:textAppearance="?attr/textAppearanceBody1"
                                     android:textStyle="bold"
                                     android:text="@string/title_type"/>
 
                                 <TextView
                                     android:id="@+id/tv_bakingfragment_output_pantype"
                                     android:layout_width="wrap_content"
+                                    android:textAppearance="?attr/textAppearanceBody1"
                                     android:layout_height="wrap_content"
                                     android:text="@string/default_type"/>
 
@@ -319,12 +380,14 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:textStyle="bold"
+                                        android:textAppearance="?attr/textAppearanceBody1"
                                         android:text="@string/title_dimension_1"/>
 
                                     <TextView
                                         android:id="@+id/tv_bakingfragment_output_dim2_name"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:textAppearance="?attr/textAppearanceBody1"
                                         android:textStyle="bold"
                                         android:text="@string/title_dimension_2"/>
 
@@ -339,11 +402,13 @@
                                     <TextView
                                         android:id="@+id/tv_bakingfragment_output_dim1_value"
                                         android:layout_width="wrap_content"
+                                        android:textAppearance="?attr/textAppearanceBody1"
                                         android:layout_height="wrap_content"/>
 
                                     <TextView
                                         android:id="@+id/tv_bakingfragment_output_dim2_value"
                                         android:layout_width="wrap_content"
+                                        android:textAppearance="?attr/textAppearanceBody1"
                                         android:layout_height="wrap_content"/>
 
                                 </LinearLayout>
@@ -356,11 +421,13 @@
                                     <TextView
                                         android:id="@+id/tv_bakingfragment_output_dim1_units"
                                         android:layout_width="wrap_content"
+                                        android:textAppearance="?attr/textAppearanceBody1"
                                         android:layout_height="wrap_content"/>
 
                                     <TextView
                                         android:id="@+id/tv_bakingfragment_output_dim2_units"
                                         android:layout_width="wrap_content"
+                                        android:textAppearance="?attr/textAppearanceBody1"
                                         android:layout_height="wrap_content"/>
 
                                 </LinearLayout>
@@ -371,22 +438,13 @@
 
                         <ImageView
                             android:id="@+id/iv_output_pan_icon"
-                            android:layout_width="56dp"
-                            android:layout_height="56dp"
+                            android:layout_width="68dp"
+                            android:layout_height="68dp"
                             tools:background="@drawable/ic_rectangular_pan_96px"
                             android:backgroundTint="@color/colorPrimary"
                             android:layout_weight="0"/>
 
                     </LinearLayout>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/bt_output_pan_edit"
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_margin="8dp"
-                        android:text="@string/button_edit" />
 
                 </LinearLayout>
 
