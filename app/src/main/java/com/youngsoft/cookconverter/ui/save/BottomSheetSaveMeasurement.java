@@ -27,6 +27,7 @@ import com.youngsoft.cookconverter.ui.servings.ViewModelServings;
 import com.youngsoft.cookconverter.ui.util.MeasuresSpinnerAdapter;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.List;
 
 public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
@@ -111,12 +112,26 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
         viewModelSaveMeasurement.getMeasurementValue().observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
-                if (aDouble != null) { //check if the value is null
-                    if (aDouble * 1000 < 1) { //check is smaller than usable significant figures
-                        etMeasurementValue.setText("0.0");
-                    } else { //else display in required format
-                        DecimalFormat decimalFormat = new DecimalFormat("#,##0.###");
-                        etMeasurementValue.setText(decimalFormat.format(aDouble));
+
+                //get the current value in the output text box from the bottom sheet
+                double temp;
+                //try to catch error associated with leading decimal
+                try {
+                    temp = DecimalFormat.getNumberInstance().parse(etMeasurementValue.getText().toString()).doubleValue();
+                } catch (ParseException e) {
+                    //Can't handle leading decimal
+                    e.printStackTrace();
+                    temp = 0.0;
+                }
+
+                if (aDouble != null) { //check if the observed value is null
+                    if (aDouble != temp) { //check if observed value is the same as the displayed value
+                        if (aDouble * 1000 < 1) { //check is smaller than usable significant figures
+                            etMeasurementValue.setText("0.0");
+                        } else { //else display in required format
+                            DecimalFormat decimalFormat = new DecimalFormat("#,##0.###");
+                            etMeasurementValue.setText(decimalFormat.format(aDouble));
+                        }
                     }
                 } else { //if null, display as empty
                     etMeasurementValue.setText("");
@@ -139,11 +154,12 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
      */
     private void setMeasureObservers() {
         //observe the output value
-        viewModelMeasures.getMediatorOutput().observe(getViewLifecycleOwner(), new Observer<Double>() {
+        final LiveData<Double> outputValue = viewModelMeasures.getMediatorOutput();
+        outputValue.observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
+                outputValue.removeObserver(this); //remove the observer, no longer want to observe changes to the output value
                 viewModelSaveMeasurement.setMeasurementValue(aDouble); //save the output value into the viewmodel for the dialogfragment
-                viewModelMeasures.getMediatorOutput().removeObserver(this); //remove the observer, no longer want to observe changes to the output value
             }
         });
 
@@ -174,11 +190,12 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
      */
     private void setBakingObservers() {
         //observe the output value
-        viewModelBaking.getMediatorOutput().observe(getViewLifecycleOwner(), new Observer<Double>() {
+        final LiveData<Double> outputValue = viewModelBaking.getMediatorOutput();
+        outputValue.observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
+                outputValue.removeObserver(this); //remove the observer, no longer want to observe changes to the output value
                 viewModelSaveMeasurement.setMeasurementValue(aDouble); //save the output value into the viewmodel for the dialogfragment
-                viewModelBaking.getMediatorOutput().removeObserver(this); //remove the observer, no longer want to observe changes to the output value
             }
         });
 
@@ -199,11 +216,12 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
      */
     private void setServingObservers() {
         //observe the output value
-        viewModelServings.getMediatorOutput().observe(getViewLifecycleOwner(), new Observer<Double>() {
+        final LiveData<Double> outputValue = viewModelServings.getMediatorOutput();
+        outputValue.observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
+                outputValue.removeObserver(this); //remove the observer, no longer want to observe changes to the output value
                 viewModelSaveMeasurement.setMeasurementValue(aDouble); //save the output value into the viewmodel for the dialogfragment
-                viewModelServings.getMediatorOutput().removeObserver(this); //remove the observer, no longer want to observe changes to the output value
             }
         });
 
@@ -274,6 +292,37 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        //set listener for the output edit text
+        etMeasurementValue.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (etMeasurementValue.getText().toString().isEmpty()) {
+                    viewModelSaveMeasurement.setMeasurementValue(0.0);
+                } else {
+                    double temp;
+                    //try to catch error associated with leading decimal
+                    try {
+                        temp = DecimalFormat.getNumberInstance().parse(etMeasurementValue.getText().toString()).doubleValue();
+                    } catch (ParseException e) {
+                        //Can't handle leading decimal
+                        e.printStackTrace();
+                        temp = 0.0;
+                    }
+                    viewModelSaveMeasurement.setMeasurementValue(temp);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
 
             }
         });

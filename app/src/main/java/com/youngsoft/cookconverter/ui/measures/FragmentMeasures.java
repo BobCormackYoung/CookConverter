@@ -79,7 +79,6 @@ public class FragmentMeasures extends Fragment {
     }
 
     private void initDefaultUnit(int id) {
-        //spOutput.setSelection(id);
         spInput.setSelection(id-1);
     }
 
