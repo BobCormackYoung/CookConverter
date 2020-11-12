@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +55,6 @@ public class FragmentMeasures extends Fragment {
     SharedPreferences preferences;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.i("FM","onCreateView");
         viewModelMeasures = new ViewModelProvider(this).get(ViewModelMeasures.class);
         View root = inflater.inflate(R.layout.fragment_measures, container, false);
         mapViews(root); //map views for the root layout
@@ -66,7 +64,6 @@ public class FragmentMeasures extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.i("FM","onViewCreated");
         context = getActivity();
         setObservers(); //init viewmodel observers
         setListeners(); //init view listeners
@@ -75,7 +72,6 @@ public class FragmentMeasures extends Fragment {
     }
 
     private void initDefaultUnit(int id) {
-        Log.i("FM","initDefaultUnit " + id);
         spInput.setSelection(id-1);
     }
 
@@ -139,7 +135,6 @@ public class FragmentMeasures extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 ConversionFactorsRecord selectedItem = spinnerAdapterInput.getItem(position);
                 viewModelMeasures.setConversionFactorInputID(selectedItem);
-                Log.i("FM","spInput onItemSelected " + position);
             }
 
             @Override
