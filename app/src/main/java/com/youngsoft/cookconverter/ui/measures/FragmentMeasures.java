@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
@@ -54,6 +56,7 @@ public class FragmentMeasures extends Fragment {
     SharedPreferences preferences;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.i("FM","onCreateView");
         viewModelMeasures = new ViewModelProvider(this).get(ViewModelMeasures.class);
         View root = inflater.inflate(R.layout.fragment_measures, container, false);
         mapViews(root); //map views for the root layout
@@ -63,25 +66,18 @@ public class FragmentMeasures extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.i("FM","onViewCreated");
         context = getActivity();
         setObservers(); //init viewmodel observers
         setListeners(); //init view listeners
         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        initDefaultUnit(preferences.getInt(KEY_PREF_DEFAULT_UNIT,1));
         etInputValue.setText("0.0"); //TODO: can this be removed?
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        //update the shared preference default value in the viewmodel & views
-        initDefaultUnit(preferences.getInt(KEY_PREF_DEFAULT_UNIT,1));
-    }
-
     private void initDefaultUnit(int id) {
+        Log.i("FM","initDefaultUnit " + id);
         spInput.setSelection(id-1);
     }
-
 
     /**
      * set listeners on the view fields & update the viewmodel when changed
@@ -143,6 +139,7 @@ public class FragmentMeasures extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 ConversionFactorsRecord selectedItem = spinnerAdapterInput.getItem(position);
                 viewModelMeasures.setConversionFactorInputID(selectedItem);
+                Log.i("FM","spInput onItemSelected " + position);
             }
 
             @Override
@@ -209,13 +206,17 @@ public class FragmentMeasures extends Fragment {
         });
 
         //observe changes to the list of conversion factors
-        viewModelMeasures.getAllConversionFactors().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
+        final LiveData<List<ConversionFactorsRecord>> conversionFactorsList = viewModelMeasures.getAllConversionFactors();
+        conversionFactorsList.observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
             @Override
             public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
+                conversionFactorsList.removeObserver(this); //remove the observer, this list won't change during fragment lifecycle
                 ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
                 conversionFactorsRecords.toArray(outputArray);
                 spinnerAdapterInput = new MeasuresSpinnerAdapter(context, outputArray);
                 spInput.setAdapter(spinnerAdapterInput);
+
+                initDefaultUnit(preferences.getInt(KEY_PREF_DEFAULT_UNIT,1)); //select the default value in the shared preferences
             }
         });
 
@@ -242,8 +243,7 @@ public class FragmentMeasures extends Fragment {
         viewModelMeasures.getInputConversionFactor().observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
             @Override
             public void onChanged(ConversionFactorsRecord input) {
-                //check if the new selection is the same as currently selected, if yes, don't update the view
-                spInput.setSelection((int) input.getConversionFactorID()-1);
+                //observe to initialise
             }
         });
 
@@ -251,7 +251,7 @@ public class FragmentMeasures extends Fragment {
         viewModelMeasures.getOutputConversionFactor().observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
             @Override
             public void onChanged(ConversionFactorsRecord input) {
-                //check if the new selection is the same as currently selected, if yes, don't update the view
+                //observe to initialise
             }
         });
 
@@ -266,12 +266,6 @@ public class FragmentMeasures extends Fragment {
             }
         });
     }
-
-
-
-
-
-
 
     /**
      * map views from the root view
