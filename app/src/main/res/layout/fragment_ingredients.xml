@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
     tools:context=".ui.ingredients.FragmentIngredients">
 
     <com.google.android.material.button.MaterialButton
@@ -12,7 +11,7 @@
         android:layout_height="wrap_content"
         android:text="@string/button_clear_list"
         android:id="@+id/bt_clear_recipe_list"
-        android:layout_marginBottom="16dp"/>
+        android:layout_margin="16dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_recipe_list"

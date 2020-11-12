@@ -1,6 +1,8 @@
 package com.youngsoft.cookconverter.ui.measures;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,6 +16,7 @@ import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -47,6 +50,7 @@ public class FragmentMeasures extends Fragment {
     private Button btSaveMeasure;
     private BottomSheetSaveMeasurement bottomSheetSaveMeasurement;
     private Context context;
+    private Button btInfoButton;
     SharedPreferences preferences;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -84,6 +88,26 @@ public class FragmentMeasures extends Fragment {
      * set listeners on the view fields & update the viewmodel when changed
      */
     private void setListeners() {
+
+        //set click listener for info button
+        btInfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.Theme_MaterialComponents_Light_Dialog_Alert)
+                        .setMessage(getResources().getString(R.string.info_fragment_measures))
+                        .setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //Do nothing
+                            }
+                        });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                Button btNegativeDialog = dialog.getButton(Dialog.BUTTON_NEGATIVE);
+                btNegativeDialog.setTextColor(getResources().getColor(R.color.colorPrimary));
+            }
+        });
+
+
         //listen for changes to the input value edit text field
         etInputValue.addTextChangedListener(new TextWatcher() {
             @Override
@@ -261,6 +285,7 @@ public class FragmentMeasures extends Fragment {
         etOutputValue = root.findViewById(R.id.tiet_measures_output);
         spIngredients = root.findViewById(R.id.sp_measure_ingredients);
         btSaveMeasure = root.findViewById(R.id.bt_save_measures);
+        btInfoButton = root.findViewById(R.id.bt_info_fragment_measures);
     }
 
 }
