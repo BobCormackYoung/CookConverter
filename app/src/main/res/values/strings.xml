@@ -43,7 +43,7 @@
     <string name="dimensions_bundt_2">Inner Diameter:</string>
     <string name="pan_type_unknown">Unknown</string>
     <string name="dimensions_unknown">Unknown:</string>
-    <string name="info_fragment_baking">Use this tab to scale ingredient amounts between different pan types. This works such that the depth of the cake mix in the new pan will be same as the depth of the cake in the old pan, giving a similar baking time.</string>
-    <string name="info_fragment_serving">Use this tab to scale ingredient amounts to a new number of servings. The amount of ingredients is increased or decreased such that each serving size will be the same as the original recipe.</string>
-    <string name="info_fragment_measures">Use this tab to scale ingredient amounts between different measurement units. The amount of ingredients will be the same as the original recipe, but reported in your units of choice. For converting between US-style cups and Metric kg, you will need to select an ingredient type - if you don\'t see your ingredient, pick something similar.</string>
+    <string name="info_fragment_baking">Use this tab to scale ingredient amounts between different pan types. \n\nThis works such that the depth of the cake mix in the new pan will be same as the depth of the cake in the old pan, giving a similar baking time.</string>
+    <string name="info_fragment_serving">Use this tab to scale ingredient amounts to a new number of servings. \n\nThe amount of ingredients is increased or decreased such that each serving size will be the same as the original recipe.</string>
+    <string name="info_fragment_measures">Use this tab to scale ingredient amounts between different measurement units. \n\nThe amount of ingredients will be the same as the original recipe, but reported in your units of choice. \n\nFor converting between weight and volume, or between US-style \"cups\" and Metric \"kg\", you will need to select an ingredient type - if you don\'t see your ingredient, pick the most similar.</string>
 </resources>
