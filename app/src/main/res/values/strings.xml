@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Cake Converter</string>
+    <string name="app_name">Cakeulator</string>
     <string name="title_measures">Measures</string>
     <string name="title_baking">Pans</string>
     <string name="title_servings">Servings</string>
