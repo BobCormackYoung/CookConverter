@@ -1,5 +1,7 @@
 package com.youngsoft.cookconverter.ui.baking;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -48,8 +51,7 @@ public class FragmentBaking extends Fragment {
     private TextView tvOutputDim2Unit;
     private ImageView ivInputPanIcon;
     private ImageView ivOutputPanIcon;
-
-    //DEBUG
+    private Button btInfoButton;
     private BottomSheetPanSize bottomSheetPanSize;
     private Button btLaunchInputBottomSheet;
     private Button btLaunchOutputBottomSheet;
@@ -102,6 +104,25 @@ public class FragmentBaking extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
 
+            }
+        });
+
+        //set click listener for info button
+        btInfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.Theme_MaterialComponents_Light_Dialog)
+                        .setMessage(getResources().getString(R.string.info_fragment_baking))
+                        .setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //Do nothing
+                            }
+                        });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                Button btNegativeDialog = dialog.getButton(Dialog.BUTTON_NEGATIVE);
+                btNegativeDialog.setTextColor(getResources().getColor(R.color.colorPrimary));
             }
         });
 
@@ -304,8 +325,7 @@ public class FragmentBaking extends Fragment {
         tvOutputDim2Unit = root.findViewById(R.id.tv_bakingfragment_output_dim2_units);
         ivInputPanIcon = root.findViewById(R.id.iv_input_pan_icon);
         ivOutputPanIcon = root.findViewById(R.id.iv_output_pan_icon);
-
-        //DEBUG
+        btInfoButton = root.findViewById(R.id.bt_info_fragment_baking);
         btLaunchInputBottomSheet = root.findViewById(R.id.bt_input_pan_edit);
         btLaunchOutputBottomSheet = root.findViewById(R.id.bt_output_pan_edit);
     }

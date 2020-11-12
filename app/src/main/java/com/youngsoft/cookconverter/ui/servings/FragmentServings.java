@@ -1,5 +1,7 @@
 package com.youngsoft.cookconverter.ui.servings;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,6 +13,7 @@ import android.widget.NumberPicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -30,6 +33,7 @@ public class FragmentServings extends Fragment {
     private NumberPicker npInputServing;
     private NumberPicker npOutputServing;
     private Button btSaveServing;
+    private Button btInfoButton;
     private BottomSheetSaveMeasurement bottomSheetSaveMeasurement;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -83,6 +87,24 @@ public class FragmentServings extends Fragment {
      * set view listeners
      */
     private void setListeners() {
+
+        //set click listener for info button
+        btInfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.Theme_MaterialComponents_Light_Dialog_Alert)
+                        .setMessage(getResources().getString(R.string.info_fragment_serving))
+                        .setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //Do nothing
+                            }
+                        });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                Button btNegativeDialog = dialog.getButton(Dialog.BUTTON_NEGATIVE);
+                btNegativeDialog.setTextColor(getResources().getColor(R.color.colorPrimary));
+            }
+        });
 
         //set listener for the input edit text
         etInputValue.addTextChangedListener(new TextWatcher() {
@@ -148,5 +170,6 @@ public class FragmentServings extends Fragment {
         npInputServing = root.findViewById(R.id.np_servings_input);
         npOutputServing = root.findViewById(R.id.np_servings_output);
         btSaveServing = root.findViewById(R.id.bt_save_serving);
+        btInfoButton = root.findViewById(R.id.bt_info_fragment_servings);
     }
 }

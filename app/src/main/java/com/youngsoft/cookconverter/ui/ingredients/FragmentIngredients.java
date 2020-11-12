@@ -1,10 +1,12 @@
 package com.youngsoft.cookconverter.ui.ingredients;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -105,7 +107,12 @@ public class FragmentIngredients extends Fragment implements AdapterRecipeList.O
                                 //Do nothing
                             }
                         });
-                builder.create().show();
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                Button btNegativeDialog = dialog.getButton(Dialog.BUTTON_NEGATIVE);
+                btNegativeDialog.setTextColor(getResources().getColor(R.color.colorPrimary));
+                Button btPositiveDialog = dialog.getButton(Dialog.BUTTON_POSITIVE);
+                btPositiveDialog.setTextColor(getResources().getColor(R.color.colorAccent));
             }
         });
     }
@@ -134,6 +141,11 @@ public class FragmentIngredients extends Fragment implements AdapterRecipeList.O
                     }
                 });
 
-        builder.create().show();
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        Button btNegativeDialog = dialog.getButton(Dialog.BUTTON_NEGATIVE);
+        btNegativeDialog.setTextColor(getResources().getColor(R.color.colorPrimary));
+        Button btPositiveDialog = dialog.getButton(Dialog.BUTTON_POSITIVE);
+        btPositiveDialog.setTextColor(getResources().getColor(R.color.colorAccent));
     }
 }
