@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -104,10 +103,10 @@ public class MainActivity extends AppCompatActivity {
                         .setIntent(new Intent(this, SettingsActivity.class)), null, null, null);
                 break;
             // action with ID  was selected
-            case R.id.action_bug_report:
+            /*case R.id.action_bug_report:
                 Toast.makeText(this, "Bug report selected", Toast.LENGTH_SHORT)
                         .show();
-                break;
+                break;*/
             default:
                 break;
         }

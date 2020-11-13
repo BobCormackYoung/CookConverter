@@ -15,8 +15,8 @@
         android:title="Licences"
         app:showAsAction="never"/>
 
-    <item android:id="@+id/action_bug_report"
+<!--    <item android:id="@+id/action_bug_report"
         android:title="Report problem"
-        app:showAsAction="never"/>
+        app:showAsAction="never"/>-->
 
 </menu>
