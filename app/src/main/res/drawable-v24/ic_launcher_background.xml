@@ -12,13 +12,13 @@
       android:strokeLineCap="round">
     <aapt:attr name="android:fillColor">
       <gradient 
-          android:startY="0"
-          android:startX="0"
-          android:endY="108"
-          android:endX="108"
+          android:startY="87"
+          android:startX="87"
+          android:endY="21"
+          android:endX="21"
           android:type="linear">
-        <item android:offset="0" android:color="#FF7E66FF"/>
-        <item android:offset="1" android:color="#FFFF4B4B"/>
+        <item android:offset="0" android:color="#FF283044"/>
+        <item android:offset="1" android:color="#FFA2ACC3"/>
       </gradient>
     </aapt:attr>
   </path>
