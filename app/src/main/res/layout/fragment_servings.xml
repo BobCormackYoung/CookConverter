@@ -121,9 +121,10 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="8dp"
+                        android:text="@string/title_input_serving"
                         android:textAppearance="?attr/textAppearanceHeadline6"
                         android:textColor="@color/colorPrimary"
-                        android:text="@string/title_input_serving" />
+                        android:textSize="16sp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -164,6 +165,7 @@
                         android:padding="8dp"
                         android:textAppearance="?attr/textAppearanceHeadline6"
                         android:textColor="@color/colorPrimary"
+                        android:textSize="16sp"
                         android:text="@string/title_output_serving" />
 
                     <TextView
