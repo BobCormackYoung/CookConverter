@@ -82,14 +82,43 @@
 
         </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/bt_save_serving"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/button_save"
-            android:layout_marginLeft="16dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginLeft="16dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bt_save_serving"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/button_save"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bt_copy_serving"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/button_copy"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bt_paste_serving"
+                android:layout_marginLeft="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="16dp"
+                android:text="@string/button_paste"/>
+
+        </LinearLayout>
 
 
         <LinearLayout

@@ -5,12 +5,14 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.youngsoft.cookconverter.R;
+import com.youngsoft.cookconverter.ViewModelMainActivity;
 import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
 import com.youngsoft.cookconverter.ui.save.BottomSheetSaveMeasurement;
 
@@ -55,6 +58,8 @@ public class FragmentBaking extends Fragment {
     private BottomSheetPanSize bottomSheetPanSize;
     private Button btLaunchInputBottomSheet;
     private Button btLaunchOutputBottomSheet;
+    private Button btCopyBaking;
+    private Button btPasteBaking;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewModelBaking = new ViewModelProvider(this).get(ViewModelBaking.class);
@@ -75,6 +80,61 @@ public class FragmentBaking extends Fragment {
      * set view listeners
      */
     private void setListeners() {
+
+        //set click listener for the copy button
+        btCopyBaking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("FS","btCopyServings onClick");
+                viewModelBaking.getMediatorOutput().observe(getViewLifecycleOwner(), new Observer<Double>() {
+                    @Override
+                    public void onChanged(Double aDouble) {
+                        DecimalFormat decimalFormat = new DecimalFormat("#,##0.###");
+                        viewModelBaking.getMediatorOutput().removeObserver(this);
+                        Log.i("FS","btCopyServings onClick onChanged " + aDouble);
+                        ViewModelMainActivity viewModelMainActivity = new ViewModelProvider(getParentFragment().getActivity()).get(ViewModelMainActivity.class);
+                        viewModelMainActivity.setCopyDataValue(aDouble);
+                        Toast.makeText(getContext(),"Copied output value " + decimalFormat.format(aDouble), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
+        //set click listener for the paste button
+        btPasteBaking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final ViewModelMainActivity viewModelMainActivity = new ViewModelProvider(getParentFragment().getActivity()).get(ViewModelMainActivity.class);
+                viewModelMainActivity.getCopyDataValue().observe(getViewLifecycleOwner(), new Observer<Double>() {
+                    @Override
+                    public void onChanged(Double aDouble) {
+                        viewModelMainActivity.getCopyDataValue().removeObserver(this);
+
+                        final Double tempDouble = aDouble;
+                        final DecimalFormat decimalFormat = new DecimalFormat("#,##0.###");
+                        //create an alert dialog to check to make sure they they would like to paste the new value
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.Theme_MaterialComponents_Light_Dialog_Alert)
+                                .setMessage("Overwrite the \"Convert From\" value with " + decimalFormat.format(aDouble) + " ?")
+                                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        etInputValue.setText(decimalFormat.format(tempDouble));
+                                    }
+                                })
+                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        //Do nothing
+                                    }
+                                });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                        Button btNegativeDialog = dialog.getButton(Dialog.BUTTON_NEGATIVE);
+                        btNegativeDialog.setTextColor(getResources().getColor(R.color.colorPrimary));
+                        Button btPositiveDialog = dialog.getButton(Dialog.BUTTON_POSITIVE);
+                        btPositiveDialog.setTextColor(getResources().getColor(R.color.colorConfirmGreen));
+                    }
+                });
+            }
+        });
 
         //set listener for the input edit text
         etInputValue.addTextChangedListener(new TextWatcher() {
@@ -328,5 +388,7 @@ public class FragmentBaking extends Fragment {
         btInfoButton = root.findViewById(R.id.bt_info_fragment_baking);
         btLaunchInputBottomSheet = root.findViewById(R.id.bt_input_pan_edit);
         btLaunchOutputBottomSheet = root.findViewById(R.id.bt_output_pan_edit);
+        btCopyBaking = root.findViewById(R.id.bt_copy_baking);
+        btPasteBaking = root.findViewById(R.id.bt_paste_baking);
     }
 }

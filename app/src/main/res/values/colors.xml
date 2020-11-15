@@ -5,6 +5,8 @@
     <color name="colorAccent">#ff4b4b</color>
     <color name="colorPrimaryLight">#A2ACC3</color>
     <color name="colorSecondaryDark">#08090b</color>
+    <color name="colorConfirmGreen">#45b334</color>
+    <color name="colorDeleteRed">#ff4b4b</color>
 
     <color name="colorPrimary2">#90584b</color>
     <color name="colorPrimaryDark2">#431f1d</color>

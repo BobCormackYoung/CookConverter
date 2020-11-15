@@ -67,15 +67,6 @@ public class FragmentIngredients extends Fragment implements AdapterRecipeList.O
      * set up livedata observers for the view
      */
     private void setObservers() {
-        /** //observe the list of data
-        viewModelIngredients.getAllRecipeListRecords().observe(getViewLifecycleOwner(), new Observer<List<RecipeList>>() {
-            @Override
-            public void onChanged(List<RecipeList> recipeLists) {
-                adapterRecipeList.submitList(recipeLists);
-                adapterRecipeList.notifyDataSetChanged();
-            }
-        }); **/
-
         //observe the list of data
         viewModelIngredients.getAllRecipeWithConversionFactor().observe(getViewLifecycleOwner(), new Observer<List<RecipeWithConversionFactor>>() {
             @Override
@@ -112,7 +103,7 @@ public class FragmentIngredients extends Fragment implements AdapterRecipeList.O
                 Button btNegativeDialog = dialog.getButton(Dialog.BUTTON_NEGATIVE);
                 btNegativeDialog.setTextColor(getResources().getColor(R.color.colorPrimary));
                 Button btPositiveDialog = dialog.getButton(Dialog.BUTTON_POSITIVE);
-                btPositiveDialog.setTextColor(getResources().getColor(R.color.colorAccent));
+                btPositiveDialog.setTextColor(getResources().getColor(R.color.colorDeleteRed));
             }
         });
     }
@@ -146,6 +137,6 @@ public class FragmentIngredients extends Fragment implements AdapterRecipeList.O
         Button btNegativeDialog = dialog.getButton(Dialog.BUTTON_NEGATIVE);
         btNegativeDialog.setTextColor(getResources().getColor(R.color.colorPrimary));
         Button btPositiveDialog = dialog.getButton(Dialog.BUTTON_POSITIVE);
-        btPositiveDialog.setTextColor(getResources().getColor(R.color.colorAccent));
+        btPositiveDialog.setTextColor(getResources().getColor(R.color.colorDeleteRed));
     }
 }

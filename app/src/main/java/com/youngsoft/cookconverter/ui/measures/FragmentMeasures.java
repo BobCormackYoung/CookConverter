@@ -7,12 +7,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +27,7 @@ import androidx.preference.PreferenceManager;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.youngsoft.cookconverter.R;
+import com.youngsoft.cookconverter.ViewModelMainActivity;
 import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
 import com.youngsoft.cookconverter.data.IngredientsRecord;
 import com.youngsoft.cookconverter.ui.save.BottomSheetSaveMeasurement;
@@ -53,6 +56,8 @@ public class FragmentMeasures extends Fragment {
     private Context context;
     private Button btInfoButton;
     SharedPreferences preferences;
+    private Button btCopyMeasures;
+    private Button btPasteMeasures;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewModelMeasures = new ViewModelProvider(this).get(ViewModelMeasures.class);
@@ -79,6 +84,61 @@ public class FragmentMeasures extends Fragment {
      * set listeners on the view fields & update the viewmodel when changed
      */
     private void setListeners() {
+
+        //set click listener for the copy button
+        btCopyMeasures.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("FS","btCopyServings onClick");
+                viewModelMeasures.getMediatorOutput().observe(getViewLifecycleOwner(), new Observer<Double>() {
+                    @Override
+                    public void onChanged(Double aDouble) {
+                        DecimalFormat decimalFormat = new DecimalFormat("#,##0.###");
+                        viewModelMeasures.getMediatorOutput().removeObserver(this);
+                        Log.i("FS","btCopyServings onClick onChanged " + aDouble);
+                        ViewModelMainActivity viewModelMainActivity = new ViewModelProvider(getParentFragment().getActivity()).get(ViewModelMainActivity.class);
+                        viewModelMainActivity.setCopyDataValue(aDouble);
+                        Toast.makeText(getContext(),"Copied output value " + decimalFormat.format(aDouble), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
+        //set click listener for the paste button
+        btPasteMeasures.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final ViewModelMainActivity viewModelMainActivity = new ViewModelProvider(getParentFragment().getActivity()).get(ViewModelMainActivity.class);
+                viewModelMainActivity.getCopyDataValue().observe(getViewLifecycleOwner(), new Observer<Double>() {
+                    @Override
+                    public void onChanged(Double aDouble) {
+                        viewModelMainActivity.getCopyDataValue().removeObserver(this);
+
+                        final Double tempDouble = aDouble;
+                        final DecimalFormat decimalFormat = new DecimalFormat("#,##0.###");
+                        //create an alert dialog to check to make sure they they would like to paste the new value
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.Theme_MaterialComponents_Light_Dialog_Alert)
+                                .setMessage("Overwrite the \"Convert From\" value with " + decimalFormat.format(aDouble) + " ?")
+                                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        etInputValue.setText(decimalFormat.format(tempDouble));
+                                    }
+                                })
+                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        //Do nothing
+                                    }
+                                });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                        Button btNegativeDialog = dialog.getButton(Dialog.BUTTON_NEGATIVE);
+                        btNegativeDialog.setTextColor(getResources().getColor(R.color.colorPrimary));
+                        Button btPositiveDialog = dialog.getButton(Dialog.BUTTON_POSITIVE);
+                        btPositiveDialog.setTextColor(getResources().getColor(R.color.colorConfirmGreen));
+                    }
+                });
+            }
+        });
 
         //set click listener for info button
         btInfoButton.setOnClickListener(new View.OnClickListener() {
@@ -274,6 +334,8 @@ public class FragmentMeasures extends Fragment {
         spIngredients = root.findViewById(R.id.sp_measure_ingredients);
         btSaveMeasure = root.findViewById(R.id.bt_save_measures);
         btInfoButton = root.findViewById(R.id.bt_info_fragment_measures);
+        btCopyMeasures =root.findViewById(R.id.bt_copy_measures);
+        btPasteMeasures = root.findViewById(R.id.bt_paste_measures);
     }
 
 }
