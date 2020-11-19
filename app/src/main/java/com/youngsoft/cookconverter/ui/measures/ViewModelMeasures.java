@@ -137,6 +137,11 @@ public class ViewModelMeasures extends AndroidViewModel {
         return mediatorOutputConversionFactor;
     }
 
+    //return the selected ingredient value
+    public LiveData<IngredientsRecord> getIngredientsRecord() {
+        return ingredientSelected;
+    }
+
 
     //set the input value
     void setInputValueMutable(Double input) {

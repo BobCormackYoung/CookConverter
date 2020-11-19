@@ -21,6 +21,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.youngsoft.cookconverter.R;
 import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
+import com.youngsoft.cookconverter.data.IngredientsRecord;
 import com.youngsoft.cookconverter.ui.baking.ViewModelBaking;
 import com.youngsoft.cookconverter.ui.measures.ViewModelMeasures;
 import com.youngsoft.cookconverter.ui.servings.ViewModelServings;
@@ -160,6 +161,16 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
             public void onChanged(Double aDouble) {
                 outputValue.removeObserver(this); //remove the observer, no longer want to observe changes to the output value
                 viewModelSaveMeasurement.setMeasurementValue(aDouble); //save the output value into the viewmodel for the dialogfragment
+            }
+        });
+
+        viewModelMeasures.getIngredientsRecord().observe(getViewLifecycleOwner(), new Observer<IngredientsRecord>() {
+            @Override
+            public void onChanged(IngredientsRecord ingredientsRecord) {
+                viewModelMeasures.getIngredientsRecord().removeObserver(this);
+                if (ingredientsRecord.getType()!=0) {
+                    etMeasurementName.setText(ingredientsRecord.getName());
+                }
             }
         });
 
