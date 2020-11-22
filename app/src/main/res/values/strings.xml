@@ -14,6 +14,7 @@
     <string name="heading_convert_from_this_pan">Convert from this pan...</string>
     <string name="heading_to_this_pan">...To this pan!</string>
     <string name="title_units">Units:</string>
+    <string name="title_fragment_units">Units</string>
     <string name="title_pan_outer_diameter">Pan Outer Diameter</string>
     <string name="title_pan_inner_diameter">Pan Inner Diameter</string>
     <string name="title_pan_diameter">Pan Diameter</string>

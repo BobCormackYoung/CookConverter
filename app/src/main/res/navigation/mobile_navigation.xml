@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/navigation_measures"
         android:name="com.youngsoft.cookconverter.ui.measures.FragmentMeasures"
-        android:label="@string/title_measures"
+        android:label="@string/title_fragment_units"
         tools:layout="@layout/fragment_measures" />
 
     <fragment
