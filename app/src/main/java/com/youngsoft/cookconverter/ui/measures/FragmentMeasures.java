@@ -12,8 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -43,12 +43,10 @@ import static com.youngsoft.cookconverter.ui.preferences.FragmentPreferences.KEY
 public class FragmentMeasures extends Fragment {
 
     private ViewModelMeasures viewModelMeasures;
-    private Spinner spInput;
-    private Spinner spOutput;
-    private Spinner spIngredients;
+    private AutoCompleteTextView actvInput;
+    private AutoCompleteTextView actvOutput;
     private MeasuresSpinnerAdapter spinnerAdapterInput;
     private MeasuresSpinnerAdapter spinnerAdapterOutput;
-    private IngredientsSpinnerAdapter spinnerIngredients;
     private TextInputEditText etInputValue;
     private TextInputEditText etOutputValue;
     private Button btSaveMeasure;
@@ -58,6 +56,8 @@ public class FragmentMeasures extends Fragment {
     SharedPreferences preferences;
     private Button btCopyMeasures;
     private Button btPasteMeasures;
+    private AutoCompleteTextView actvIngredient;
+    private IngredientsSpinnerAdapter spinnerIngredients;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewModelMeasures = new ViewModelProvider(this).get(ViewModelMeasures.class);
@@ -77,7 +77,9 @@ public class FragmentMeasures extends Fragment {
     }
 
     private void initDefaultUnit(int id) {
-        spInput.setSelection(id-1);
+        viewModelMeasures.setConversionFactorInputID(spinnerAdapterInput.getItem(id-1));
+        actvInput.setText(spinnerAdapterInput.getItem(id-1).getName());
+        //spInput.setSelection(id-1);
     }
 
     /**
@@ -190,44 +192,31 @@ public class FragmentMeasures extends Fragment {
         });
 
         //listen for changes to the input spinner value
-        spInput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        actvInput.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ConversionFactorsRecord selectedItem = spinnerAdapterInput.getItem(position);
                 viewModelMeasures.setConversionFactorInputID(selectedItem);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+                //actvInput.setText(selectedItem.getName());
             }
         });
 
         //listen for changes to the output spinner value
-        spOutput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        actvOutput.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ConversionFactorsRecord selectedItem = spinnerAdapterOutput.getItem(position);
                 viewModelMeasures.setConversionFactorOutputID(selectedItem);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+                //actvOutput.setText(selectedItem.getName());
             }
         });
 
-        //listen for changes to the selected ingredient type
-        spIngredients.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        actvIngredient.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 IngredientsRecord selectedItem = spinnerIngredients.getItem(position);
                 viewModelMeasures.setIngredientSelected(selectedItem);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+                actvIngredient.setText(selectedItem.getName());
             }
         });
 
@@ -269,9 +258,34 @@ public class FragmentMeasures extends Fragment {
                 ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
                 conversionFactorsRecords.toArray(outputArray);
                 spinnerAdapterInput = new MeasuresSpinnerAdapter(context, outputArray);
-                spInput.setAdapter(spinnerAdapterInput);
-
+                actvInput.setAdapter(spinnerAdapterInput);
                 initDefaultUnit(preferences.getInt(KEY_PREF_DEFAULT_UNIT,1)); //select the default value in the shared preferences
+            }
+        });
+
+        //observe the subset conversion factors list, and update the output spinner adapter
+        viewModelMeasures.getSubsetConversionFactors().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
+            @Override
+            public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
+                ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
+                conversionFactorsRecords.toArray(outputArray);
+                spinnerAdapterOutput = new MeasuresSpinnerAdapter(context, outputArray);
+                actvOutput.setAdapter(spinnerAdapterOutput);
+
+                String selectedValue;
+                if (actvOutput.getText() != null) {
+                    selectedValue = String.valueOf(actvOutput.getText());
+                    Integer selectedItemArrayPosition = checkIfItemAlreadySelected(selectedValue, outputArray);
+                    if (selectedItemArrayPosition == -1) {
+                        viewModelMeasures.setConversionFactorOutputID(spinnerAdapterOutput.getItem(0));
+                    } else {
+                        viewModelMeasures.setConversionFactorOutputID(spinnerAdapterOutput.getItem(selectedItemArrayPosition));
+                    }
+                }  else {
+                    viewModelMeasures.setConversionFactorOutputID(spinnerAdapterOutput.getItem(0));
+                }
+
+                //actvOutput.setText(spinnerAdapterOutput.getItem(0).getName());
             }
         });
 
@@ -279,10 +293,13 @@ public class FragmentMeasures extends Fragment {
         viewModelMeasures.getAllIngredients().observe(getViewLifecycleOwner(), new Observer<List<IngredientsRecord>>() {
             @Override
             public void onChanged(List<IngredientsRecord> ingredientsRecords) {
+                viewModelMeasures.getAllIngredients().removeObserver(this); //remove the observer, list won't change during fragment lifecycle
                 IngredientsRecord[] outputArray = new IngredientsRecord[ingredientsRecords.size()];
                 ingredientsRecords.toArray(outputArray);
                 spinnerIngredients = new IngredientsSpinnerAdapter(context, outputArray);
-                spIngredients.setAdapter(spinnerIngredients);
+                actvIngredient.setAdapter(spinnerIngredients);
+                actvIngredient.setText(spinnerIngredients.getItem(0).getName());
+                viewModelMeasures.setIngredientSelected(spinnerIngredients.getItem(0));
             }
         });
 
@@ -298,7 +315,7 @@ public class FragmentMeasures extends Fragment {
         viewModelMeasures.getInputConversionFactor().observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
             @Override
             public void onChanged(ConversionFactorsRecord input) {
-                //observe to initialise
+                actvInput.setText(input.getName());
             }
         });
 
@@ -306,20 +323,27 @@ public class FragmentMeasures extends Fragment {
         viewModelMeasures.getOutputConversionFactor().observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
             @Override
             public void onChanged(ConversionFactorsRecord input) {
-                //observe to initialise
+                actvOutput.setText(input.getName());
             }
         });
 
-        //observe the subset conversion factors list, and update the output spinner adapter
-        viewModelMeasures.getSubsetConversionFactors().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
+        //observe changes to the selected ingredient
+        viewModelMeasures.getIngredientsRecord().observe(getViewLifecycleOwner(), new Observer<IngredientsRecord>() {
             @Override
-            public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
-                ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
-                conversionFactorsRecords.toArray(outputArray);
-                spinnerAdapterOutput = new MeasuresSpinnerAdapter(context, outputArray);
-                spOutput.setAdapter(spinnerAdapterOutput);
+            public void onChanged(IngredientsRecord ingredientsRecord) {
+                actvIngredient.setText(ingredientsRecord.getName());
             }
         });
+    }
+
+    public Integer checkIfItemAlreadySelected(String selectedItem, ConversionFactorsRecord[] availableItems) {
+        Integer output = -1;
+        for (int i=0; i< availableItems.length-1; i++) {
+            if (selectedItem.equals(availableItems[i].getName())) {
+                output = i;
+            }
+        }
+        return output;
     }
 
     /**
@@ -327,15 +351,15 @@ public class FragmentMeasures extends Fragment {
      * @param root input view for mapping
      */
     private void mapViews(View root) {
-        spInput = root.findViewById(R.id.sp_measure_input);
-        spOutput = root.findViewById(R.id.sp_measure_output);
+        actvInput = root.findViewById(R.id.actv_measure_input);
+        actvOutput = root.findViewById(R.id.actv_measure_output);
         etInputValue = root.findViewById(R.id.tiet_measures_input);
         etOutputValue = root.findViewById(R.id.tiet_measures_output);
-        spIngredients = root.findViewById(R.id.sp_measure_ingredients);
         btSaveMeasure = root.findViewById(R.id.bt_save_measures);
         btInfoButton = root.findViewById(R.id.bt_info_fragment_measures);
         btCopyMeasures =root.findViewById(R.id.bt_copy_measures);
         btPasteMeasures = root.findViewById(R.id.bt_paste_measures);
+        actvIngredient = root.findViewById(R.id.actv_measure_ingredients);
     }
 
 }

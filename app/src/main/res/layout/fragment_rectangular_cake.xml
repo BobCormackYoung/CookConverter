@@ -8,26 +8,21 @@
     android:padding="16dp"
     android:id="@+id/ll_frc_fragment">
 
-    <LinearLayout
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:orientation="horizontal"
-        android:id="@+id/ll_spinner_holder">
+        android:layout_weight="1"
+        android:layout_marginBottom="16dp">
 
-        <TextView
+        <AutoCompleteTextView
+            android:id="@+id/actv_frc_input_units"
+            android:hint="Units"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/title_units"
-            android:layout_weight="5"/>
+            android:editable="false"/>
 
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/sp_frc_input_units"
-            android:layout_weight="1"/>
-
-    </LinearLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -43,6 +38,7 @@
             android:layout_weight="1"
             android:paddingRight="8dp"
             app:errorEnabled="true"
+            app:endIconMode="clear_text"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -62,6 +58,7 @@
             android:layout_weight="1"
             android:paddingLeft="8dp"
             app:errorEnabled="true"
+            app:endIconMode="clear_text"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText

@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Spinner;
+import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,7 +41,7 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
 
     private TextInputEditText etMeasurementName;
     private TextInputEditText etMeasurementValue;
-    private Spinner spMeasurementUnit;
+    private AutoCompleteTextView actvMeasurementUnit;
     private MeasuresSpinnerAdapter spinnerAdapterUnits;
     private MaterialButton btSave;
     private MaterialButton btCancel;
@@ -148,6 +148,14 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
                 dataCompleteForSave = aBoolean;
             }
         });
+
+        //observer the selected ingredient value, and update the view
+        viewModelSaveMeasurement.getMeasurementUnit().observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
+            @Override
+            public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
+                actvMeasurementUnit.setText(conversionFactorsRecord.getName());
+            }
+        });
     }
 
     /**
@@ -181,7 +189,7 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
                 ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
                 conversionFactorsRecords.toArray(outputArray);
                 spinnerAdapterUnits = new MeasuresSpinnerAdapter(getContext(), outputArray);
-                spMeasurementUnit.setAdapter(spinnerAdapterUnits);
+                actvMeasurementUnit.setAdapter(spinnerAdapterUnits);
 
                 //observe conversion factor, update the spinner, then remove the observer
                 final LiveData<ConversionFactorsRecord> selectedConversionFactor = viewModelMeasures.getOutputConversionFactor();
@@ -189,7 +197,8 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
                     @Override
                     public void onChanged(ConversionFactorsRecord aConversionFactor) {
                         selectedConversionFactor.removeObserver(this);
-                        spMeasurementUnit.setSelection((int) (aConversionFactor.getConversionFactorID() - 1));
+                        viewModelSaveMeasurement.setMeasurementUnit(aConversionFactor);
+                        //spMeasurementUnit.setSelection((int) (aConversionFactor.getConversionFactorID() - 1));
                     }
                 });
             }
@@ -217,7 +226,8 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
                 ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
                 conversionFactorsRecords.toArray(outputArray);
                 spinnerAdapterUnits = new MeasuresSpinnerAdapter(getContext(), outputArray);
-                spMeasurementUnit.setAdapter(spinnerAdapterUnits);
+                actvMeasurementUnit.setAdapter(spinnerAdapterUnits);
+                viewModelSaveMeasurement.setMeasurementUnit(outputArray[0]);
             }
         });
     }
@@ -243,7 +253,8 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
                 ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
                 conversionFactorsRecords.toArray(outputArray);
                 spinnerAdapterUnits = new MeasuresSpinnerAdapter(getContext(), outputArray);
-                spMeasurementUnit.setAdapter(spinnerAdapterUnits);
+                actvMeasurementUnit.setAdapter(spinnerAdapterUnits);
+                viewModelSaveMeasurement.setMeasurementUnit(outputArray[0]);
             }
         });
     }
@@ -294,16 +305,11 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
         });
 
         //listen for changes to the measurement unit spinner value
-        spMeasurementUnit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        actvMeasurementUnit.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ConversionFactorsRecord selectedItem = spinnerAdapterUnits.getItem(position);
                 viewModelSaveMeasurement.setMeasurementUnit(selectedItem);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
@@ -346,7 +352,7 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
     private void mapViews(View root) {
         etMeasurementName = root.findViewById(R.id.tiet_save_measurement_name);
         etMeasurementValue = root.findViewById(R.id.tiet_save_measurement_value);
-        spMeasurementUnit = root.findViewById(R.id.sp_save_measurement_spinner);
+        actvMeasurementUnit = root.findViewById(R.id.actv_save_measurement_spinner);
         btCancel = root.findViewById(R.id.bt_cancel_measurement);
         btSave = root.findViewById(R.id.bt_save_measurement);
     }

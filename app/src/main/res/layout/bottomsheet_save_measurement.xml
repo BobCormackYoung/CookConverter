@@ -35,6 +35,7 @@
             android:id="@+id/til_save_measurement_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
             android:layout_weight="1"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
@@ -48,12 +49,21 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Spinner
-            android:id="@+id/sp_save_measurement_spinner"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:spinnerMode="dialog" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="1">
+
+            <AutoCompleteTextView
+                android:id="@+id/actv_save_measurement_spinner"
+                android:hint="Units"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 

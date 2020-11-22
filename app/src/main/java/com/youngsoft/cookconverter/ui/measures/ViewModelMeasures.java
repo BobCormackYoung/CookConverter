@@ -106,37 +106,30 @@ public class ViewModelMeasures extends AndroidViewModel {
     public LiveData<Double> getMediatorOutput() {
         return mediatorOutput;
     }
-
     //return list of all conversion factor records
     LiveData<List<ConversionFactorsRecord>> getAllConversionFactors() {
         return allConversionFactors;
     }
-
     //return list of all ingredient records
     LiveData<List<IngredientsRecord>> getAllIngredients() {
         return allIngredients;
     }
-
     //return list of all ingredient records
     LiveData<SubsetConversionFactorFilter> getSubsetConversionFactorFilter() {
         return mediatorSubsetConversionFactorFilter;
     }
-
     //return list of subset conversion factor records
     LiveData<List<ConversionFactorsRecord>> getSubsetConversionFactors() {
         return subsetConversionFactorList;
     }
-
     //return input conversion factor
     LiveData<ConversionFactorsRecord> getInputConversionFactor() {
         return mediatorInputConversionFactor;
     }
-
     //return output conversion factor
     public LiveData<ConversionFactorsRecord> getOutputConversionFactor() {
         return mediatorOutputConversionFactor;
     }
-
     //return the selected ingredient value
     public LiveData<IngredientsRecord> getIngredientsRecord() {
         return ingredientSelected;
@@ -147,17 +140,14 @@ public class ViewModelMeasures extends AndroidViewModel {
     void setInputValueMutable(Double input) {
         inputValue.setValue(input);
     }
-
     //set the picked input conversion factor ID
     void setConversionFactorInputID(ConversionFactorsRecord input) {
         conversionFactorInputID.setValue(input);
     }
-
     //set the picked output conversion factor ID
     void setConversionFactorOutputID(ConversionFactorsRecord input) {
         conversionFactorOutputID.setValue(input);
     }
-
     //set the selected ingredient
     void setIngredientSelected(IngredientsRecord input) {
         ingredientSelected.setValue(input);
@@ -186,7 +176,6 @@ public class ViewModelMeasures extends AndroidViewModel {
 
     }
 
-
     private void mediatorOutputConversionFactorInit() {
 
         //observe the user selected input value
@@ -207,8 +196,6 @@ public class ViewModelMeasures extends AndroidViewModel {
         });
 
     }
-
-
 
 
     /**

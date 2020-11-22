@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Spinner;
+import android.widget.AutoCompleteTextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,7 +28,7 @@ import java.util.List;
 public class FragmentRectangularCake extends Fragment {
 
     private final ViewModelPanSize viewModelPanSize;
-    private Spinner spFRCUnits;
+    private AutoCompleteTextView actvFRCUnits;
     private TextInputEditText etDimensionWidth;
     private TextInputEditText etDimensionLength;
     private final boolean isInput;
@@ -68,7 +68,7 @@ public class FragmentRectangularCake extends Fragment {
                 ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
                 conversionFactorsRecords.toArray(outputArray);
                 measuresSpinnerAdapter = new MeasuresSpinnerAdapter(context, outputArray);
-                spFRCUnits.setAdapter(measuresSpinnerAdapter);
+                actvFRCUnits.setAdapter(measuresSpinnerAdapter);
 
                 //observe conversion factor, update the spinner, then remove the observer
                 final LiveData<ConversionFactorsRecord> rectangularConversionFactor = viewModelPanSize.getRectangularConversionFactor();
@@ -76,7 +76,8 @@ public class FragmentRectangularCake extends Fragment {
                     @Override
                     public void onChanged(ConversionFactorsRecord aConversionFactor) {
                         rectangularConversionFactor.removeObserver(this);
-                        spFRCUnits.setSelection((int) (aConversionFactor.getConversionFactorID())-17);
+                        viewModelPanSize.setRectangularConversionFactor(aConversionFactor);
+                        //spFRCUnits.setSelection((int) (aConversionFactor.getConversionFactorID())-17);
                     }
                 });
             }
@@ -102,6 +103,12 @@ public class FragmentRectangularCake extends Fragment {
             }
         });
 
+        viewModelPanSize.getRectangularConversionFactor().observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
+            @Override
+            public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
+                actvFRCUnits.setText(conversionFactorsRecord.getName());
+            }
+        });
 
     }
 
@@ -172,16 +179,11 @@ public class FragmentRectangularCake extends Fragment {
         });
 
         //listen for changes to the measurement spinner value
-        spFRCUnits.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        actvFRCUnits.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ConversionFactorsRecord selectedItem = measuresSpinnerAdapter.getItem(position);
                 viewModelPanSize.setRectangularConversionFactor(selectedItem);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
@@ -207,7 +209,7 @@ public class FragmentRectangularCake extends Fragment {
      * @param root View input that contains the views for mapping
      */
     private void mapViews(View root) {
-        spFRCUnits = root.findViewById(R.id.sp_frc_input_units);
+        actvFRCUnits = root.findViewById(R.id.actv_frc_input_units);
         etDimensionWidth = root.findViewById(R.id.tiet_frc_width_input);
         etDimensionLength = root.findViewById(R.id.tiet_frc_length_input);
     }

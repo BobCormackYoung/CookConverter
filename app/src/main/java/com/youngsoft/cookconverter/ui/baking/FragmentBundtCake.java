@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Spinner;
+import android.widget.AutoCompleteTextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,7 +29,7 @@ import java.util.List;
 public class FragmentBundtCake extends Fragment {
 
     private final ViewModelPanSize viewModelPanSize;
-    private Spinner spFBCUnits;
+    private AutoCompleteTextView actvFBCUnits;
     private TextInputEditText etOuterDiameter;
     private TextInputEditText etInnerDiameter;
     private TextInputLayout tilOuterDiameter;
@@ -92,7 +92,8 @@ public class FragmentBundtCake extends Fragment {
                 ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
                 conversionFactorsRecords.toArray(outputArray);
                 measuresSpinnerAdapter = new MeasuresSpinnerAdapter(context, outputArray);
-                spFBCUnits.setAdapter(measuresSpinnerAdapter);
+                actvFBCUnits.setAdapter(measuresSpinnerAdapter);
+                viewModelPanSize.setBundtConversionFactor(measuresSpinnerAdapter.getItem(0));
 
                 //observe conversion factor, update the spinner, then remove the observer
                 final LiveData<ConversionFactorsRecord> bundtConversionFactor = viewModelPanSize.getBundtConversionFactor();
@@ -100,9 +101,17 @@ public class FragmentBundtCake extends Fragment {
                     @Override
                     public void onChanged(ConversionFactorsRecord aConversionFactor) {
                         bundtConversionFactor.removeObserver(this);
-                        spFBCUnits.setSelection((int) (aConversionFactor.getConversionFactorID())-17);
+                        viewModelPanSize.setBundtConversionFactor(aConversionFactor);
+                        //spFBCUnits.setSelection((int) (aConversionFactor.getConversionFactorID())-17);
                     }
                 });
+            }
+        });
+
+        viewModelPanSize.getBundtConversionFactor().observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
+            @Override
+            public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
+                actvFBCUnits.setText(conversionFactorsRecord.getName());
             }
         });
 
@@ -160,6 +169,7 @@ public class FragmentBundtCake extends Fragment {
 
             }
         });
+
         //set listener for the inner diameter
         etInnerDiameter.addTextChangedListener(new TextWatcher() {
             @Override
@@ -192,16 +202,11 @@ public class FragmentBundtCake extends Fragment {
         });
 
         //listen for changes to the measurement spinner value
-        spFBCUnits.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        actvFBCUnits.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ConversionFactorsRecord selectedItem = measuresSpinnerAdapter.getItem(position);
                 viewModelPanSize.setBundtConversionFactor(selectedItem);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
@@ -220,7 +225,7 @@ public class FragmentBundtCake extends Fragment {
     private void mapViews(View root) {
         etOuterDiameter = root.findViewById(R.id.tiet_fbc_od_input);
         etInnerDiameter = root.findViewById(R.id.tiet_fbc_id_input);
-        spFBCUnits = root.findViewById(R.id.sp_fbc_input_units);
+        actvFBCUnits = root.findViewById(R.id.actv_fbc_input_units);
         tilOuterDiameter = root.findViewById(R.id.til_fbc_od_input);
         tilInnerDiameter = root.findViewById(R.id.til_fbc_id_input);
     }

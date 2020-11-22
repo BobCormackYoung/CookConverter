@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Spinner;
+import android.widget.AutoCompleteTextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,7 +28,7 @@ import java.util.List;
 public class FragmentCircularCake extends Fragment {
 
     private final ViewModelPanSize viewModelPanSize;
-    private Spinner spFCCUnits;
+    private AutoCompleteTextView actvFCCUnits;
     private TextInputEditText etDimension;
     private final boolean isInput;
     private MeasuresSpinnerAdapter measuresSpinnerAdapter;
@@ -64,7 +64,8 @@ public class FragmentCircularCake extends Fragment {
                 ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
                 conversionFactorsRecords.toArray(outputArray);
                 measuresSpinnerAdapter = new MeasuresSpinnerAdapter(context, outputArray);
-                spFCCUnits.setAdapter(measuresSpinnerAdapter);
+                actvFCCUnits.setAdapter(measuresSpinnerAdapter);
+                viewModelPanSize.setCircularConversionFactor(measuresSpinnerAdapter.getItem(0));
 
                 //observe conversion factor, update the spinner, then remove the observer
                 final LiveData<ConversionFactorsRecord> circularConversionFactor = viewModelPanSize.getCircularConversionFactor();
@@ -72,7 +73,8 @@ public class FragmentCircularCake extends Fragment {
                     @Override
                     public void onChanged(ConversionFactorsRecord aConversionFactor) {
                         circularConversionFactor.removeObserver(this);
-                        spFCCUnits.setSelection((int) (aConversionFactor.getConversionFactorID())-17);
+                        viewModelPanSize.setCircularConversionFactor(aConversionFactor);
+                        //spFCCUnits.setSelection((int) (aConversionFactor.getConversionFactorID())-17);
                     }
                 });
             }
@@ -85,6 +87,13 @@ public class FragmentCircularCake extends Fragment {
             public void onChanged(Double aDouble) {
                 circularPanDimension.removeObserver(this);
                 etDimension.setText(aDouble.toString());
+            }
+        });
+
+        viewModelPanSize.getCircularConversionFactor().observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
+            @Override
+            public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
+                actvFCCUnits.setText(conversionFactorsRecord.getName());
             }
         });
     }
@@ -123,16 +132,11 @@ public class FragmentCircularCake extends Fragment {
         });
 
         //listen for changes to the measurement spinner value
-        spFCCUnits.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        actvFCCUnits.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ConversionFactorsRecord selectedItem = measuresSpinnerAdapter.getItem(position);
                 viewModelPanSize.setCircularConversionFactor(selectedItem);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
@@ -144,7 +148,7 @@ public class FragmentCircularCake extends Fragment {
 
     //map views from the fragment
     private void mapViews(View root) {
-        spFCCUnits = root.findViewById(R.id.sp_fcc_input_units);
+        actvFCCUnits = root.findViewById(R.id.actv_fcc_input_units);
         etDimension = root.findViewById(R.id.tiet_fcc_od_input);
     }
 }
