@@ -1,7 +1,6 @@
 package com.youngsoft.cookconverter;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -26,7 +25,6 @@ public class ViewModelMainActivity extends AndroidViewModel {
     }
 
     public void setCopyDataValue(Double input) {
-        Log.i("VMMA","setCopyDataValue " + input);
         copyDataValue.setValue(input);
     }
 

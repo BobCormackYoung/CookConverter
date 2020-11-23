@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,13 +90,11 @@ public class FragmentMeasures extends Fragment {
         btCopyMeasures.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("FS","btCopyServings onClick");
                 viewModelMeasures.getMediatorOutput().observe(getViewLifecycleOwner(), new Observer<Double>() {
                     @Override
                     public void onChanged(Double aDouble) {
                         DecimalFormat decimalFormat = new DecimalFormat("#,##0.###");
                         viewModelMeasures.getMediatorOutput().removeObserver(this);
-                        Log.i("FS","btCopyServings onClick onChanged " + aDouble);
                         ViewModelMainActivity viewModelMainActivity = new ViewModelProvider(getParentFragment().getActivity()).get(ViewModelMainActivity.class);
                         viewModelMainActivity.setCopyDataValue(aDouble);
                         Toast.makeText(getContext(),"Copied output value " + decimalFormat.format(aDouble), Toast.LENGTH_SHORT).show();
