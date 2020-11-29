@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,8 +77,10 @@ public class FragmentMeasures extends Fragment {
     }
 
     private void initDefaultUnit(int id) {
-        viewModelMeasures.setConversionFactorInputID(spinnerAdapterInput.getItem(id-1));
-        actvInput.setText(spinnerAdapterInput.getItem(id-1).getName());
+        if (spinnerAdapterInput.getCount() !=0 ) {
+            viewModelMeasures.setConversionFactorInputID(spinnerAdapterInput.getItem(id-1));
+            actvInput.setText(spinnerAdapterInput.getItem(id-1).getName());
+        }
         //spInput.setSelection(id-1);
     }
 
@@ -251,7 +254,7 @@ public class FragmentMeasures extends Fragment {
         conversionFactorsList.observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
             @Override
             public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
-                conversionFactorsList.removeObserver(this); //remove the observer, this list won't change during fragment lifecycle
+                //conversionFactorsList.removeObserver(this); //remove the observer, this list won't change during fragment lifecycle
                 ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
                 conversionFactorsRecords.toArray(outputArray);
                 spinnerAdapterInput = new MeasuresSpinnerAdapter(context, outputArray);
@@ -290,13 +293,15 @@ public class FragmentMeasures extends Fragment {
         viewModelMeasures.getAllIngredients().observe(getViewLifecycleOwner(), new Observer<List<IngredientsRecord>>() {
             @Override
             public void onChanged(List<IngredientsRecord> ingredientsRecords) {
-                viewModelMeasures.getAllIngredients().removeObserver(this); //remove the observer, list won't change during fragment lifecycle
+                //viewModelMeasures.getAllIngredients().removeObserver(this); //remove the observer, list won't change during fragment lifecycle
                 IngredientsRecord[] outputArray = new IngredientsRecord[ingredientsRecords.size()];
                 ingredientsRecords.toArray(outputArray);
                 spinnerIngredients = new IngredientsSpinnerAdapter(context, outputArray);
                 actvIngredient.setAdapter(spinnerIngredients);
-                actvIngredient.setText(spinnerIngredients.getItem(0).getName());
-                viewModelMeasures.setIngredientSelected(spinnerIngredients.getItem(0));
+                if (outputArray.length != 0) {
+                    actvIngredient.setText(spinnerIngredients.getItem(0).getName());
+                    viewModelMeasures.setIngredientSelected(spinnerIngredients.getItem(0));
+                }
             }
         });
 
@@ -312,7 +317,12 @@ public class FragmentMeasures extends Fragment {
         viewModelMeasures.getInputConversionFactor().observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
             @Override
             public void onChanged(ConversionFactorsRecord input) {
-                actvInput.setText(input.getName());
+                if (input != null) {
+                    actvInput.setText(input.getName());
+                } else {
+                    Log.i("FM","getInputConversionFactor is null");
+                }
+
             }
         });
 
@@ -320,7 +330,9 @@ public class FragmentMeasures extends Fragment {
         viewModelMeasures.getOutputConversionFactor().observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
             @Override
             public void onChanged(ConversionFactorsRecord input) {
-                actvOutput.setText(input.getName());
+                if (input != null) {
+                    actvOutput.setText(input.getName());
+                }
             }
         });
 
@@ -328,7 +340,9 @@ public class FragmentMeasures extends Fragment {
         viewModelMeasures.getIngredientsRecord().observe(getViewLifecycleOwner(), new Observer<IngredientsRecord>() {
             @Override
             public void onChanged(IngredientsRecord ingredientsRecord) {
-                actvIngredient.setText(ingredientsRecord.getName());
+                if (ingredientsRecord != null) {
+                    actvIngredient.setText(ingredientsRecord.getName());
+                }
             }
         });
     }
