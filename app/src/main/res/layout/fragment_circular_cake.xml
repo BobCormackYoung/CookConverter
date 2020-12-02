@@ -13,11 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        android:hint="Units">
 
         <AutoCompleteTextView
             android:id="@+id/actv_fcc_input_units"
-            android:hint="Units"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:editable="false"/>
@@ -37,15 +37,15 @@
             android:layout_weight="1"
             app:errorEnabled="true"
             app:endIconMode="clear_text"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:hint="@string/title_pan_diameter">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tiet_fcc_od_input"
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:inputType="numberDecimal"
-                tools:text="10"
-                android:hint="@string/title_pan_diameter"/>
+                tools:text="10"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

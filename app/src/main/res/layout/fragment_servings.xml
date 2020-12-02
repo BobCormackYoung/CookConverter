@@ -29,13 +29,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 app:endIconMode="clear_text"
+                android:hint="@string/title_convert_from"
                 android:paddingRight="8dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tiet_fs_input_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/title_convert_from"
                     android:inputType="numberDecimal"
                     tools:text="10" />
 
@@ -48,13 +48,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingLeft="8dp"
+                android:hint="@string/title_convert_to"
                 android:paddingRight="8dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tiet_fs_output_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/title_convert_to"
                     android:inputType="numberDecimal"
                     tools:text="10"
                     android:focusable="false" />

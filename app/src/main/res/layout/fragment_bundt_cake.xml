@@ -14,11 +14,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        android:hint="Units">
 
         <AutoCompleteTextView
             android:id="@+id/actv_fbc_input_units"
-            android:hint="Units"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:editable="false"/>
@@ -39,15 +39,15 @@
             android:paddingRight="8dp"
             app:endIconMode="clear_text"
             app:errorEnabled="true"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:hint="@string/title_pan_outer_diameter">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tiet_fbc_od_input"
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:inputType="numberDecimal"
-                tools:text="10"
-                android:hint="@string/title_pan_outer_diameter" />
+                tools:text="10" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -59,15 +59,15 @@
             android:paddingLeft="8dp"
             app:errorEnabled="true"
             app:endIconMode="clear_text"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:hint="@string/title_pan_inner_diameter">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tiet_fbc_id_input"
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:inputType="numberDecimal"
-                tools:text="10"
-                android:hint="@string/title_pan_inner_diameter" />
+                tools:text="10" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

@@ -13,11 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        android:hint="Units">
 
         <AutoCompleteTextView
             android:id="@+id/actv_frc_input_units"
-            android:hint="Units"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:editable="false"/>
@@ -39,6 +39,7 @@
             android:paddingRight="8dp"
             app:errorEnabled="true"
             app:endIconMode="clear_text"
+            android:hint="@string/title_pan_width"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -46,8 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:inputType="numberDecimal"
-                tools:text="10"
-                android:hint="@string/title_pan_width"/>
+                tools:text="10"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -59,6 +59,7 @@
             android:paddingLeft="8dp"
             app:errorEnabled="true"
             app:endIconMode="clear_text"
+            android:hint="@string/title_pan_length"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -66,8 +67,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:inputType="numberDecimal"
-                tools:text="10"
-                android:hint="@string/title_pan_length"/>
+                tools:text="10"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
