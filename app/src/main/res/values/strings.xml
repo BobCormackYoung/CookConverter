@@ -49,4 +49,7 @@
     <string name="info_fragment_measures">Use this tab to scale ingredient amounts between different measurement units. \n\nThe amount of ingredients will be the same as the original recipe, but reported in your units of choice. \n\nFor converting between weight and volume, or between US-style \"cups\" and Metric \"kg\", you will need to select an ingredient type - if you don\'t see your ingredient, pick the most similar. \n\nUse \"Save\" to save to the ingredients list. \nUse \"Copy\" to copy the output value. \nUse \"Paste\" to paste the stored output value to the input field.</string>
     <string name="button_paste">Paste</string>
     <string name="button_copy">Copy</string>
+    <string name="error_ingredients">Ingredient selection required!</string>
+    <string name="helper_ingredients_optional">Optional selection</string>
+    <string name="helper_ingredients_required">Required selection</string>
 </resources>

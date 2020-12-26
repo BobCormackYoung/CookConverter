@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +19,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.youngsoft.cookconverter.R;
 import com.youngsoft.cookconverter.ViewModelMainActivity;
 import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
@@ -58,6 +57,7 @@ public class FragmentMeasures extends Fragment {
     private Button btPasteMeasures;
     private AutoCompleteTextView actvIngredient;
     private IngredientsSpinnerAdapter spinnerIngredients;
+    private TextInputLayout tilIngredient;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewModelMeasures = new ViewModelProvider(this).get(ViewModelMeasures.class);
@@ -250,42 +250,22 @@ public class FragmentMeasures extends Fragment {
         });
 
         //observe changes to the list of conversion factors
-        final LiveData<List<ConversionFactorsRecord>> conversionFactorsList = viewModelMeasures.getAllConversionFactors();
-        conversionFactorsList.observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
+        viewModelMeasures.getAllConversionFactors().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
             @Override
             public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
                 //conversionFactorsList.removeObserver(this); //remove the observer, this list won't change during fragment lifecycle
                 ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
                 conversionFactorsRecords.toArray(outputArray);
+
+                //setup input spinner
                 spinnerAdapterInput = new MeasuresSpinnerAdapter(context, outputArray);
                 actvInput.setAdapter(spinnerAdapterInput);
-                initDefaultUnit(preferences.getInt(KEY_PREF_DEFAULT_UNIT,1)); //select the default value in the shared preferences
-            }
-        });
 
-        //observe the subset conversion factors list, and update the output spinner adapter
-        viewModelMeasures.getSubsetConversionFactors().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
-            @Override
-            public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
-                ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
-                conversionFactorsRecords.toArray(outputArray);
+                //setup output spinner
                 spinnerAdapterOutput = new MeasuresSpinnerAdapter(context, outputArray);
                 actvOutput.setAdapter(spinnerAdapterOutput);
 
-                String selectedValue;
-                if (actvOutput.getText() != null) {
-                    selectedValue = String.valueOf(actvOutput.getText());
-                    Integer selectedItemArrayPosition = checkIfItemAlreadySelected(selectedValue, outputArray);
-                    if (selectedItemArrayPosition == -1) {
-                        viewModelMeasures.setConversionFactorOutputID(spinnerAdapterOutput.getItem(0));
-                    } else {
-                        viewModelMeasures.setConversionFactorOutputID(spinnerAdapterOutput.getItem(selectedItemArrayPosition));
-                    }
-                }  else {
-                    viewModelMeasures.setConversionFactorOutputID(spinnerAdapterOutput.getItem(0));
-                }
-
-                //actvOutput.setText(spinnerAdapterOutput.getItem(0).getName());
+                initDefaultUnit(preferences.getInt(KEY_PREF_DEFAULT_UNIT,1)); //select the default value in the shared preferences
             }
         });
 
@@ -305,22 +285,12 @@ public class FragmentMeasures extends Fragment {
             }
         });
 
-        //observe changes t the subset conversion factor filter
-        viewModelMeasures.getSubsetConversionFactorFilter().observe(getViewLifecycleOwner(), new Observer<ViewModelMeasures.SubsetConversionFactorFilter>() {
-            @Override
-            public void onChanged(ViewModelMeasures.SubsetConversionFactorFilter subsetConversionFactorFilter) {
-                //needs to be observed to initialise
-            }
-        });
-
         //observe changes to the input conversion factor selection
         viewModelMeasures.getInputConversionFactor().observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
             @Override
             public void onChanged(ConversionFactorsRecord input) {
                 if (input != null) {
                     actvInput.setText(input.getName());
-                } else {
-                    Log.i("FM","getInputConversionFactor is null");
                 }
 
             }
@@ -345,16 +315,23 @@ public class FragmentMeasures extends Fragment {
                 }
             }
         });
-    }
 
-    public Integer checkIfItemAlreadySelected(String selectedItem, ConversionFactorsRecord[] availableItems) {
-        Integer output = -1;
-        for (int i=0; i< availableItems.length-1; i++) {
-            if (selectedItem.equals(availableItems[i].getName())) {
-                output = i;
+        //observer changes to the ingredient error state
+        viewModelMeasures.getIngredientsDropDownState().observe(getViewLifecycleOwner(), new Observer<IngredientDropDownState>() {
+            @Override
+            public void onChanged(IngredientDropDownState aIngredientDropDownState) {
+                if (aIngredientDropDownState != null) {
+                    if (aIngredientDropDownState.getErrorState()) {
+                        tilIngredient.setError(aIngredientDropDownState.getHelperText());
+                    } else {
+                        tilIngredient.setError(null);
+                        tilIngredient.setHelperText(aIngredientDropDownState.getHelperText());
+                    }
+                } else {
+                    tilIngredient.setError(null);
+                }
             }
-        }
-        return output;
+        });
     }
 
     /**
@@ -371,6 +348,7 @@ public class FragmentMeasures extends Fragment {
         btCopyMeasures =root.findViewById(R.id.bt_copy_measures);
         btPasteMeasures = root.findViewById(R.id.bt_paste_measures);
         actvIngredient = root.findViewById(R.id.actv_measure_ingredients);
+        tilIngredient = root.findViewById(R.id.til_measure_ingredient);
     }
 
 }
