@@ -41,6 +41,8 @@ import static com.youngsoft.cookconverter.ui.preferences.FragmentPreferences.KEY
 
 public class FragmentMeasures extends Fragment {
 
+    //test comment
+
     private ViewModelMeasures viewModelMeasures;
     private AutoCompleteTextView actvInput;
     private AutoCompleteTextView actvOutput;
