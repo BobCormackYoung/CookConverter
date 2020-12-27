@@ -47,6 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:inputType="numberDecimal"
+                android:selectAllOnFocus="true"
                 tools:text="10"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -67,6 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:inputType="numberDecimal"
+                android:selectAllOnFocus="true"
                 tools:text="10"/>
 
         </com.google.android.material.textfield.TextInputLayout>
