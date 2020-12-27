@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_weight="1"
-            android:hint="Units">
+            android:hint="@string/hint_units">
 
             <AutoCompleteTextView
                 android:id="@+id/actv_save_measurement_spinner"

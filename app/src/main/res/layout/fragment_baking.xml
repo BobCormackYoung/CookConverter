@@ -271,7 +271,8 @@
                             android:layout_height="68dp"
                             tools:background="@drawable/ic_rectangular_pan_96px"
                             android:backgroundTint="@color/colorPrimary"
-                            android:layout_weight="0"/>
+                            android:layout_weight="0"
+                            android:contentDescription="@string/context_description_pan_type_icon" />
 
                     </LinearLayout>
 
@@ -449,7 +450,8 @@
                             android:layout_height="68dp"
                             tools:background="@drawable/ic_rectangular_pan_96px"
                             android:backgroundTint="@color/colorPrimary"
-                            android:layout_weight="0"/>
+                            android:layout_weight="0"
+                            android:contentDescription="@string/context_description_pan_type_icon" />
 
                     </LinearLayout>
 

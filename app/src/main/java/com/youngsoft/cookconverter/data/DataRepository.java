@@ -16,8 +16,6 @@ public class DataRepository {
     private final LiveData<List<IngredientsRecord>> allIngredientsRecords;
     //private final LiveData<List<PanTypeRecord>> allPanTypeRecords;
     private final LiveData<List<ConversionFactorsRecord>> allMassVolumeConversionFactors;
-    private final LiveData<List<ConversionFactorsRecord>> allMassConversionFactors;
-    private final LiveData<List<ConversionFactorsRecord>> allVolumeConversionFactors;
     private final LiveData<List<ConversionFactorsRecord>> allDistanceConversionFactors;
     private final LiveData<List<RecipeList>> allRecipeList;
     private final LiveData<List<RecipeWithConversionFactor>> allRecipeWithConversionFactor;
@@ -27,8 +25,8 @@ public class DataRepository {
         dataDao = dataDatabase.dataDao();
         //allConversionFactorsRecords = dataDao.getAllConversionFactorsRecordsSortById();
         allMassVolumeConversionFactors = dataDao.getAllMassVolumeConversionFactors();
-        allMassConversionFactors = dataDao.getAllMassConversionFactors();
-        allVolumeConversionFactors = dataDao.getAllVolumeConversionFactors();
+        LiveData<List<ConversionFactorsRecord>> allMassConversionFactors = dataDao.getAllMassConversionFactors();
+        LiveData<List<ConversionFactorsRecord>> allVolumeConversionFactors = dataDao.getAllVolumeConversionFactors();
         allIngredientsRecords = dataDao.getAllIngredientsRecordsSortById();
         //allPanTypeRecords = dataDao.getAllPanTypeRecordsSortById();
         allDistanceConversionFactors = dataDao.getAllDistanceConversionFactors();

@@ -29,7 +29,6 @@ public class BottomSheetPanSize extends BottomSheetDialogFragment {
 
     private WrapContentHeightViewPager viewPagerTabLayout;
     private TabLayout tabLayout;
-    private TabLayoutAdapter adapterTabLayout;
 
     private TextView tvBottomSheetHeader;
 
@@ -74,6 +73,7 @@ public class BottomSheetPanSize extends BottomSheetDialogFragment {
         //set listeners for the bottom sheet view
         setListeners();
 
+        TabLayoutAdapter adapterTabLayout;
         if (launchCase == 1) {
             adapterTabLayout = new TabLayoutAdapter(getChildFragmentManager(), viewModelPanSize, true);
         } else if (launchCase == 2) {

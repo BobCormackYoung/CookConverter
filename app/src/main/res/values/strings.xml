@@ -56,4 +56,6 @@
     <string name="menu_licences">Licences</string>
     <string name="menu_information">Information</string>
     <string name="info_fragment_recipe">Your saved list of ingredients</string>
+    <string name="context_description_pan_type_icon">Pan type icon</string>
+    <string name="hint_units">Units</string>
 </resources>

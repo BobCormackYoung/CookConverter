@@ -2,7 +2,6 @@ package com.youngsoft.cookconverter.ui.measures;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -342,7 +341,6 @@ public class ViewModelMeasures extends AndroidViewModel {
             return IngredientDropDownState.STATE_OPTIONAL_NO_ERROR;
         } else {
             //no idea what is going on
-            Log.i("VMM","Unknown error combination of ingredient & input/output types");
             return IngredientDropDownState.STATE_OPTIONAL_NO_ERROR;
         }
     }
