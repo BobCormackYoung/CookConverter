@@ -114,7 +114,6 @@
             android:id="@+id/til_measure_ingredient"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="16dp"
             android:layout_weight="1"
             app:helperTextEnabled="true"
             app:helperText="Optional"
@@ -128,27 +127,6 @@
                 android:editable="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-            android:id="@+id/bt_info_fragment_measures"
-            android:layout_width="48dp"
-            android:layout_height="match_parent"
-            android:backgroundTint="@color/cardview_light_background"
-            app:icon="@drawable/ic_info_24px"
-            app:iconGravity="textStart"
-            app:iconPadding="0dp"
-            app:iconSize="36dp"
-            app:rippleColor="@color/colorPrimaryLight"
-            app:iconTint="@color/colorPrimary"
-            android:layout_gravity="center"
-            android:layout_weight="0"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:paddingLeft="0dp"
-            android:paddingRight="0dp"
-            android:minWidth="96dp"
-            android:minHeight="48dp"/>
 
     </LinearLayout>
 

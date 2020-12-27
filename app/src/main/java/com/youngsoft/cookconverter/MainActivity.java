@@ -22,6 +22,7 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.youngsoft.cookconverter.ui.preferences.FragmentPreferences;
 import com.youngsoft.cookconverter.ui.preferences.SettingsActivity;
+import com.youngsoft.cookconverter.ui.util.GlobalFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -91,7 +92,12 @@ public class MainActivity extends AppCompatActivity {
         ActivityNavigator activityNavigator = new ActivityNavigator(this);
 
         switch (item.getItemId()) {
-            // action with ID  was selected
+            // action with ID action_information was selected
+            case R.id.action_information:
+                GlobalFragment globalFragment = (GlobalFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment).getChildFragmentManager().getFragments().get(0);
+                globalFragment.displayInformationAlert();
+                break;
+            // action with ID action_licences was selected
             case R.id.action_licences:
                 Intent intent = new Intent(this, OssLicensesMenuActivity.class);
                 startActivity(intent);
@@ -102,20 +108,11 @@ public class MainActivity extends AppCompatActivity {
                         .createDestination()
                         .setIntent(new Intent(this, SettingsActivity.class)), null, null, null);
                 break;
-            // action with ID  was selected
-            /*case R.id.action_bug_report:
-                Toast.makeText(this, "Bug report selected", Toast.LENGTH_SHORT)
-                        .show();
-                break;*/
             default:
                 break;
         }
 
         return true;
-
-        //NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        //return NavigationUI.onNavDestinationSelected(item, navController)
-        //        || super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -2,17 +2,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item
+        android:id="@+id/action_information"
+        android:icon="@drawable/ic_info_24px"
+        android:title="@string/menu_information"
+        app:iconTint="@color/colorPrimaryLight"
+        app:showAsAction="always" />
+
     <!-- Settings, should always be in the overflow -->
     <!--<item android:id="@+id/navigation_preferences"
         android:title="Settings"
         app:showAsAction="never"/>-->
 
     <item android:id="@+id/action_preferences"
-        android:title="Settings"
+        android:title="@string/menu_settings"
         app:showAsAction="never"/>
 
     <item android:id="@+id/action_licences"
-        android:title="Licences"
+        android:title="@string/menu_licences"
         app:showAsAction="never"/>
 
 <!--    <item android:id="@+id/action_bug_report"

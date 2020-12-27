@@ -52,4 +52,8 @@
     <string name="error_ingredients">Ingredient selection required!</string>
     <string name="helper_ingredients_optional">Optional selection</string>
     <string name="helper_ingredients_required">Required selection</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_licences">Licences</string>
+    <string name="menu_information">Information</string>
+    <string name="info_fragment_recipe">Your saved list of ingredients</string>
 </resources>

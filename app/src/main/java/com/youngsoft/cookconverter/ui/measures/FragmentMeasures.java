@@ -18,7 +18,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
@@ -30,6 +29,7 @@ import com.youngsoft.cookconverter.ViewModelMainActivity;
 import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
 import com.youngsoft.cookconverter.data.IngredientsRecord;
 import com.youngsoft.cookconverter.ui.save.BottomSheetSaveMeasurement;
+import com.youngsoft.cookconverter.ui.util.GlobalFragment;
 import com.youngsoft.cookconverter.ui.util.IngredientsSpinnerAdapter;
 import com.youngsoft.cookconverter.ui.util.MeasuresSpinnerAdapter;
 
@@ -39,7 +39,7 @@ import java.util.List;
 
 import static com.youngsoft.cookconverter.ui.preferences.FragmentPreferences.KEY_PREF_DEFAULT_UNIT;
 
-public class FragmentMeasures extends Fragment {
+public class FragmentMeasures extends GlobalFragment {
 
     //test comment
 
@@ -76,6 +76,21 @@ public class FragmentMeasures extends Fragment {
         setListeners(); //init view listeners
         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         etInputValue.setText("0.0"); //TODO: can this be removed?
+    }
+
+    @Override
+    public void displayInformationAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.Theme_MaterialComponents_Light_Dialog_Alert)
+                .setMessage(getResources().getString(R.string.info_fragment_measures))
+                .setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //Do nothing
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        Button btNegativeDialog = dialog.getButton(Dialog.BUTTON_NEGATIVE);
+        btNegativeDialog.setTextColor(getResources().getColor(R.color.colorPrimary));
     }
 
     private void initDefaultUnit(int id) {
@@ -141,24 +156,6 @@ public class FragmentMeasures extends Fragment {
                         btPositiveDialog.setTextColor(getResources().getColor(R.color.colorConfirmGreen));
                     }
                 });
-            }
-        });
-
-        //set click listener for info button
-        btInfoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.Theme_MaterialComponents_Light_Dialog_Alert)
-                        .setMessage(getResources().getString(R.string.info_fragment_measures))
-                        .setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                //Do nothing
-                            }
-                        });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                Button btNegativeDialog = dialog.getButton(Dialog.BUTTON_NEGATIVE);
-                btNegativeDialog.setTextColor(getResources().getColor(R.color.colorPrimary));
             }
         });
 
@@ -346,7 +343,6 @@ public class FragmentMeasures extends Fragment {
         etInputValue = root.findViewById(R.id.tiet_measures_input);
         etOutputValue = root.findViewById(R.id.tiet_measures_output);
         btSaveMeasure = root.findViewById(R.id.bt_save_measures);
-        btInfoButton = root.findViewById(R.id.bt_info_fragment_measures);
         btCopyMeasures =root.findViewById(R.id.bt_copy_measures);
         btPasteMeasures = root.findViewById(R.id.bt_paste_measures);
         actvIngredient = root.findViewById(R.id.actv_measure_ingredients);

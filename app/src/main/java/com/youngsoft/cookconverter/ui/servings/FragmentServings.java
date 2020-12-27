@@ -15,7 +15,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -23,11 +22,12 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.youngsoft.cookconverter.R;
 import com.youngsoft.cookconverter.ViewModelMainActivity;
 import com.youngsoft.cookconverter.ui.save.BottomSheetSaveMeasurement;
+import com.youngsoft.cookconverter.ui.util.GlobalFragment;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
 
-public class FragmentServings extends Fragment {
+public class FragmentServings extends GlobalFragment {
 
     private ViewModelServings viewModelServings;
     private TextInputEditText etInputValue;
@@ -54,6 +54,21 @@ public class FragmentServings extends Fragment {
         setListeners();
         setObservers();
         etInputValue.setText("0.0"); //is this needed
+    }
+
+    @Override
+    public void displayInformationAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.Theme_MaterialComponents_Light_Dialog_Alert)
+                .setMessage(getResources().getString(R.string.info_fragment_serving))
+                .setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //Do nothing
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        Button btNegativeDialog = dialog.getButton(Dialog.BUTTON_NEGATIVE);
+        btNegativeDialog.setTextColor(getResources().getColor(R.color.colorPrimary));
     }
 
     private void initNumberPickers() {
@@ -145,24 +160,6 @@ public class FragmentServings extends Fragment {
             }
         });
 
-        //set click listener for info button
-        btInfoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.Theme_MaterialComponents_Light_Dialog_Alert)
-                        .setMessage(getResources().getString(R.string.info_fragment_serving))
-                        .setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                //Do nothing
-                            }
-                        });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                Button btNegativeDialog = dialog.getButton(Dialog.BUTTON_NEGATIVE);
-                btNegativeDialog.setTextColor(getResources().getColor(R.color.colorPrimary));
-            }
-        });
-
         //set listener for the input edit text
         etInputValue.addTextChangedListener(new TextWatcher() {
             @Override
@@ -227,7 +224,6 @@ public class FragmentServings extends Fragment {
         npInputServing = root.findViewById(R.id.np_servings_input);
         npOutputServing = root.findViewById(R.id.np_servings_output);
         btSaveServing = root.findViewById(R.id.bt_save_serving);
-        btInfoButton = root.findViewById(R.id.bt_info_fragment_servings);
         btCopyServing = root.findViewById(R.id.bt_copy_serving);
         btPasteServing = root.findViewById(R.id.bt_paste_serving);
     }

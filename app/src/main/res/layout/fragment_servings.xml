@@ -48,8 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingLeft="8dp"
-                android:hint="@string/title_convert_to"
-                android:paddingRight="8dp">
+                android:hint="@string/title_convert_to">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tiet_fs_output_value"
@@ -60,27 +59,6 @@
                     android:focusable="false" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.button.MaterialButton
-                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                android:id="@+id/bt_info_fragment_servings"
-                android:layout_width="48dp"
-                android:layout_height="match_parent"
-                android:backgroundTint="@color/cardview_light_background"
-                app:icon="@drawable/ic_info_24px"
-                app:iconGravity="textStart"
-                app:iconPadding="0dp"
-                app:iconSize="36dp"
-                app:rippleColor="@color/colorPrimaryLight"
-                app:iconTint="@color/colorPrimary"
-                android:layout_gravity="center"
-                android:layout_weight="0"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:paddingLeft="0dp"
-                android:paddingRight="0dp"
-                android:minWidth="96dp"
-                android:minHeight="48dp"/>
 
         </LinearLayout>
 
@@ -97,7 +75,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginTop="16dp"
                 android:layout_marginRight="8dp"
                 android:text="@string/button_save"/>
 
@@ -108,7 +85,6 @@
                 android:layout_weight="1"
                 android:layout_marginRight="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="16dp"
                 android:text="@string/button_copy"/>
 
             <com.google.android.material.button.MaterialButton
@@ -117,7 +93,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginTop="16dp"
                 android:text="@string/button_paste"/>
 
         </LinearLayout>
@@ -134,7 +109,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginBottom="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginLeft="16dp"
                 app:cardCornerRadius="8dp"
@@ -175,7 +149,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginLeft="8dp"
