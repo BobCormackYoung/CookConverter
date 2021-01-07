@@ -47,6 +47,8 @@
     <string name="info_fragment_baking">Use this tab to scale ingredient amounts between different pan types. \n\nThis works such that the depth of the cake mix in the new pan will be same as the depth of the cake in the old pan, giving a similar baking time. \n\nUse \"Save\" to save to the ingredients list. \nUse \"Copy\" to copy the output value. \nUse \"Paste\" to paste the stored output value to the input field.</string>
     <string name="info_fragment_serving">Use this tab to scale ingredient amounts to a new number of servings. \n\nThe amount of ingredients is increased or decreased such that each serving size will be the same as the original recipe. \n\nUse \"Save\" to save to the ingredients list. \nUse \"Copy\" to copy the output value. \nUse \"Paste\" to paste the stored output value to the input field.</string>
     <string name="info_fragment_measures">Use this tab to scale ingredient amounts between different measurement units. \n\nThe amount of ingredients will be the same as the original recipe, but reported in your units of choice. \n\nFor converting between weight and volume, or between US-style \"cups\" and Metric \"kg\", you will need to select an ingredient type - if you don\'t see your ingredient, pick the most similar. \n\nUse \"Save\" to save to the ingredients list. \nUse \"Copy\" to copy the output value. \nUse \"Paste\" to paste the stored output value to the input field.</string>
+    <string name="info_fragment_recipe">Your saved list of ingredients</string>
+    <string name="info_fragment_ingredients">Use this tab to scale an ingredient amount by a different ingredient amount. \n\nThe amount of ingredients is increased or decreased such that the ratio between ingredients is the same as the original recipe. \n\nUse \"Save\" to save to the ingredients list. \nUse \"Copy\" to copy the output value. \nUse \"Paste\" to paste the stored output value to the input field.</string>
     <string name="button_paste">Paste</string>
     <string name="button_copy">Copy</string>
     <string name="error_ingredients">Ingredient selection required!</string>
@@ -55,7 +57,13 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_licences">Licences</string>
     <string name="menu_information">Information</string>
-    <string name="info_fragment_recipe">Your saved list of ingredients</string>
     <string name="context_description_pan_type_icon">Pan type icon</string>
     <string name="hint_units">Units</string>
+    <string name="title_recipe">Recipe</string>
+    <string name="title_your_ingredient_amount">Your Ingredient Amount</string>
+    <string name="title_recipe_ingredient_amount">Recipe Ingredient Amount</string>
+    <string name="title_ingredient_scale_factor">Ingredient Scale Factor</string>
+    <string name="title_scale_factor">Scale Factor</string>
+    <string name="title_your_amount">Your Amount:</string>
+    <string name="title_recipe_amount">Recipe Amount:</string>
 </resources>

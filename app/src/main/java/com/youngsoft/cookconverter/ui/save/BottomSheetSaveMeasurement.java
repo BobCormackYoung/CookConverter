@@ -23,6 +23,7 @@ import com.youngsoft.cookconverter.R;
 import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
 import com.youngsoft.cookconverter.data.IngredientsRecord;
 import com.youngsoft.cookconverter.ui.baking.ViewModelBaking;
+import com.youngsoft.cookconverter.ui.ingredients.ViewModelIngredients;
 import com.youngsoft.cookconverter.ui.measures.ViewModelMeasures;
 import com.youngsoft.cookconverter.ui.servings.ViewModelServings;
 import com.youngsoft.cookconverter.ui.util.MeasuresSpinnerAdapter;
@@ -37,7 +38,8 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
     private ViewModelBaking viewModelBaking;
     private ViewModelServings viewModelServings;
     private ViewModelSaveMeasurement viewModelSaveMeasurement;
-    private final int launchCase; //1 = measures, 2 = baking, 3 = servings
+    private ViewModelIngredients viewModelIngredients;
+    private final int launchCase; //1 = measures, 2 = baking, 3 = servings, 4 = ingredients
 
     private TextInputEditText etMeasurementName;
     private TextInputEditText etMeasurementValue;
@@ -75,6 +77,10 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
             if (getParentFragment() != null) {
                 viewModelServings = new ViewModelProvider(getParentFragment()).get(ViewModelServings.class);
             }
+        } else if (launchCase == 4) {
+            if (getParentFragment() != null) {
+                viewModelIngredients = new ViewModelProvider(getParentFragment()).get(ViewModelIngredients.class);
+            }
         } else {
 
         }
@@ -99,6 +105,8 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
             setBakingObservers();
         } else if (launchCase == 3) {
             setServingObservers();
+        } else if (launchCase == 4) {
+            setIngredientsObservers();
         } else {
 
         }
@@ -238,6 +246,33 @@ public class BottomSheetSaveMeasurement extends BottomSheetDialogFragment {
     private void setServingObservers() {
         //observe the output value
         final LiveData<Double> outputValue = viewModelServings.getMediatorOutput();
+        outputValue.observe(getViewLifecycleOwner(), new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                outputValue.removeObserver(this); //remove the observer, no longer want to observe changes to the output value
+                viewModelSaveMeasurement.setMeasurementValue(aDouble); //save the output value into the viewmodel for the dialogfragment
+            }
+        });
+
+        //observe the list of units
+        viewModelSaveMeasurement.getAllConversionFactors().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
+            @Override
+            public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
+                ConversionFactorsRecord[] outputArray = new ConversionFactorsRecord[conversionFactorsRecords.size()];
+                conversionFactorsRecords.toArray(outputArray);
+                spinnerAdapterUnits = new MeasuresSpinnerAdapter(getContext(), outputArray);
+                actvMeasurementUnit.setAdapter(spinnerAdapterUnits);
+                viewModelSaveMeasurement.setMeasurementUnit(outputArray[0]);
+            }
+        });
+    }
+
+    /**
+     * set the observers if the bottom fragment is launched from the ingredients fragment
+     */
+    private void setIngredientsObservers() {
+        //observe the output value
+        final LiveData<Double> outputValue = viewModelIngredients.getMediatorOutput();
         outputValue.observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {

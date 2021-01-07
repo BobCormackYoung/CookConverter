@@ -27,7 +27,13 @@
         android:id="@+id/navigation_ingredients"
         android:name="com.youngsoft.cookconverter.ui.ingredients.FragmentIngredients"
         android:label="@string/title_ingredients"
-        tools:layout="@layout/fragment_ingredients" />
+        tools:layout="@layout/fragment_recipe" />
+
+    <fragment
+        android:id="@+id/navigation_recipe"
+        android:name="com.youngsoft.cookconverter.ui.recipe.FragmentRecipe"
+        android:label="@string/title_recipe"
+        tools:layout="@layout/fragment_recipe" />
 
     <!--<fragment
         android:id="@+id/navigation_preferences"

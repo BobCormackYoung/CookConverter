@@ -48,6 +48,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingLeft="8dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
                 android:hint="@string/title_convert_to">
 
                 <com.google.android.material.textfield.TextInputEditText

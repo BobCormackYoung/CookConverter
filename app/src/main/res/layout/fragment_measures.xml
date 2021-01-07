@@ -70,6 +70,8 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
             android:layout_weight="1"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
             android:hint="@string/title_convert_to"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 

@@ -1,4 +1,4 @@
-package com.youngsoft.cookconverter.ui.ingredients;
+package com.youngsoft.cookconverter.ui.recipe;
 
 import android.view.LayoutInflater;
 import android.view.View;
