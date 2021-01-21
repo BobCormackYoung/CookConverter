@@ -16,6 +16,7 @@ import com.youngsoft.cookconverter.data.DataRepository;
 import com.youngsoft.cookconverter.data.IngredientsRecord;
 
 import java.util.List;
+import java.util.concurrent.Executors;
 
 import static com.youngsoft.cookconverter.ui.preferences.FragmentPreferences.KEY_PREF_DEFAULT_UNIT;
 
@@ -28,23 +29,24 @@ public class ViewModelMeasures extends AndroidViewModel {
     //Live Data from Database
     private final LiveData<List<ConversionFactorsRecord>> allConversionFactors;
     private final LiveData<List<IngredientsRecord>> allIngredients;
-    private final LiveData<ConversionFactorsRecord> sharedPreferenceConversionFactor;
+    //private final LiveData<ConversionFactorsRecord> sharedPreferenceConversionFactor;
 
     //Mutable live data values
-    private final MutableLiveData<Double> inputValue;
-    private final MutableLiveData<ConversionFactorsRecord> conversionFactorInputID;
-    private final MutableLiveData<ConversionFactorsRecord> conversionFactorOutputID;
-    private final MutableLiveData<IngredientsRecord> ingredientSelected;
+    private MutableLiveData<Double> inputValue;
+    private MutableLiveData<ConversionFactorsRecord> conversionFactorInputID;
+    private MutableLiveData<ConversionFactorsRecord> conversionFactorOutputID;
+    private MutableLiveData<IngredientsRecord> ingredientSelected;
 
     //Mediator live data values
-    private final MediatorLiveData<ConversionFactorsRecord> mediatorInputConversionFactor;
-    private final MediatorLiveData<ConversionFactorsRecord> mediatorOutputConversionFactor;
     private final MediatorLiveData<Double> mediatorOutput;
     private final MediatorLiveData<Double> mediatorConversionFactor;
     private final MediatorLiveData<IngredientDropDownState> mediatorIngredientDropDownState;
 
 
-    //Constructor
+    /**
+     * ViewModelMeasures constructor
+     * @param application the application
+     */
     public ViewModelMeasures(@NonNull Application application) {
         super(application);
 
@@ -54,55 +56,111 @@ public class ViewModelMeasures extends AndroidViewModel {
 
         //get the sharedPreference livedata value
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplication());
-        sharedPreferenceConversionFactor = dataRepository.getSingleConversionFactor(preferences.getInt(KEY_PREF_DEFAULT_UNIT,1));
+        //TODO: is the below even needed?
+        //sharedPreferenceConversionFactor = dataRepository.getSingleConversionFactor(preferences.getInt(KEY_PREF_DEFAULT_UNIT,1));
 
-        //set initial input value for conversion to 0
-        inputValue = new MutableLiveData<>();
-        inputValue.setValue(0.0);
-
-        //set initial ingredient
-        ingredientSelected = new MutableLiveData<>();
-
-        //set initial input/output conversion values
-        conversionFactorInputID = new MutableLiveData<>();
-        conversionFactorOutputID = new MutableLiveData<>();
+        setupLiveData();
+        initLiveData();
 
         //instantiate mediatorLiveData objects
-        mediatorInputConversionFactor = new MediatorLiveData<>();
-        mediatorOutputConversionFactor = new MediatorLiveData<>();
         mediatorConversionFactor = new MediatorLiveData<>();
         mediatorOutput = new MediatorLiveData<>();
         mediatorIngredientDropDownState = new MediatorLiveData<>();
 
         //initialise mediatorLiveData objects
-        mediatorInputConversionFactorInit();
-        mediatorOutputConversionFactorInit();
         mediatorConversionFactorInit();
         mediatorOutputInit();
         mediatorIngredientDropDownStateInit();
     }
 
+    /**
+     * set up mutable live data values
+     */
+    private void setupLiveData() {
+        inputValue = new MutableLiveData<>();
+        ingredientSelected = new MutableLiveData<>();
+        conversionFactorInputID = new MutableLiveData<>();
+        conversionFactorOutputID = new MutableLiveData<>();
+    }
 
-    //get the converted value
+    /**
+     * initialise mutable live data values
+     */
+    private void initLiveData() {
+        inputValue.setValue(0.0);
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                ingredientSelected.postValue(dataRepository.getSingleIngredient(1));
+            }
+        });
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                conversionFactorInputID.postValue(dataRepository.getSingleConversionFactorNonLive(preferences.getInt(KEY_PREF_DEFAULT_UNIT,1)));
+            }
+        });
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                conversionFactorOutputID.postValue(dataRepository.getSingleConversionFactorNonLive(preferences.getInt(KEY_PREF_DEFAULT_UNIT,1)));
+            }
+        });
+    }
+
+    /**
+     * Get LiveData of the output value
+     * @return the output value
+     */
     public LiveData<Double> getMediatorOutput() {
         return mediatorOutput;
     }
-    //return list of all conversion factor records
+
+    /**
+     * Get LiveData list of conversion factors or units
+     * @return the list of conversion factors
+     */
     LiveData<List<ConversionFactorsRecord>> getAllConversionFactors() { return allConversionFactors; }
-    //return list of all ingredient records
+
+    /**
+     * Get LiveData list of ingredients
+     * @return the list of ingredients
+     */
     LiveData<List<IngredientsRecord>> getAllIngredients() {
         return allIngredients;
     }
-    //return input conversion factor
-    LiveData<ConversionFactorsRecord> getInputConversionFactor() { return mediatorInputConversionFactor; }
-    //return output conversion factor
-    public LiveData<ConversionFactorsRecord> getOutputConversionFactor() { return mediatorOutputConversionFactor; }
-    //return the selected ingredient value
+
+    /**
+     * Get LiveData of the selected input conversion factor
+     * @return the conversion factor
+     */
+    LiveData<ConversionFactorsRecord> getInputConversionFactor() { return conversionFactorInputID; }
+
+    /**
+     * Get LiveData of the selected output conversion factor
+     * @return the conversion factor
+     */
+    public LiveData<ConversionFactorsRecord> getOutputConversionFactor() { return conversionFactorOutputID; }
+
+    /**
+     * Get LiveData of the selected ingredient
+     * @return the ingredient
+     */
     public LiveData<IngredientsRecord> getIngredientsRecord() {
         return ingredientSelected;
     }
-    //return the helper text
+
+    /**
+     * Get LiveData of the ingredient drop down error state
+     * @return the ingredient drop down state
+     */
     public LiveData<IngredientDropDownState> getIngredientsDropDownState() { return mediatorIngredientDropDownState; }
+
+    /**
+     * Get LiveData of the input value
+     * @return the input value
+     */
+    LiveData<Double> getInputValue() { return inputValue; }
 
 
     //set the input value
@@ -118,60 +176,12 @@ public class ViewModelMeasures extends AndroidViewModel {
         ingredientSelected.setValue(input);
     }
 
-
-    /**
-     * set the input conversion factor based on sharedpreferences or user selection
-     */
-    private void mediatorInputConversionFactorInit() {
-
-        //observe the user selected input value
-        mediatorInputConversionFactor.addSource(conversionFactorInputID, new Observer<ConversionFactorsRecord>() {
-            @Override
-            public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
-                mediatorInputConversionFactor.setValue(conversionFactorInputID.getValue());
-            }
-        });
-
-        //observe the shared preference value
-        mediatorInputConversionFactor.addSource(sharedPreferenceConversionFactor, new Observer<ConversionFactorsRecord>() {
-            @Override
-            public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
-                mediatorInputConversionFactor.setValue(sharedPreferenceConversionFactor.getValue());
-                //mediatorInputConversionFactor.removeSource(sharedPreferenceConversionFactor);
-            }
-        });
-
-    }
-
-    /**
-     * set the output conversion factor based on sharedpreferences or user selection
-     */
-    private void mediatorOutputConversionFactorInit() {
-
-        //observe the user selected input value
-        mediatorOutputConversionFactor.addSource(conversionFactorOutputID, new Observer<ConversionFactorsRecord>() {
-            @Override
-            public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
-                mediatorOutputConversionFactor.setValue(conversionFactorOutputID.getValue());
-            }
-        });
-
-        //observe the shared preference value
-        mediatorOutputConversionFactor.addSource(sharedPreferenceConversionFactor, new Observer<ConversionFactorsRecord>() {
-            @Override
-            public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
-                mediatorOutputConversionFactor.setValue(sharedPreferenceConversionFactor.getValue());
-                //mediatorOutputConversionFactor.removeSource(sharedPreferenceConversionFactor);
-            }
-        });
-
-    }
-
-
     /**
      * setup the observers for the output value mediator that will calculate the output value based on input & conversion factor
      */
     private void mediatorOutputInit() {
+        mediatorOutput.setValue(0.0);
+
         //observe the input value
         mediatorOutput.addSource(inputValue, new Observer<Double>() {
             @Override
@@ -279,29 +289,29 @@ public class ViewModelMeasures extends AndroidViewModel {
 
         mediatorIngredientDropDownState.setValue(new IngredientDropDownState(getApplication(), 1));
 
-        mediatorIngredientDropDownState.addSource(mediatorInputConversionFactor, new Observer<ConversionFactorsRecord>() {
+        mediatorIngredientDropDownState.addSource(conversionFactorInputID, new Observer<ConversionFactorsRecord>() {
             @Override
             public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
-                if (mediatorInputConversionFactor.getValue() != null &&
-                        mediatorOutputConversionFactor.getValue() != null &&
+                if (conversionFactorInputID.getValue() != null &&
+                        conversionFactorOutputID.getValue() != null &&
                         ingredientSelected.getValue() != null) {
                     mediatorIngredientDropDownState.setValue(new IngredientDropDownState(getApplication(),
-                            checkIngredientStateState(mediatorInputConversionFactor.getValue().getType(),
-                            mediatorOutputConversionFactor.getValue().getType(),
+                            checkIngredientStateState(conversionFactorInputID.getValue().getType(),
+                                    conversionFactorOutputID.getValue().getType(),
                             ingredientSelected.getValue().getType())));
                 }
             }
         });
 
-        mediatorIngredientDropDownState.addSource(mediatorOutputConversionFactor, new Observer<ConversionFactorsRecord>() {
+        mediatorIngredientDropDownState.addSource(conversionFactorOutputID, new Observer<ConversionFactorsRecord>() {
             @Override
             public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
-                if (mediatorInputConversionFactor.getValue() != null &&
-                        mediatorOutputConversionFactor.getValue() != null &&
+                if (conversionFactorInputID.getValue() != null &&
+                        conversionFactorOutputID.getValue() != null &&
                         ingredientSelected.getValue() != null) {
                     mediatorIngredientDropDownState.setValue(new IngredientDropDownState(getApplication(),
-                            checkIngredientStateState(mediatorInputConversionFactor.getValue().getType(),
-                                    mediatorOutputConversionFactor.getValue().getType(),
+                            checkIngredientStateState(conversionFactorInputID.getValue().getType(),
+                                    conversionFactorOutputID.getValue().getType(),
                                     ingredientSelected.getValue().getType())));
                 }
             }
@@ -310,12 +320,12 @@ public class ViewModelMeasures extends AndroidViewModel {
         mediatorIngredientDropDownState.addSource(ingredientSelected, new Observer<IngredientsRecord>() {
             @Override
             public void onChanged(IngredientsRecord ingredientsRecord) {
-                if (mediatorInputConversionFactor.getValue() != null &&
-                        mediatorOutputConversionFactor.getValue() != null &&
+                if (conversionFactorInputID.getValue() != null &&
+                        conversionFactorOutputID.getValue() != null &&
                         ingredientSelected.getValue() != null) {
                     mediatorIngredientDropDownState.setValue(new IngredientDropDownState(getApplication(),
-                            checkIngredientStateState(mediatorInputConversionFactor.getValue().getType(),
-                                    mediatorOutputConversionFactor.getValue().getType(),
+                            checkIngredientStateState(conversionFactorInputID.getValue().getType(),
+                                    conversionFactorOutputID.getValue().getType(),
                                     ingredientSelected.getValue().getType())));
                 }
             }

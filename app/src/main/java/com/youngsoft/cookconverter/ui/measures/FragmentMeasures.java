@@ -37,8 +37,6 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.List;
 
-import static com.youngsoft.cookconverter.ui.preferences.FragmentPreferences.KEY_PREF_DEFAULT_UNIT;
-
 public class FragmentMeasures extends GlobalFragment {
 
     //test comment
@@ -75,7 +73,6 @@ public class FragmentMeasures extends GlobalFragment {
         setObservers(); //init viewmodel observers
         setListeners(); //init view listeners
         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        etInputValue.setText("0.0"); //TODO: can this be removed?
     }
 
     @Override
@@ -91,14 +88,6 @@ public class FragmentMeasures extends GlobalFragment {
         dialog.show();
         Button btNegativeDialog = dialog.getButton(Dialog.BUTTON_NEGATIVE);
         btNegativeDialog.setTextColor(getResources().getColor(R.color.colorPrimary));
-    }
-
-    private void initDefaultUnit(int id) {
-        if (spinnerAdapterInput.getCount() !=0 ) {
-            viewModelMeasures.setConversionFactorInputID(spinnerAdapterInput.getItem(id-1));
-            actvInput.setText(spinnerAdapterInput.getItem(id-1).getName());
-        }
-        //spInput.setSelection(id-1);
     }
 
     /**
@@ -196,7 +185,6 @@ public class FragmentMeasures extends GlobalFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ConversionFactorsRecord selectedItem = spinnerAdapterInput.getItem(position);
                 viewModelMeasures.setConversionFactorInputID(selectedItem);
-                //actvInput.setText(selectedItem.getName());
             }
         });
 
@@ -206,10 +194,10 @@ public class FragmentMeasures extends GlobalFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ConversionFactorsRecord selectedItem = spinnerAdapterOutput.getItem(position);
                 viewModelMeasures.setConversionFactorOutputID(selectedItem);
-                //actvOutput.setText(selectedItem.getName());
             }
         });
 
+        //listen for changes to the input spinner value
         actvIngredient.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -233,6 +221,20 @@ public class FragmentMeasures extends GlobalFragment {
      * set observers for the viewmodel and update view when changed
      */
     private void setObservers() {
+        //observe the initial input value, then remove the observer
+        viewModelMeasures.getInputValue().observe(getViewLifecycleOwner(), new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                if (aDouble*1000 < 1) {
+                    etInputValue.setText("0.0");
+                } else {
+                    DecimalFormat decimalFormat = new DecimalFormat("#,##0.###");
+                    etInputValue.setText(decimalFormat.format(aDouble));
+                }
+                viewModelMeasures.getInputValue().removeObserver(this);
+            }
+        });
+
         //observe changes to the output value
         viewModelMeasures.getMediatorOutput().observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
@@ -263,8 +265,6 @@ public class FragmentMeasures extends GlobalFragment {
                 //setup output spinner
                 spinnerAdapterOutput = new MeasuresSpinnerAdapter(context, outputArray);
                 actvOutput.setAdapter(spinnerAdapterOutput);
-
-                initDefaultUnit(preferences.getInt(KEY_PREF_DEFAULT_UNIT,1)); //select the default value in the shared preferences
             }
         });
 
@@ -277,10 +277,6 @@ public class FragmentMeasures extends GlobalFragment {
                 ingredientsRecords.toArray(outputArray);
                 spinnerIngredients = new IngredientsSpinnerAdapter(context, outputArray);
                 actvIngredient.setAdapter(spinnerIngredients);
-                if (outputArray.length != 0) {
-                    actvIngredient.setText(spinnerIngredients.getItem(0).getName());
-                    viewModelMeasures.setIngredientSelected(spinnerIngredients.getItem(0));
-                }
             }
         });
 

@@ -54,7 +54,7 @@ public class ViewModelSaveMeasurement extends AndroidViewModel {
      * initialise the live data
      */
     private void initLiveData() {
-        allConversionFactors = dataRepository.getAllMassVolumeConversionFactors();
+        allConversionFactors = dataRepository.getAllIngredientConversionFactors();
     }
 
     //getters

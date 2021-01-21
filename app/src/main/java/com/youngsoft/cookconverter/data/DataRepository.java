@@ -16,6 +16,7 @@ public class DataRepository {
     private final LiveData<List<IngredientsRecord>> allIngredientsRecords;
     //private final LiveData<List<PanTypeRecord>> allPanTypeRecords;
     private final LiveData<List<ConversionFactorsRecord>> allMassVolumeConversionFactors;
+    private final LiveData<List<ConversionFactorsRecord>> allIngredientConversionFactors;
     private final LiveData<List<ConversionFactorsRecord>> allDistanceConversionFactors;
     private final LiveData<List<RecipeList>> allRecipeList;
     private final LiveData<List<RecipeWithConversionFactor>> allRecipeWithConversionFactor;
@@ -23,8 +24,8 @@ public class DataRepository {
     public DataRepository(Application application) {
         DataDatabase dataDatabase = DataDatabase.getInstance(application);
         dataDao = dataDatabase.dataDao();
-        //allConversionFactorsRecords = dataDao.getAllConversionFactorsRecordsSortById();
         allMassVolumeConversionFactors = dataDao.getAllMassVolumeConversionFactors();
+        allIngredientConversionFactors = dataDao.getAllIngredientConversionFactors();
         LiveData<List<ConversionFactorsRecord>> allMassConversionFactors = dataDao.getAllMassConversionFactors();
         LiveData<List<ConversionFactorsRecord>> allVolumeConversionFactors = dataDao.getAllVolumeConversionFactors();
         allIngredientsRecords = dataDao.getAllIngredientsRecordsSortById();
@@ -44,6 +45,10 @@ public class DataRepository {
 
     public LiveData<List<ConversionFactorsRecord>> getAllMassVolumeConversionFactors() {
         return allMassVolumeConversionFactors;
+    }
+
+    public LiveData<List<ConversionFactorsRecord>> getAllIngredientConversionFactors() {
+        return allIngredientConversionFactors;
     }
 
     public LiveData<List<IngredientsRecord>> getAllIngredientsRecords() {
@@ -112,5 +117,13 @@ public class DataRepository {
 
     public LiveData<ConversionFactorsRecord> getSingleConversionFactor(int id) {
         return dataDao.getSingleConversionFactor(id);
+    }
+
+    public ConversionFactorsRecord getSingleConversionFactorNonLive(final int id) {
+        return dataDao.getSingleConversionFactorNonLive(id);
+    }
+
+    public IngredientsRecord getSingleIngredient(int id) {
+        return dataDao.getSingleIngredient(id);
     }
 }

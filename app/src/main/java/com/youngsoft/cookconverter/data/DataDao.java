@@ -38,8 +38,11 @@ public interface DataDao {
     @Query("SELECT * FROM ConversionFactorsRecord_Table WHERE type = :index")
     LiveData<List<ConversionFactorsRecord>> getSubsetConversionFactors(int index);
 
-    @Query("SELECT * FROM ConversionFactorsRecord_Table WHERE type IN (1,2,4)")
+    @Query("SELECT * FROM ConversionFactorsRecord_Table WHERE type IN (1,2)")
     LiveData<List<ConversionFactorsRecord>> getAllMassVolumeConversionFactors();
+
+    @Query("SELECT * FROM ConversionFactorsRecord_Table WHERE type IN (1,2,4)")
+    LiveData<List<ConversionFactorsRecord>> getAllIngredientConversionFactors();
 
     @Query("SELECT * FROM ConversionFactorsRecord_Table WHERE type = 1")
     LiveData<List<ConversionFactorsRecord>> getAllMassConversionFactors();
@@ -52,6 +55,9 @@ public interface DataDao {
 
     @Query("SELECT * FROM ConversionFactorsRecord_Table WHERE conversionFactorID = :index LIMIT 1")
     LiveData<ConversionFactorsRecord> getSingleConversionFactor(int index);
+
+    @Query("SELECT * FROM ConversionFactorsRecord_Table WHERE conversionFactorID = :index LIMIT 1")
+    ConversionFactorsRecord getSingleConversionFactorNonLive(int index);
 
     @Query("DELETE FROM RecipeList_Table")
     void deleteAllRecipeListItems();
@@ -68,4 +74,7 @@ public interface DataDao {
     @Transaction
     @Query("SELECT * FROM RecipeList_Table ORDER BY recipeListID")
     LiveData<List<RecipeWithConversionFactor>> getRecipeWithConversionFactor();
+
+    @Query("SELECT * FROM IngredientsRecord_Table WHERE id = :index LIMIT 1")
+    IngredientsRecord getSingleIngredient(int index);
 }
