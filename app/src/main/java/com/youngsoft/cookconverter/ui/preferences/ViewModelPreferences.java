@@ -17,17 +17,29 @@ public class ViewModelPreferences extends AndroidViewModel {
 
     //Live Data from Database
     private final LiveData<List<ConversionFactorsRecord>> allConversionFactors;
+    private final LiveData<List<ConversionFactorsRecord>> allDistanceConversionFactors;
 
     public ViewModelPreferences(@NonNull Application application) {
         super(application);
         dataRepository = new DataRepository(application);
         allConversionFactors = dataRepository.getAllMassVolumeConversionFactors();
+        allDistanceConversionFactors = dataRepository.getAllDistanceConversionFactors();
     }
 
-    //return list of all mss conversion factor records
+    /**
+     * Get a live data list of all mass & volume conversion factors
+     * @return LiveData list of ConversionFactorsRecord
+     */
     LiveData<List<ConversionFactorsRecord>> getAllConversionFactors() {
         return allConversionFactors;
     }
 
+    /**
+     * Get a live data list of all distance conversion factors
+     * @return LiveData list of ConversionFactorsRecord
+     */
+    LiveData<List<ConversionFactorsRecord>> getAllDistanceConversionFactors() {
+        return allDistanceConversionFactors;
+    }
 
 }

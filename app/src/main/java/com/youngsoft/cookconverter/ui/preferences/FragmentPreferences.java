@@ -26,12 +26,15 @@ public class FragmentPreferences extends PreferenceFragmentCompat implements Dia
     ViewModelPreferences viewModelPreferences;
     SharedPreferences preferences;
     Preference pfDefaultUnit;
+    Preference pfDefaultDistanceUnit;
 
     //public key values for preferences
     public static final String KEY_PREF_DEFAULT_UNIT = "preference_default_unit";
+    public static final String KEY_PREF_DEFAULT_DISTANCE_UNIT = "preference_default_distance_unit";
 
     //conversion factors lists
     List<ConversionFactorsRecord> allConversionFactors;
+    List<ConversionFactorsRecord> allDistanceConversionFactors;
 
 
     public FragmentPreferences() {
@@ -67,12 +70,26 @@ public class FragmentPreferences extends PreferenceFragmentCompat implements Dia
         pfDefaultUnit = findPreference(KEY_PREF_DEFAULT_UNIT);
         pfDefaultUnit.setSummary(" ");
 
+        // Shared preference for default displayed distance unit
+        pfDefaultDistanceUnit = findPreference(KEY_PREF_DEFAULT_DISTANCE_UNIT);
+        pfDefaultDistanceUnit.setSummary(" ");
+
         // Set an onclick listener for the mass unit preference
         // Allows picking the mass unit from a list tied to the viewmodel livedata
         pfDefaultUnit.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
-                DialogUnitPicker massUnitPickerFragment = new DialogUnitPicker(FragmentPreferences.this, allConversionFactors);
+                DialogUnitPicker massUnitPickerFragment = new DialogUnitPicker(FragmentPreferences.this, KEY_PREF_DEFAULT_UNIT, allConversionFactors, pfDefaultUnit);
                 massUnitPickerFragment.show(getChildFragmentManager(), "defaultUnitPickerFragment");
+                return true;
+            }
+        });
+
+        // Set an onclick listener for the distance unit preference
+        // Allows picking the mass unit from a list tied to the viewmodel livedata
+        pfDefaultDistanceUnit.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+                DialogUnitPicker distanceUnitPickerFragment = new DialogUnitPicker(FragmentPreferences.this, KEY_PREF_DEFAULT_DISTANCE_UNIT, allDistanceConversionFactors, pfDefaultDistanceUnit);
+                distanceUnitPickerFragment.show(getChildFragmentManager(), "defaultDistanceUnitPickerFragment");
                 return true;
             }
         });
@@ -105,27 +122,37 @@ public class FragmentPreferences extends PreferenceFragmentCompat implements Dia
             public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
                 //massConversionFactors.clear();
                 allConversionFactors = conversionFactorsRecords;
-                updateUnitPreferenceView();
+                updateUnitPreferenceView(KEY_PREF_DEFAULT_UNIT, allConversionFactors, pfDefaultUnit);
+            }
+        });
+
+        //observe changes to the list of mass conversion factors
+        viewModelPreferences.getAllDistanceConversionFactors().observe(getViewLifecycleOwner(), new Observer<List<ConversionFactorsRecord>>() {
+            @Override
+            public void onChanged(List<ConversionFactorsRecord> conversionFactorsRecords) {
+                //massConversionFactors.clear();
+                allDistanceConversionFactors = conversionFactorsRecords;
+                updateUnitPreferenceView(KEY_PREF_DEFAULT_DISTANCE_UNIT, allDistanceConversionFactors, pfDefaultDistanceUnit);
             }
         });
     }
 
 
-    public void updateUnitPreferenceView() {
-        int preferenceValueMass = preferences.getInt(KEY_PREF_DEFAULT_UNIT,1);
-        String preferenceNameMass = searchList(preferenceValueMass, allConversionFactors);
-        pfDefaultUnit.setSummary(preferenceNameMass);
+    public void updateUnitPreferenceView(String key_pref, List<ConversionFactorsRecord> conversionFactorsList, Preference preference) {
+        int preferenceValue = preferences.getInt(key_pref,1);
+        String preferenceName = searchList(preferenceValue, conversionFactorsList);
+        preference.setSummary(preferenceName);
     }
 
     @Override
-    public void onSave(ConversionFactorsRecord conversionFactorsRecord) {
+    public void onSave(ConversionFactorsRecord conversionFactorsRecord, String keyPref, Preference preference, List<ConversionFactorsRecord> conversionFactorsList) {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = preferences.edit();
 
-        editor.putInt(this.KEY_PREF_DEFAULT_UNIT, (int) conversionFactorsRecord.getConversionFactorID());
-        editor.commit();
-        updateUnitPreferenceView();
+        editor.putInt(keyPref, (int) conversionFactorsRecord.getConversionFactorID());
+        editor.apply();
+        updateUnitPreferenceView(keyPref, conversionFactorsList, preference);
     }
 
 }

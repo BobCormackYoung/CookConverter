@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+import androidx.preference.Preference;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,12 +29,16 @@ public class DialogUnitPicker extends DialogFragment implements AdapterUnitPicke
     AdapterUnitPickerList adapterUnitPickerList;
     List<ConversionFactorsRecord> conversionFactorsRecordList;
     ArrayList<ConversionFactorsRecord> unitArrayList;
+    String keyPref;
+    Preference preference;
 
-    private OnSaveListener onSaveListener;
+    private final OnSaveListener onSaveListener;
 
-    public DialogUnitPicker(OnSaveListener onSaveListener, List<ConversionFactorsRecord> conversionFactorsRecordList) {
+    public DialogUnitPicker(OnSaveListener onSaveListener, String keyPref, List<ConversionFactorsRecord> conversionFactorsRecordList, Preference preference) {
         this.onSaveListener = onSaveListener;
         this.conversionFactorsRecordList = conversionFactorsRecordList;
+        this.keyPref = keyPref;
+        this.preference = preference;
     }
 
     @NonNull
@@ -86,11 +91,11 @@ public class DialogUnitPicker extends DialogFragment implements AdapterUnitPicke
 
     @Override
     public void onUnitClick(ConversionFactorsRecord index) {
-        onSaveListener.onSave(index);
+        onSaveListener.onSave(index, keyPref, preference, conversionFactorsRecordList);
         dismiss();
     }
 
     public interface OnSaveListener {
-        void onSave(ConversionFactorsRecord conversionFactorsRecord);
+        void onSave(ConversionFactorsRecord conversionFactorsRecord, String keyPref, Preference preference, List<ConversionFactorsRecord> conversionFactorsList);
     }
 }

@@ -68,15 +68,14 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = preferences.edit();
 
         if (preferences.getInt(FragmentPreferences.KEY_PREF_DEFAULT_UNIT, -1) == -1) {
-            editor.putInt(FragmentPreferences.KEY_PREF_DEFAULT_UNIT, 1);
+            editor.putInt(FragmentPreferences.KEY_PREF_DEFAULT_UNIT, 1); //TODO: remove hardcoded integer
             editor.commit();
         }
 
-        //if (preferences.getInt(FragmentPreferences.KEY_PREF_DEFAULT_VOLUME_UNIT, -1) == -1) {
-        //    editor.putInt(FragmentPreferences.KEY_PREF_DEFAULT_VOLUME_UNIT, 7);
-        //    editor.commit();
-        //}
-
+        if (preferences.getInt(FragmentPreferences.KEY_PREF_DEFAULT_DISTANCE_UNIT, -1) == -1) {
+            editor.putInt(FragmentPreferences.KEY_PREF_DEFAULT_DISTANCE_UNIT, 18); //TODO: remove hardcoded integer
+            editor.commit();
+        }
     }
 
     @Override

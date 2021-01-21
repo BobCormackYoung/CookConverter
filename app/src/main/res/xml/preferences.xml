@@ -8,7 +8,15 @@
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:summary="kg"
-        android:title="Default Measurement Unit"
+        android:title="Default Mass or Volume Unit"
+        app:iconSpaceReserved="false"/>
+
+    <Preference
+        android:key="preference_default_distance_unit"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="kg"
+        android:title="Default Distance Unit"
         app:iconSpaceReserved="false"/>
 
     <PreferenceCategory
