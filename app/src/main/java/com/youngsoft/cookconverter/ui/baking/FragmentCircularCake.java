@@ -65,18 +65,15 @@ public class FragmentCircularCake extends Fragment {
                 conversionFactorsRecords.toArray(outputArray);
                 measuresSpinnerAdapter = new MeasuresSpinnerAdapter(context, outputArray);
                 actvFCCUnits.setAdapter(measuresSpinnerAdapter);
-                viewModelPanSize.setCircularConversionFactor(measuresSpinnerAdapter.getItem(0));
+            }
+        });
 
-                //observe conversion factor, update the spinner, then remove the observer
-                final LiveData<ConversionFactorsRecord> circularConversionFactor = viewModelPanSize.getCircularConversionFactor();
-                circularConversionFactor.observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
-                    @Override
-                    public void onChanged(ConversionFactorsRecord aConversionFactor) {
-                        circularConversionFactor.removeObserver(this);
-                        viewModelPanSize.setCircularConversionFactor(aConversionFactor);
-                        //spFCCUnits.setSelection((int) (aConversionFactor.getConversionFactorID())-17);
-                    }
-                });
+        viewModelPanSize.getCircularConversionFactor().observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
+            @Override
+            public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
+                if (conversionFactorsRecord != null) {
+                    actvFCCUnits.setText(conversionFactorsRecord.getName());
+                }
             }
         });
 

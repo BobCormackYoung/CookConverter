@@ -29,6 +29,7 @@ import com.youngsoft.cookconverter.ViewModelMainActivity;
 import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
 import com.youngsoft.cookconverter.data.IngredientsRecord;
 import com.youngsoft.cookconverter.ui.save.BottomSheetSaveMeasurement;
+import com.youngsoft.cookconverter.ui.save.ViewModelSaveMeasurement;
 import com.youngsoft.cookconverter.ui.util.GlobalFragment;
 import com.youngsoft.cookconverter.ui.util.IngredientsSpinnerAdapter;
 import com.youngsoft.cookconverter.ui.util.MeasuresSpinnerAdapter;
@@ -211,7 +212,7 @@ public class FragmentMeasures extends GlobalFragment {
         btSaveMeasure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bottomSheetSaveMeasurement = new BottomSheetSaveMeasurement( 1);
+                bottomSheetSaveMeasurement = new BottomSheetSaveMeasurement( ViewModelSaveMeasurement.LAUNCH_CASE_MEASUREMENTS);
                 bottomSheetSaveMeasurement.show(getChildFragmentManager(), "saveDataBottomSheet");
             }
         });

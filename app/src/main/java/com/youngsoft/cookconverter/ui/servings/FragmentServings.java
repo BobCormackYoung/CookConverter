@@ -22,6 +22,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.youngsoft.cookconverter.R;
 import com.youngsoft.cookconverter.ViewModelMainActivity;
 import com.youngsoft.cookconverter.ui.save.BottomSheetSaveMeasurement;
+import com.youngsoft.cookconverter.ui.save.ViewModelSaveMeasurement;
 import com.youngsoft.cookconverter.ui.util.GlobalFragment;
 
 import java.text.DecimalFormat;
@@ -210,8 +211,7 @@ public class FragmentServings extends GlobalFragment {
         btSaveServing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //bottomSheetSaveMeasurement = new BottomSheetSaveMeasurement(viewModelServings, 3);
-                bottomSheetSaveMeasurement = new BottomSheetSaveMeasurement( 3);
+                bottomSheetSaveMeasurement = new BottomSheetSaveMeasurement( ViewModelSaveMeasurement.LAUNCH_CASE_SERVINGS);
                 bottomSheetSaveMeasurement.show(getChildFragmentManager(), "saveDataBottomSheet");
             }
         });

@@ -93,18 +93,15 @@ public class FragmentBundtCake extends Fragment {
                 conversionFactorsRecords.toArray(outputArray);
                 measuresSpinnerAdapter = new MeasuresSpinnerAdapter(context, outputArray);
                 actvFBCUnits.setAdapter(measuresSpinnerAdapter);
-                viewModelPanSize.setBundtConversionFactor(measuresSpinnerAdapter.getItem(0));
+            }
+        });
 
-                //observe conversion factor, update the spinner, then remove the observer
-                final LiveData<ConversionFactorsRecord> bundtConversionFactor = viewModelPanSize.getBundtConversionFactor();
-                bundtConversionFactor.observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
-                    @Override
-                    public void onChanged(ConversionFactorsRecord aConversionFactor) {
-                        bundtConversionFactor.removeObserver(this);
-                        viewModelPanSize.setBundtConversionFactor(aConversionFactor);
-                        //spFBCUnits.setSelection((int) (aConversionFactor.getConversionFactorID())-17);
-                    }
-                });
+        viewModelPanSize.getBundtConversionFactor().observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
+            @Override
+            public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
+                if (conversionFactorsRecord != null) {
+                    actvFBCUnits.setText(conversionFactorsRecord.getName());
+                }
             }
         });
 

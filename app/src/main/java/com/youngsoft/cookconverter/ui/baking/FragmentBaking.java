@@ -24,6 +24,7 @@ import com.youngsoft.cookconverter.R;
 import com.youngsoft.cookconverter.ViewModelMainActivity;
 import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
 import com.youngsoft.cookconverter.ui.save.BottomSheetSaveMeasurement;
+import com.youngsoft.cookconverter.ui.save.ViewModelSaveMeasurement;
 import com.youngsoft.cookconverter.ui.util.GlobalFragment;
 
 import java.text.DecimalFormat;
@@ -184,7 +185,7 @@ public class FragmentBaking extends GlobalFragment {
         btSaveBaking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bottomSheetSaveMeasurement = new BottomSheetSaveMeasurement( 2);
+                bottomSheetSaveMeasurement = new BottomSheetSaveMeasurement( ViewModelSaveMeasurement.LAUNCH_CASE_BAKING);
                 bottomSheetSaveMeasurement.show(getChildFragmentManager(), "saveDataBottomSheet");
             }
         });
@@ -228,7 +229,7 @@ public class FragmentBaking extends GlobalFragment {
         viewModelBaking.getPanTypeInputMutable().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
-                if (integer == 0) {
+                if (integer == ViewModelPanSize.PAN_TYPE_RECTANGULAR) {
                     ivInputPanIcon.setBackgroundResource(R.drawable.ic_rectangular_pan_96px);
                     tvInputPanType.setText(R.string.pan_type_rectangular);
                     tvInputDim1Name.setText(R.string.dimension_rectangular_1);
@@ -236,14 +237,14 @@ public class FragmentBaking extends GlobalFragment {
                     tvInputDim2Unit.setVisibility(View.VISIBLE);
                     tvInputDim2Value.setVisibility(View.VISIBLE);
                     tvInputDim2Name.setText(R.string.dimensions_rectangular_2);
-                } else if (integer == 1) {
+                } else if (integer == ViewModelPanSize.PAN_TYPE_CIRCULAR) {
                     ivInputPanIcon.setBackgroundResource(R.drawable.ic_circular_pan_96px);
                     tvInputPanType.setText(R.string.pan_type_circular);
                     tvInputDim1Name.setText(R.string.dimensions_circular);
                     tvInputDim2Name.setVisibility(View.GONE);
                     tvInputDim2Unit.setVisibility(View.GONE);
                     tvInputDim2Value.setVisibility(View.GONE);
-                } else if (integer == 2) {
+                } else if (integer == ViewModelPanSize.PAN_TYPE_BUNDT) {
                     ivInputPanIcon.setBackgroundResource(R.drawable.ic_bundt_pan_96px);
                     tvInputPanType.setText(R.string.pan_type_bundt);
                     tvInputDim1Name.setText(R.string.dimensions_bundt_1);
@@ -267,7 +268,7 @@ public class FragmentBaking extends GlobalFragment {
         viewModelBaking.getPanTypeOutputMutable().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
-                if (integer == 0) {
+                if (integer == ViewModelPanSize.PAN_TYPE_RECTANGULAR) {
                     ivOutputPanIcon.setBackgroundResource(R.drawable.ic_rectangular_pan_96px);
                     tvOutputPanType.setText(R.string.pan_type_rectangular);
                     tvOutputDim1Name.setText(R.string.dimension_rectangular_1);
@@ -275,14 +276,14 @@ public class FragmentBaking extends GlobalFragment {
                     tvOutputDim2Unit.setVisibility(View.VISIBLE);
                     tvOutputDim2Value.setVisibility(View.VISIBLE);
                     tvOutputDim2Name.setText(R.string.dimensions_rectangular_2);
-                } else if (integer == 1) {
+                } else if (integer == ViewModelPanSize.PAN_TYPE_CIRCULAR) {
                     ivOutputPanIcon.setBackgroundResource(R.drawable.ic_circular_pan_96px);
                     tvOutputPanType.setText(R.string.pan_type_circular);
                     tvOutputDim1Name.setText(R.string.dimensions_circular);
                     tvOutputDim2Name.setVisibility(View.GONE);
                     tvOutputDim2Unit.setVisibility(View.GONE);
                     tvOutputDim2Value.setVisibility(View.GONE);
-                } else if (integer == 2) {
+                } else if (integer == ViewModelPanSize.PAN_TYPE_BUNDT) {
                     ivOutputPanIcon.setBackgroundResource(R.drawable.ic_bundt_pan_96px);
                     tvOutputPanType.setText(R.string.pan_type_bundt);
                     tvOutputDim1Name.setText(R.string.dimensions_bundt_1);

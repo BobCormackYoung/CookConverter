@@ -1,6 +1,7 @@
 package com.youngsoft.cookconverter.ui.baking;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -9,15 +10,25 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.preference.PreferenceManager;
 
 import com.youngsoft.cookconverter.data.ConversionFactorsRecord;
 import com.youngsoft.cookconverter.data.DataRepository;
 
 import java.util.List;
+import java.util.concurrent.Executors;
+
+import static com.youngsoft.cookconverter.ui.preferences.FragmentPreferences.KEY_PREF_DEFAULT_DISTANCE_UNIT;
 
 public class ViewModelPanSize extends AndroidViewModel {
 
     private final DataRepository dataRepository;
+
+    SharedPreferences preferences;
+
+    static final int PAN_TYPE_RECTANGULAR = 0;
+    static final int PAN_TYPE_CIRCULAR = 1;
+    static final int PAN_TYPE_BUNDT = 2;
 
     //livedata
     private LiveData<List<ConversionFactorsRecord>> conversionFactorsRecordLiveData;
@@ -40,6 +51,10 @@ public class ViewModelPanSize extends AndroidViewModel {
     public ViewModelPanSize(@NonNull Application application) {
         super(application);
         dataRepository = new DataRepository(application);
+
+        //get the sharedPreference livedata value
+        preferences = PreferenceManager.getDefaultSharedPreferences(getApplication());
+
         setupLiveData();
         initLiveData();
 
@@ -160,6 +175,24 @@ public class ViewModelPanSize extends AndroidViewModel {
         circularPanDimension.setValue(0.0);
         bundtPanDimension1.setValue(0.0);
         bundtPanDimension2.setValue(0.0);
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                bundtConversionFactor.postValue(dataRepository.getSingleConversionFactorNonLive(preferences.getInt(KEY_PREF_DEFAULT_DISTANCE_UNIT,18)));
+            }
+        });
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                rectangularConversionFactor.postValue(dataRepository.getSingleConversionFactorNonLive(preferences.getInt(KEY_PREF_DEFAULT_DISTANCE_UNIT,18)));
+            }
+        });
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                rectangularConversionFactor.postValue(dataRepository.getSingleConversionFactorNonLive(preferences.getInt(KEY_PREF_DEFAULT_DISTANCE_UNIT,18)));
+            }
+        });
     }
 
     /**

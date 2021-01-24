@@ -29,7 +29,6 @@ public class ViewModelMeasures extends AndroidViewModel {
     //Live Data from Database
     private final LiveData<List<ConversionFactorsRecord>> allConversionFactors;
     private final LiveData<List<IngredientsRecord>> allIngredients;
-    //private final LiveData<ConversionFactorsRecord> sharedPreferenceConversionFactor;
 
     //Mutable live data values
     private MutableLiveData<Double> inputValue;
@@ -56,7 +55,6 @@ public class ViewModelMeasures extends AndroidViewModel {
 
         //get the sharedPreference livedata value
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplication());
-        //TODO: is the below even needed?
         //sharedPreferenceConversionFactor = dataRepository.getSingleConversionFactor(preferences.getInt(KEY_PREF_DEFAULT_UNIT,1));
 
         setupLiveData();

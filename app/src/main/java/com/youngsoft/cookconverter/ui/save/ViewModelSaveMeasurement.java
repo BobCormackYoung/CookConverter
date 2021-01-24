@@ -19,6 +19,12 @@ public class ViewModelSaveMeasurement extends AndroidViewModel {
 
     private final DataRepository dataRepository;
 
+    //1 = measures, 2 = baking, 3 = servings, 4 = ingredients
+    public static final int LAUNCH_CASE_MEASUREMENTS = 1;
+    public static final int LAUNCH_CASE_BAKING = 2;
+    public static final int LAUNCH_CASE_SERVINGS = 3;
+    public static final int LAUNCH_CASE_INGREDIENTS = 4;
+
     //Live Data from Database
     private LiveData<List<ConversionFactorsRecord>> allConversionFactors;
 

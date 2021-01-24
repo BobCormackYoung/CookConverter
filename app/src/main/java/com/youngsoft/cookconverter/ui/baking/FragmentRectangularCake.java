@@ -69,17 +69,15 @@ public class FragmentRectangularCake extends Fragment {
                 conversionFactorsRecords.toArray(outputArray);
                 measuresSpinnerAdapter = new MeasuresSpinnerAdapter(context, outputArray);
                 actvFRCUnits.setAdapter(measuresSpinnerAdapter);
+            }
+        });
 
-                //observe conversion factor, update the spinner, then remove the observer
-                final LiveData<ConversionFactorsRecord> rectangularConversionFactor = viewModelPanSize.getRectangularConversionFactor();
-                rectangularConversionFactor.observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
-                    @Override
-                    public void onChanged(ConversionFactorsRecord aConversionFactor) {
-                        rectangularConversionFactor.removeObserver(this);
-                        viewModelPanSize.setRectangularConversionFactor(aConversionFactor);
-                        //spFRCUnits.setSelection((int) (aConversionFactor.getConversionFactorID())-17);
-                    }
-                });
+        viewModelPanSize.getRectangularConversionFactor().observe(getViewLifecycleOwner(), new Observer<ConversionFactorsRecord>() {
+            @Override
+            public void onChanged(ConversionFactorsRecord conversionFactorsRecord) {
+                if (conversionFactorsRecord != null ) {
+                    actvFRCUnits.setText(conversionFactorsRecord.getName());
+                }
             }
         });
 
