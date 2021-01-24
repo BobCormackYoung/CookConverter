@@ -184,7 +184,7 @@ public class ViewModelPanSize extends AndroidViewModel {
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                rectangularConversionFactor.postValue(dataRepository.getSingleConversionFactorNonLive(preferences.getInt(KEY_PREF_DEFAULT_DISTANCE_UNIT,18)));
+                circularConversionFactor.postValue(dataRepository.getSingleConversionFactorNonLive(preferences.getInt(KEY_PREF_DEFAULT_DISTANCE_UNIT,18)));
             }
         });
         Executors.newSingleThreadExecutor().execute(new Runnable() {
